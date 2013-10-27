@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="first_label">FIRST ACTIVITY</string>
+    <string name="second_label">SECOND ACTIVITY</string>
+    <string name="app_name">LifecycleActivityTest</string>
+</resources>
