@@ -1,6 +1,6 @@
 package com.ats.bestapp;
 
-import com.example.demo.R;
+import com.ats.bestapp.R;
 
 import android.os.Bundle;
 import android.app.Activity;

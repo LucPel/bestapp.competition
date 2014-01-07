@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 import com.ats.bestapp.utils.Commons;
 import com.ats.bestapp.vuforia.VuforiaWrapper;
-import com.example.demo.R;
+import com.ats.bestapp.R;
 import com.qualcomm.vuforia.CameraDevice;
 import com.qualcomm.vuforia.ImageTracker;
 import com.qualcomm.vuforia.State;
