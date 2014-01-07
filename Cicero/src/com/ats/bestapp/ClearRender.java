@@ -3,6 +3,7 @@ package com.ats.bestapp;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.ats.bestapp.vuforia.VuforiaWrapper;
 import com.qualcomm.vuforia.Renderer;
 import com.qualcomm.vuforia.State;
 import com.qualcomm.vuforia.TrackableResult;

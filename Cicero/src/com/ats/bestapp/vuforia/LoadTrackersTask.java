@@ -1,4 +1,4 @@
-package com.ats.bestapp;
+package com.ats.bestapp.vuforia;
 
 import android.os.AsyncTask;
 

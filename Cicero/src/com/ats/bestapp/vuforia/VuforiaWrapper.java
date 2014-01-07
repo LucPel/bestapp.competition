@@ -1,5 +1,6 @@
-package com.ats.bestapp;
+package com.ats.bestapp.vuforia;
 
+import com.ats.bestapp.utils.Commons;
 import com.qualcomm.vuforia.CameraCalibration;
 import com.qualcomm.vuforia.CameraDevice;
 import com.qualcomm.vuforia.ImageTracker;
@@ -15,6 +16,9 @@ import com.qualcomm.vuforia.VideoBackgroundConfig;
 import com.qualcomm.vuforia.VideoMode;
 import com.qualcomm.vuforia.Vuforia;
 import com.qualcomm.vuforia.Vuforia.UpdateCallbackInterface;
+
+
+
 
 
 

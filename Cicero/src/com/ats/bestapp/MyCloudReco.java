@@ -21,6 +21,8 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.ats.bestapp.utils.Commons;
+import com.ats.bestapp.vuforia.VuforiaWrapper;
 import com.example.demo.R;
 import com.qualcomm.vuforia.CameraDevice;
 import com.qualcomm.vuforia.ImageTracker;
