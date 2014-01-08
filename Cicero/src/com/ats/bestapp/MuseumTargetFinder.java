@@ -9,10 +9,12 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.GestureDetectorCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
@@ -36,7 +38,8 @@ import com.qualcomm.vuforia.Vuforia.UpdateCallbackInterface;
 
 
 
-public class MuseumTargetFinder extends Activity implements UpdateCallbackInterface{
+public class MuseumTargetFinder extends Activity implements UpdateCallbackInterface,GestureDetector.OnGestureListener,
+GestureDetector.OnDoubleTapListener{
 
 private static final String LOGTAG = "CloudReco";
 
@@ -44,6 +47,8 @@ private static final String LOGTAG = "CloudReco";
     
     // Our OpenGL view:
     private SampleApplicationGLView mGlView;
+    private static final String DEBUG_TAG = "Gestures";
+    private GestureDetectorCompat mDetector; 
     
     // Our renderer:
     private boolean mFlash = false;
@@ -51,14 +56,10 @@ private static final String LOGTAG = "CloudReco";
     private boolean mExtendedTracking = false;
     
     // Display size of the device:
- 	 private int mScreenWidth = 0;
- 	 private int mScreenHeight = 0;
-	 private boolean isPortrait;
-    
+ 	private int mScreenWidth = 0;
+ 	private int mScreenHeight = 0;
+	private boolean isPortrait;
     private View mFlashOptionView;
-    
-    // The textures we will use for rendering:
-    //private Vector<Texture> mTextures;
     
     // View overlays to be displayed in the Augmented View
     private RelativeLayout mUILayout;
@@ -84,6 +85,8 @@ private static final String LOGTAG = "CloudReco";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         vufWrap=VuforiaWrapper.getInstance();
+        mDetector = new GestureDetectorCompat(this,this);
+        mDetector.setOnDoubleTapListener(this);
         //vuforiaAppSession = new SampleApplicationSession(this);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         updateActivityOrientation();
@@ -180,14 +183,14 @@ private static final String LOGTAG = "CloudReco";
         //mRenderer = new CloudRecoRenderer(vuforiaAppSession);
         //mRenderer.setTextures(mTextures);
         mGlView.setRenderer(new ClearRender(vufWrap,this));
-        LayoutInflater inflater = LayoutInflater.from(this);
-        mUILayout = (RelativeLayout) inflater.inflate(R.layout.camera_overlay,
+        //LayoutInflater inflater = LayoutInflater.from(this);
+        /*mUILayout = (RelativeLayout) inflater.inflate(R.layout.camera_overlay,
             null, false);
         mUILayout.setVisibility(View.VISIBLE);
         mUILayout.setBackgroundColor(Color.BLACK);
         
         addContentView(mUILayout, new LayoutParams(LayoutParams.MATCH_PARENT,
-            LayoutParams.MATCH_PARENT));
+            LayoutParams.MATCH_PARENT));*/
         
     }
     
@@ -353,5 +356,77 @@ private static final String LOGTAG = "CloudReco";
             mGlView.onResume();
         }
         
+    }
+    
+    public void openMenu(View view) {
+        // Do something in response to button
+    }
+    
+    @Override 
+    public boolean onTouchEvent(MotionEvent event){ 
+        this.mDetector.onTouchEvent(event);
+        // Be sure to call the superclass implementation
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent event) { 
+        Log.d(DEBUG_TAG,"onDown: " + event.toString()); 
+        return true;
+    }
+
+    @Override
+    public boolean onFling(MotionEvent event1, MotionEvent event2, 
+            float velocityX, float velocityY) {
+        Log.d(DEBUG_TAG, "onFling: " + event1.toString()+event2.toString());
+        return true;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onLongPress: " + event.toString()); 
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+            float distanceY) {
+        Log.d(DEBUG_TAG, "onScroll: " + e1.toString()+e2.toString());
+        return true;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onShowPress: " + event.toString());
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onSingleTapUp: " + event.toString());
+        return true;
+    }
+
+    @Override
+    public boolean onDoubleTap(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onDoubleTap: " + event.toString());
+        mFlash=!mFlash;
+        try {
+			vufWrap.setCameraFlash(mFlash);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return true;
+    }
+
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onDoubleTapEvent: " + event.toString());
+        return true;
+    }
+
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onSingleTapConfirmed: " + event.toString());
+        return true;
     }
 }
