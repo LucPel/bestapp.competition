@@ -36,7 +36,7 @@ import com.qualcomm.vuforia.Vuforia.UpdateCallbackInterface;
 
 
 
-public class MyCloudReco extends Activity implements UpdateCallbackInterface{
+public class MuseumTargetFinder extends Activity implements UpdateCallbackInterface{
 
 private static final String LOGTAG = "CloudReco";
 
@@ -82,6 +82,7 @@ private static final String LOGTAG = "CloudReco";
     {
         Log.d(LOGTAG, "onCreate");
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         vufWrap=VuforiaWrapper.getInstance();
         //vuforiaAppSession = new SampleApplicationSession(this);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
