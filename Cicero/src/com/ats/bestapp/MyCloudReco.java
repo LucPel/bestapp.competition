@@ -82,7 +82,7 @@ private static final String LOGTAG = "CloudReco";
     {
         Log.d(LOGTAG, "onCreate");
         super.onCreate(savedInstanceState);
-        vufWrap=new VuforiaWrapper();
+        vufWrap=VuforiaWrapper.getInstance();
         //vuforiaAppSession = new SampleApplicationSession(this);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         updateActivityOrientation();

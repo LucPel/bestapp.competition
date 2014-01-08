@@ -16,17 +16,6 @@ import com.qualcomm.vuforia.VideoBackgroundConfig;
 import com.qualcomm.vuforia.VideoMode;
 import com.qualcomm.vuforia.Vuforia;
 import com.qualcomm.vuforia.Vuforia.UpdateCallbackInterface;
-
-
-
-
-
-
-
-
-
-
-
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -36,10 +25,21 @@ import android.view.WindowManager;
 
 public class VuforiaWrapper{
 
-	 private static final String LOGTAG = "BestApp";
-	 private InitVuforiaTask initVuforiaTask;
-	 
-	 
+	private static final String LOGTAG = "VuforiaWrapper";
+	private InitVuforiaTask initVuforiaTask;
+	
+	//pattern Singleton
+	private static VuforiaWrapper instance = null;
+	
+	private VuforiaWrapper() {}
+
+	public static synchronized VuforiaWrapper getInstance() {
+	        if (instance == null) 
+	        	instance = new VuforiaWrapper();
+	        return instance;
+	    }
+
+	
 	
 	public void initAR(Activity currentARActivity) throws Exception{
 			 //initVuforiaTask = new InitVuforiaTask();
