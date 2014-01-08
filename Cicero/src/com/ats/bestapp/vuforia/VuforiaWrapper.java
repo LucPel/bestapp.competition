@@ -374,4 +374,17 @@ public class VuforiaWrapper{
     	return Vuforia.requiresAlpha();
     }
     
+    public void setCameraFlash(boolean activeFlash) throws Exception{
+    	boolean result=CameraDevice.getInstance().setFlashTorchMode(activeFlash);
+    	if(!result) throw new Exception("Flash non attivabile");
+    }
+    
+    public void setFocusMode() throws Exception{
+    	boolean result=CameraDevice.getInstance().setFocusMode(
+                CameraDevice.FOCUS_MODE.FOCUS_MODE_CONTINUOUSAUTO);
+    	if(!result){
+    		throw new Exception("Error on Setting FocusMode");
+    	}
+    }
+    
 }
