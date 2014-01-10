@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  <TableLayout android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+    <TableRow android:id="@+id/tableRow1"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center">
+      <ImageButton android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher"
+        android:background="@android:color/transparent"
+        android:padding="5dp"/>
+      <TextView android:id="@+id/textview1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Prova1"
+        android:textSize="20dp"
+        android:layout_gravity="center"/>
+                </TableRow>
+                <TableRow android:id="@+id/tableRow2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <ImageButton android:id="@+id/button2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/ic_launcher"
+      android:background="@android:color/transparent"
+      android:padding="5dp"/>
+    <TextView android:id="@+id/textview2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Prova2"
+      android:textSize="20dp"
+      android:layout_gravity="center"/>
+    </TableRow>
+                <TableRow android:id="@+id/tableRow2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <ImageButton android:id="@+id/button2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/ic_launcher"
+      android:background="@android:color/transparent"
+      android:padding="5dp"/>
+    <TextView android:id="@+id/textview2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Prova3"
+      android:textSize="20dp"
+      android:layout_gravity="center"/>
+    </TableRow>
+  </TableLayout>
+</LinearLayout>
