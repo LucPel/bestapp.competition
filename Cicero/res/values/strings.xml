@@ -4,5 +4,8 @@
     <string name="app_name">Cicero</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="info_museum">Info</string>
+    <string name="tutorial_museum">Tutorial</string>
+    <string name="setLanguage_museum">Language</string>
 
 </resources>

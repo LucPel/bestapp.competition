@@ -2,8 +2,10 @@ package com.ats.bestapp;
 
 import java.util.Vector;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -14,6 +16,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -83,12 +87,12 @@ private static final String LOGTAG = "CloudReco";
     {
         Log.d(LOGTAG, "onCreate");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
         vufWrap=VuforiaWrapper.getInstance();
         mDetector = new GestureDetectorCompat(this,this);
         mDetector.setOnDoubleTapListener(this);
         //vuforiaAppSession = new SampleApplicationSession(this);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         updateActivityOrientation();
         storeScreenDimensions();
 		// As long as this window is visible to the user, keep the device's
@@ -140,6 +144,7 @@ private static final String LOGTAG = "CloudReco";
             // background is configured.
             addContentView(mGlView, new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
+
             
             // Start the camera:
             try
@@ -384,7 +389,9 @@ private static final String LOGTAG = "CloudReco";
 
     @Override
     public void onLongPress(MotionEvent event) {
-        Log.d(DEBUG_TAG, "onLongPress: " + event.toString()); 
+        Log.d(DEBUG_TAG, "onLongPress: " + event.toString());
+        RelativeLayout rl=(RelativeLayout)findViewById(R.id.main_layout);
+    	rl.addView(mGlView);
     }
 
     @Override
@@ -427,6 +434,15 @@ private static final String LOGTAG = "CloudReco";
     @Override
     public boolean onSingleTapConfirmed(MotionEvent event) {
         Log.d(DEBUG_TAG, "onSingleTapConfirmed: " + event.toString());
+        RelativeLayout rl=(RelativeLayout)findViewById(R.id.main_layout);
+        LayoutInflater inflater=LayoutInflater.from(this);
+        View menuLayout = inflater.inflate(R.layout.menu2, rl, true);
+        menuLayout.setVisibility(View.VISIBLE);
+        menuLayout.setBackgroundColor(Color.TRANSPARENT);
+    	//rl.removeView(mGlView);
+        addContentView(menuLayout, new LayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT));
         return true;
     }
+    
 }
