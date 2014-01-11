@@ -101,7 +101,7 @@ public class VuforiaWrapper{
         
         try
         {
-            setFocusMode(CameraDevice.FOCUS_MODE.FOCUS_MODE_TRIGGERAUTO);
+            setFocusMode(CameraDevice.FOCUS_MODE.FOCUS_MODE_CONTINUOUSAUTO);
         } catch (Exception exceptionTriggerAuto)
         {
             setFocusMode(CameraDevice.FOCUS_MODE.FOCUS_MODE_NORMAL);
@@ -379,12 +379,5 @@ public class VuforiaWrapper{
     	if(!result) throw new Exception("Flash non attivabile");
     }
     
-    public void setFocusMode() throws Exception{
-    	boolean result=CameraDevice.getInstance().setFocusMode(
-                CameraDevice.FOCUS_MODE.FOCUS_MODE_CONTINUOUSAUTO);
-    	if(!result){
-    		throw new Exception("Error on Setting FocusMode");
-    	}
-    }
     
 }

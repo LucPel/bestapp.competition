@@ -155,15 +155,7 @@ private static final String LOGTAG = "CloudReco";
             } catch (Exception e)
             {
                 Log.e(LOGTAG, e.getMessage());
-            }
-            
-            boolean result = CameraDevice.getInstance().setFocusMode(
-                CameraDevice.FOCUS_MODE.FOCUS_MODE_CONTINUOUSAUTO);
-            
-            if (result)
-                mContAutofocus = true;
-            else
-                Log.e(LOGTAG, "Unable to enable continuous autofocus");
+            }      
             
             //mUILayout.bringToFront();
             
