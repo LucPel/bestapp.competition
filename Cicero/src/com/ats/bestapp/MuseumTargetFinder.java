@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -121,6 +122,7 @@ private static final String LOGTAG = "CloudReco";
         	Log.e(LOGTAG, "Error onCreate ");
         	e.printStackTrace();
         }
+        initMenu();
         //startLoadingAnimation();
         
         //vuforiaAppSession.initAR(this, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -434,7 +436,11 @@ private static final String LOGTAG = "CloudReco";
     @Override
     public boolean onSingleTapConfirmed(MotionEvent event) {
         Log.d(DEBUG_TAG, "onSingleTapConfirmed: " + event.toString());
-        RelativeLayout rl=(RelativeLayout)findViewById(R.id.main_layout);
+        return true;
+    }
+    
+    private void initMenu(){
+    	RelativeLayout rl=(RelativeLayout)findViewById(R.id.main_layout);
         LayoutInflater inflater=LayoutInflater.from(this);
         View menuLayout = inflater.inflate(R.layout.menu2, rl, true);
         menuLayout.setVisibility(View.VISIBLE);
@@ -442,7 +448,13 @@ private static final String LOGTAG = "CloudReco";
     	//rl.removeView(mGlView);
         addContentView(menuLayout, new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
-        return true;
+        ImageButton ib = (ImageButton) findViewById(R.id.button1);
+        ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "test", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     
 }
