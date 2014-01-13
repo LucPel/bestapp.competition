@@ -440,7 +440,7 @@ private static final String LOGTAG = "CloudReco";
     	//rl.removeView(mGlView);
         addContentView(menuLayout, new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
-        ImageButton ib = (ImageButton) findViewById(R.id.button1);
+        ImageButton ib = (ImageButton) findViewById(R.id.add);
         ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
