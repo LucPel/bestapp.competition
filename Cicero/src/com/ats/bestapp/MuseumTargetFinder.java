@@ -15,6 +15,7 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,7 @@ import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -236,13 +238,12 @@ private static final String LOGTAG = "CloudReco";
             if (finder.getResultCount() > 0)
             {
                 TargetSearchResult result = finder.getResult(0);
-                
+                Trackable trackable = finder.enableTracking(result);
+                String toastMessage="riconosciuto Target "+trackable.getId()+" "+trackable.getName();
+                Toast.makeText(this, toastMessage , Toast.LENGTH_LONG).show();
                 // Check if this target is suitable for tracking:
                 if (result.getTrackingRating() > 0)
                 {
-                    Trackable trackable = finder.enableTracking(result);
-                    String toastMessage="riconosciuto Target "+trackable.getId()+" "+trackable.getName();
-                    Toast.makeText(this, toastMessage , Toast.LENGTH_LONG).show();
                     if (mExtendedTracking)
                         trackable.startExtendedTracking();
                 }
@@ -298,16 +299,14 @@ private static final String LOGTAG = "CloudReco";
         super.onPause();
         
         // Turn off the flash
-        if (mFlashOptionView != null && mFlash)
+        if (mFlash)
         {
-            // OnCheckedChangeListener is called upon changing the checked state
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-            {
-                //((Switch) mFlashOptionView).setChecked(false);
-            } else
-            {
-                //((CheckBox) mFlashOptionView).setChecked(false);
-            }
+        	try {
+    			vufWrap.setCameraFlash(!mFlash);
+    		} catch (Exception e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
         }
         
         try
@@ -337,7 +336,7 @@ private static final String LOGTAG = "CloudReco";
         if (mIsDroidDevice)
         {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         
         try
@@ -436,9 +435,8 @@ private static final String LOGTAG = "CloudReco";
         LayoutInflater inflater=LayoutInflater.from(this);
         View menuLayout = inflater.inflate(R.layout.menu2, rl, true);
         menuLayout.setVisibility(View.VISIBLE);
-        menuLayout.setBackgroundColor(Color.TRANSPARENT);
-    	//rl.removeView(mGlView);
-        addContentView(menuLayout, new LayoutParams(LayoutParams.MATCH_PARENT,
+        //menuLayout.setBackgroundColor(Color.TRANSPARENT);
+        addContentView(menuLayout, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
         ImageButton ib = (ImageButton) findViewById(R.id.add);
         ib.setOnClickListener(new View.OnClickListener() {

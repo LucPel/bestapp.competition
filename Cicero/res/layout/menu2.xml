@@ -1,57 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-	android:layout_height="fill_parent"
-	android:orientation="vertical">
-	
-	<TableRow 
-	    android:gravity="right"
-	    android:layout_width="wrap_content"
-		android:layout_height="fill_parent">
-	    <ImageButton 
-        android:id="@+id/add"
-        android:layout_width="wrap_content"
-        android:layout_weight=".33"
-		android:layout_height="0dp"
-		android:src="@drawable/info"
-		android:background="@android:color/transparent"
-		android:onClick="add"
-		android:enabled="true"
-		android:text="+"
-		android:layout_margin="2dp"
-		android:gravity="right"/>
-	</TableRow>
-	
-	<TableRow android:gravity="right"
-	    android:layout_width="wrap_content"
-		android:layout_height="fill_parent">
-    <ImageButton 
-        android:id="@+id/minus"
-        android:layout_width="wrap_content"
-        android:layout_weight=".33"
-		android:layout_height="0dp"
-		android:layout_margin="2dp"
-		android:src="@drawable/info"
-		android:background="@android:color/transparent"
-		android:onClick="minus"
-		android:text="-"/>
-    </TableRow>
-    
-	<TableRow android:gravity="right"
-	    android:layout_width="wrap_content"
-		android:layout_height="fill_parent">
-    <ImageButton 
-        android:id="@+id/multiply"
-        android:layout_width="wrap_content"
-        android:layout_weight=".33"
-		android:layout_height="0dp"
-		android:layout_margin="2dp"
-		android:src="@drawable/info"
-		android:background="@android:color/transparent"
-		android:onClick="multiply"
-		android:text="*"/>
-	</TableRow>
-		
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
-    
-</TableLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+    	android:layout_height="match_parent"
+    	android:orientation="horizontal"
+    	android:layout_gravity="right"
+    	android:layout_alignParentRight="true">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/separator01"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="#60DFE5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical" 
+        android:background="#ffffff">
+
+        <ImageButton
+            android:id="@+id/multiply"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.33"
+            android:layout_margin="2dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Language"
+            android:onClick="multiply"
+            android:src="@drawable/info" />
+
+        <ImageButton
+            android:id="@+id/add"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.33"
+            android:layout_margin="2dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Info"
+            android:enabled="true"
+           android:layout_gravity="right"
+            android:onClick="add"
+            android:src="@drawable/info" />
+
+        <ImageButton
+            android:id="@+id/minus"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.33"
+            android:layout_gravity="right"
+            android:layout_margin="2dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Tutorial"
+            android:onClick="minus"
+            android:src="@drawable/info" />
+    </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
