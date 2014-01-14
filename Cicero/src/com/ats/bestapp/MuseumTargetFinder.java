@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -211,6 +212,7 @@ private static final String LOGTAG = "CloudReco";
     {
         // Get the tracker manager:
         TrackerManager trackerManager = TrackerManager.getInstance();
+
         
         // Get the image tracker:
         ImageTracker imageTracker = (ImageTracker) trackerManager
@@ -218,6 +220,7 @@ private static final String LOGTAG = "CloudReco";
         
         // Get the target finder:
         TargetFinder finder = imageTracker.getTargetFinder();
+
         
         // Check if there are new results available:
         final int statusCode = finder.updateSearchResults();
@@ -237,13 +240,13 @@ private static final String LOGTAG = "CloudReco";
             // Process new search results
             if (finder.getResultCount() > 0)
             {
-                TargetSearchResult result = finder.getResult(0);
-                Trackable trackable = finder.enableTracking(result);
-                String toastMessage="riconosciuto Target "+trackable.getId()+" "+trackable.getName();
+            	TargetSearchResult result = finder.getResult(0);  
+                String toastMessage="riconosciuto Target "+result.getUniqueTargetId()+" "+result.getTargetName();
                 Toast.makeText(this, toastMessage , Toast.LENGTH_LONG).show();
                 // Check if this target is suitable for tracking:
                 if (result.getTrackingRating() > 0)
                 {
+                	Trackable trackable = finder.enableTracking(result);
                     if (mExtendedTracking)
                         trackable.startExtendedTracking();
                 }
@@ -312,6 +315,7 @@ private static final String LOGTAG = "CloudReco";
         try
         {
             vufWrap.pauseAR();
+            vufWrap.stopCamera();
         } catch (Exception e)
         {
             Log.e(LOGTAG, e.getMessage());
@@ -342,6 +346,7 @@ private static final String LOGTAG = "CloudReco";
         try
         {
             vufWrap.resumeAR();
+            vufWrap.startAR(CameraDevice.CAMERA.CAMERA_DEFAULT,mScreenWidth , mScreenHeight, isPortrait);
         } catch (Exception e)
         {
             Log.e(LOGTAG, e.getMessage());
@@ -438,13 +443,41 @@ private static final String LOGTAG = "CloudReco";
         //menuLayout.setBackgroundColor(Color.TRANSPARENT);
         addContentView(menuLayout, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
-        ImageButton ib = (ImageButton) findViewById(R.id.add);
-        ib.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), "test", Toast.LENGTH_SHORT).show();
-            }
-        });
+        setOnClickListenerOnInfoButtonMenu();
+        setOnClickListenerOnTutorialButtonMenu();
+        setOnClickListenerOnLanguageButtonMenu();
+        
     }
     
+    private void setOnClickListenerOnInfoButtonMenu(){
+    	 ImageButton infob = (ImageButton) findViewById(R.id.infoButton);
+         infob.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 Toast.makeText(v.getContext(), "Info Activity", Toast.LENGTH_SHORT).show();
+                 Intent intent = new Intent(MuseumTargetFinder.this, InfoMuseum.class);
+                 startActivity(intent);
+             }
+         });
+    }
+    
+    private void setOnClickListenerOnTutorialButtonMenu(){
+   	 ImageButton tutorialb = (ImageButton) findViewById(R.id.tutorialButton);
+   	tutorialb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Tutorial Activity", Toast.LENGTH_SHORT).show();
+            }
+        });
+   }
+    
+    private void setOnClickListenerOnLanguageButtonMenu(){
+    	ImageButton lanb = (ImageButton) findViewById(R.id.languageButton);
+      	lanb.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   Toast.makeText(v.getContext(), "Language Activity", Toast.LENGTH_SHORT).show();
+               }
+           });
+      }
 }

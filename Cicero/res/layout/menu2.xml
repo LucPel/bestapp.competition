@@ -17,7 +17,7 @@
 
         <View
             android:id="@+id/separator01"
-            android:layout_width="2dp"
+            android:layout_width="3dp"
             android:layout_height="match_parent"
             android:background="#60DFE5" />
     </LinearLayout>
@@ -29,7 +29,7 @@
         android:background="#ffffff">
 
         <ImageButton
-            android:id="@+id/multiply"
+            android:id="@+id/infoButton"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="0.33"
@@ -40,7 +40,7 @@
             android:src="@drawable/info" />
 
         <ImageButton
-            android:id="@+id/add"
+            android:id="@+id/tutorialButton"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="0.33"
@@ -53,7 +53,7 @@
             android:src="@drawable/info" />
 
         <ImageButton
-            android:id="@+id/minus"
+            android:id="@+id/languageButton"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="0.33"
