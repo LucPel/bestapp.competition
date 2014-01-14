@@ -50,7 +50,7 @@
             android:enabled="true"
            android:layout_gravity="right"
             android:onClick="add"
-            android:src="@drawable/info" />
+            android:src="@drawable/tutorial" />
 
         <ImageButton
             android:id="@+id/languageButton"
@@ -62,7 +62,7 @@
             android:background="@android:color/transparent"
             android:contentDescription="Tutorial"
             android:onClick="minus"
-            android:src="@drawable/info" />
+            android:src="@drawable/language" />
     </LinearLayout>
     </LinearLayout>
 
