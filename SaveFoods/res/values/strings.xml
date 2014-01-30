@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SaveFoods</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="addFoodAB">Aggiungi Alimento</string>
+    <string name="searchFoodAB">Ricerca Alimento</string>
+    <string name="addFoodRequestAB">Aggiungi Richiesta Alimento</string>
+    <string name="categoryAutoComplete">Categoria</string>
+    <string name="saveFoodButtonLabel">Salva Alimento</string>
+
+</resources>
