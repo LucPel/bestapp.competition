@@ -32,8 +32,11 @@
         </activity>
         <meta-data android:name="com.google.android.gms.version"
            android:value="@integer/google_play_services_version" />
-        <activity android:name="HomeActivity"></activity>
-        <activity android:name="AddFoodActivity" android:parentActivityName="com.ats.bestapp.savefoods.HomeActivity">
+        <activity android:name="HomeActivity"
+            android:theme="@style/Theme.Savefoodab"></activity>
+        <activity android:name="AddFoodActivity" 
+            android:parentActivityName="com.ats.bestapp.savefoods.HomeActivity"
+            android:theme="@style/Theme.Savefoodab">
              >
         	<!-- Parent activity meta-data to support API level 7+ -->
         	<meta-data
