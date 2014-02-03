@@ -40,6 +40,7 @@
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_savefoodab</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_savefoodab</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Savefoodab</item>
+        <item name="android:displayOptions">showHome|useLogo</item>
     </style>
 
     <style name="ActionBar.Transparent.Savefoodab" parent="@android:style/Widget.Holo.ActionBar">
