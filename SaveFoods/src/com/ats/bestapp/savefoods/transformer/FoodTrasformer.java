@@ -11,9 +11,9 @@ import com.ats.bestapp.savefoods.R;
 import com.ats.bestapp.savefoods.data.Food;
 import com.ats.bestapp.savefoods.data.User;
 
-public class FoodTransformer {
+public class FoodTrasformer {
 
-	public Food transformInFood(View view,HashMap<String, Object> commonsData){
+	public Food trasformInFood(View view,HashMap<String, Object> commonsData){
 		EditText name=(EditText) view.findViewById(R.id.food_name_text);
 		EditText description=(EditText) view.findViewById(R.id.food_description_text);
 		EditText category=(EditText) view.findViewById(R.id.food_category_text);
@@ -26,9 +26,13 @@ public class FoodTransformer {
 		food.setDueDate(date.getText().toString());
 		food.setLatitude((Double)commonsData.get(Constants.latitudeKey));
 		food.setLongitude((Double)commonsData.get(Constants.longitudeKey));
-		User user=new User();
-		user.setUsername((String) commonsData.get(Constants.userNameSP));
-		food.setOwner(user);
+		String userd=(String)commonsData.get(Constants.userIdSP);
+		if(userd==null){
+			User user=new User();
+			user.setUsername((String) commonsData.get(Constants.userNameSP));
+			user.setNickname((String) commonsData.get(Constants.userNameSP));
+			food.setOwner(user);
+		}
 		return food;
 	}
 	

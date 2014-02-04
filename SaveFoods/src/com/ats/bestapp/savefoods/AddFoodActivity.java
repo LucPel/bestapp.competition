@@ -22,17 +22,24 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import com.ats.bestapp.savefoods.data.proxy.FoodProxy;
-import com.ats.bestapp.savefoods.transformer.FoodTransformer;
+import com.ats.bestapp.savefoods.data.proxy.UserProxy;
+import com.ats.bestapp.savefoods.transformer.FoodTrasformer;
 import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
 
 public class AddFoodActivity extends FragmentActivity{
 
 	private HashMap<String, Object> commonsData;
 	private LocationListenerWrapper locListenerWrap;
+	private FoodProxy fproxy;
+	private FoodTrasformer ftransformer;
+	private UserProxy userProxy;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		init();
 		setContentView(R.layout.activity_add_food);
 		ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
@@ -40,6 +47,7 @@ public class AddFoodActivity extends FragmentActivity{
 	    SharedPreferences settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
 		commonsData=new HashMap<String, Object>();
 		commonsData.put(Constants.userNameSP, settings.getString(Constants.userNameSP, null));
+		commonsData.put(Constants.userIdSP, settings.getString(Constants.userIdSP, null));
 		Calendar cal = Calendar.getInstance();
 		EditText dueDate=(EditText)findViewById(R.id.food_due_date);
 		dueDate.clearComposingText();
@@ -58,12 +66,15 @@ public class AddFoodActivity extends FragmentActivity{
 	}
 	
 	public void saveFood(View view){
-		FoodProxy fproxy=new FoodProxy();
-		FoodTransformer ftransformer=new FoodTransformer();
 		try {
 			commonsData.put(Constants.latitudeKey, locListenerWrap.getLatitude());
 			commonsData.put(Constants.longitudeKey, locListenerWrap.getLongitude());
-			fproxy.addFood(ftransformer.transformInFood(view.getRootView(), commonsData),this);
+			String userd=(String)commonsData.get(Constants.userIdSP);
+			ParseObject user=null;
+			if(userd!=null && !userd.isEmpty()){
+				user=userProxy.getUser((String)commonsData.get(Constants.userNameSP));
+			}
+			fproxy.addFood(ftransformer.trasformInFood(view.getRootView(), commonsData),user);
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,6 +85,9 @@ public class AddFoodActivity extends FragmentActivity{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -104,5 +118,12 @@ public class AddFoodActivity extends FragmentActivity{
 	  protected void onPause() {
 	    super.onPause();
 	    locListenerWrap.removeUpdates();
+	  }
+	  
+	  private void init(){
+		  fproxy=new FoodProxy();
+			ftransformer=new FoodTrasformer();
+			userProxy=new UserProxy();
+			Parse.initialize(this, "PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla", "lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp");
 	  }
 }
