@@ -1,13 +1,17 @@
 package com.ats.bestapp.savefoods.data;
 
+import java.util.ArrayList;
+
 public class Food {
 
+	private String foodId;
 	private String name;
 	private String description;
 	private String dueDate;
 	private String status;
 	private String type;
 	private User owner;
+	private ArrayList<ImageWrapper> images;
 	private double latitude;
 	private double longitude;
 	private SavingFoodAssignment savingFoodAssignment;
@@ -66,5 +70,17 @@ public class Food {
 	}
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
+	}
+	public String getFoodId() {
+		return foodId;
+	}
+	public void setFoodId(String foodId) {
+		this.foodId = foodId;
+	}
+	public ArrayList<ImageWrapper> getImages() {
+		return images;
+	}
+	public void setImages(ArrayList<ImageWrapper> images) {
+		this.images = images;
 	}
 }

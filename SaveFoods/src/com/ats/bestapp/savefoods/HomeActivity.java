@@ -1,6 +1,7 @@
 package com.ats.bestapp.savefoods;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.codehaus.jackson.JsonGenerationException;
@@ -8,15 +9,19 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.json.JSONException;
 
+import com.ats.bestapp.savefoods.data.Food;
+import com.ats.bestapp.savefoods.data.User;
 import com.ats.bestapp.savefoods.data.proxy.FoodProxy;
 import com.ats.bestapp.savefoods.data.proxy.UserProxy;
-import com.ats.bestapp.savefoods.transformer.UserTransformer;
+import com.ats.bestapp.savefoods.trasformer.UserTransformer;
 import com.google.android.gms.plus.PlusClient;
 import com.parse.Parse;
 import com.parse.ParseException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,13 +29,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
+import android.widget.Toast;
 
 public class HomeActivity extends Activity{
 
-	FoodProxy foodProxy;
-	UserTransformer	userTrasformer;
+	private FoodProxy foodProxy;
+	private User	user;
 	private HashMap<String, Object> commonsData;
 	private UserProxy userProxy;
+	private SharedPreferences settings;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,15 +48,16 @@ public class HomeActivity extends Activity{
 		setContentView(R.layout.activity_home);
 		//Parse.initialize(this, "PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla", "lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp"); 
 		init();
-		SharedPreferences settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
+		settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
 		commonsData=new HashMap<String, Object>();
 		try {
-			commonsData.put(Constants.userIdSP, userProxy.getUserID(settings.getString(Constants.userNameSP, null), this));
+			user=userProxy.getUser(settings.getString(Constants.userNameSP, null), this);
+			commonsData.put(Constants.userIdSP, user.getUserId());
 			commonsData.put(Constants.userNameSP, settings.getString(Constants.userNameSP, null));
-			String userId=(String)commonsData.get(Constants.userIdSP);
-			if(userId!=null && !userId.isEmpty()){
-				settings.edit().putString(Constants.userIdSP, userId).commit();
-				foodProxy.getFoods4User(userId, this);
+			if(user.getUserId()!=null && !user.getUserId().isEmpty()){
+				settings.edit().putString(Constants.userIdSP, user.getUserId()).commit();
+				ArrayList<Food> foods=(ArrayList<Food>) foodProxy.getFoods4User(user.getUserId(), this);
+				fillGrid(foods);
 			}
 			
 		} catch (ParseException e1) {
@@ -76,7 +87,7 @@ public class HomeActivity extends Activity{
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.action_bar, menu);
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 	
 	@Override
@@ -107,8 +118,31 @@ public class HomeActivity extends Activity{
 	
 	private void init(){
 		foodProxy=new FoodProxy();
-		userTrasformer=new UserTransformer();
 		userProxy=new UserProxy();
 		Parse.initialize(this, "PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla", "lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp");
 	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		
+	}
+	
+	private void fillGrid(ArrayList<Food> foods){
+		GridView gridView = (GridView) findViewById(R.id.gridview);
+		 
+		gridView.setAdapter(new HomeTableAdapter(this, foods));
+ 
+		gridView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View v,
+					int position, long id) {
+				Toast.makeText(
+				   getApplicationContext(),
+				   "esempio", Toast.LENGTH_SHORT).show();
+ 
+			}
+		});
+	}
+	
+	
 }

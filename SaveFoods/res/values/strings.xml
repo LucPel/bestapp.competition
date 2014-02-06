@@ -9,5 +9,6 @@
     <string name="addFoodRequestAB">Aggiungi Richiesta Alimento</string>
     <string name="categoryAutoComplete">Categoria</string>
     <string name="saveFoodButtonLabel">Salva Alimento</string>
+    <string name="addFoodImageButtonLabel">Aggiungi Foto</string>
 
 </resources>

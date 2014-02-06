@@ -10,38 +10,43 @@
 
     <EditText
         android:id="@+id/food_name_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="0dp"
-        android:ems="10"
         android:inputType="text" >
-
         <requestFocus />
     </EditText>
 
     <EditText
         android:id="@+id/food_description_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/food_name_text"
         android:layout_below="@+id/food_name_text"
         android:layout_marginTop="22dp"
-        android:ems="10"
         android:inputType="text" />
 
     <AutoCompleteTextView
         android:id="@+id/food_category_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/food_description_text"
         android:layout_marginTop="22dp"
-        android:ems="10"
         android:inputType="textAutoComplete"
         android:text="@string/categoryAutoComplete" />
 
+    <Button
+        android:id="@+id/add_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:onClick="addImage"
+        android:layout_below="@+id/food_due_date"
+        android:text="@string/addFoodImageButtonLabel" />
+    
     <Button
         android:id="@+id/add_food_button"
         android:layout_width="wrap_content"
@@ -53,18 +58,24 @@
         android:text="@string/saveFoodButtonLabel" />
 
     
-    
     <EditText
             android:id="@+id/food_due_date"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/food_category_text"
         	android:layout_marginTop="22dp"
-            android:ems="10"
             android:focusable="false"
             android:inputType="date"
             android:onClick="showDatePickerDialog" >
    </EditText>
-    
+
+    <ImageView
+        android:id="@+id/imageFood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/add_image_button"
+        android:layout_below="@+id/add_image_button"
+        android:layout_marginTop="14dp"
+        android:src="@drawable/logo_launcher" />
 
 </RelativeLayout>

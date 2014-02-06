@@ -10,7 +10,9 @@ import com.google.android.gms.plus.PlusClient;
 import android.os.Bundle;
 import android.accounts.Account;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.content.SharedPreferences;
@@ -29,7 +31,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 	private final String LogTag="Login";
 	private PlusClient mPlusClient;
     private ConnectionResult mConnectionResult;
-	
+	private boolean loggedin=false;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,9 +42,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
          //.setScopes(Scopes.PLUS_LOGIN)  // recommended login scope for social features
          // .setScopes("profile")       // alternative basic login scope
          .build();
-		 // Progress bar to be displayed if the connection failure is not resolved.
-		 mConnectionProgressDialog = new ProgressDialog(this);
-		 mConnectionProgressDialog.setMessage("Signing in...");
 		 SharedPreferences settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
 		 String userName = settings.getString(Constants.userNameSP, null);
 		 if(userName!=null){
@@ -85,8 +85,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
-		// We've resolved any connection errors.
-		  mConnectionProgressDialog.dismiss();
 		  String accountName = mPlusClient.getAccountName();
 	      Toast.makeText(this, accountName + " is connected.", Toast.LENGTH_LONG).show();
 	      SharedPreferences settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
@@ -94,14 +92,16 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 	      editor.putString(Constants.userNameSP, accountName);
 	      // Commit the edits!
 	      editor.commit();
+	      loggedin=true;
 	      Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
           startActivity(intent);
-		
+          
 	}
 
 	@Override
 	public void onDisconnected() {
 		Log.d(LogTag, "disconnected");
+		loggedin=false;
 		
 	}
 
@@ -116,7 +116,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 	 @Override
 	    protected void onStart() {
 	        super.onStart();
-	        mPlusClient.connect();
+	        //mPlusClient.connect();
 	    }
 
 	    @Override
@@ -125,6 +125,14 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 	        mPlusClient.disconnect();
 	    }
 
+	    public void onResume(){
+	    	super.onResume();
+	    	if(loggedin){
+	    		showDialog4Exit();
+	    	}
+	    	
+	    }
+	    
 	    @Override
 	    public void onClick(View view) {
 	        if (view.getId() == R.id.sign_in_button && !mPlusClient.isConnected()) {
@@ -140,6 +148,44 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 	                }
 	            }
 	        }
+	    }
+	    
+	    public void onBackPressed(){
+			showDialog4Exit();
+		}
+	    
+	    private void showDialog4Exit(){
+	    	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+					this);
+	 
+				// set title
+				alertDialogBuilder.setTitle("Exit");
+	 
+				// set dialog message
+				alertDialogBuilder
+					.setMessage("Click yes to exit!")
+					.setCancelable(false)
+					.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int id) {
+							// if this button is clicked, close
+							// current activity
+							LoginActivity.this.finish();
+						}
+					  })
+					.setNegativeButton("No",new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int id) {
+							// if this button is clicked, just close
+							// the dialog box and do nothing
+							dialog.cancel();
+							mPlusClient.connect();
+						}
+					});
+	 
+					// create alert dialog
+					AlertDialog alertDialog = alertDialogBuilder.create();
+	 
+					// show it
+					alertDialog.show();
 	    }
 
 }

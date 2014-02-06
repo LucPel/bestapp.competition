@@ -2,6 +2,7 @@ package com.ats.bestapp.savefoods.data;
 
 public class User {
 
+	private String userId;
 	private String username;
 	private String nickname;
 	
@@ -16,5 +17,11 @@ public class User {
 	}
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 }

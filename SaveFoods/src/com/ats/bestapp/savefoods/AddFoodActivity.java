@@ -1,6 +1,7 @@
 package com.ats.bestapp.savefoods;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -11,19 +12,30 @@ import org.json.JSONException;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.ats.bestapp.savefoods.data.proxy.FoodProxy;
 import com.ats.bestapp.savefoods.data.proxy.UserProxy;
-import com.ats.bestapp.savefoods.transformer.FoodTrasformer;
+import com.ats.bestapp.savefoods.trasformer.FoodTrasformer;
+import com.ats.bestapp.savefoods.utilities.JsonMapper;
+import com.ats.bestapp.savefoods.utilities.MediaFile;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -35,6 +47,8 @@ public class AddFoodActivity extends FragmentActivity{
 	private FoodProxy fproxy;
 	private FoodTrasformer ftransformer;
 	private UserProxy userProxy;
+	private ArrayList<Uri> imegesUri;
+	private String logTag="AddFoodActivity";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +86,14 @@ public class AddFoodActivity extends FragmentActivity{
 			String userd=(String)commonsData.get(Constants.userIdSP);
 			ParseObject user=null;
 			if(userd!=null && !userd.isEmpty()){
-				user=userProxy.getUser((String)commonsData.get(Constants.userNameSP));
+				user=userProxy.getUserParseObject((String)commonsData.get(Constants.userNameSP));
 			}
-			fproxy.addFood(ftransformer.trasformInFood(view.getRootView(), commonsData),user);
+			ArrayList<byte[]> imagesByte=new ArrayList<byte[]>();
+			for(Uri currentUri : imegesUri){
+				imagesByte.add(MediaFile.getImageBytes(this, currentUri));		
+			}
+			Log.d(logTag, JsonMapper.convertObject2String(imagesByte));
+			fproxy.addFood(ftransformer.trasformInFood(view.getRootView(), commonsData,imagesByte),user);
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -121,9 +140,42 @@ public class AddFoodActivity extends FragmentActivity{
 	  }
 	  
 	  private void init(){
-		  fproxy=new FoodProxy();
-			ftransformer=new FoodTrasformer();
-			userProxy=new UserProxy();
-			Parse.initialize(this, "PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla", "lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp");
+		fproxy=new FoodProxy();
+		ftransformer=new FoodTrasformer();
+		userProxy=new UserProxy();
+		imegesUri=new ArrayList<Uri>();
+		Parse.initialize(this, "PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla", "lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp");
+	  }
+	  
+	  public void addImage(View view){
+		  Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		  Uri fileUri = MediaFile.getOutputMediaFileUri(MediaFile.MEDIA_TYPE_IMAGE); // create a file to save the image
+		  Log.d(logTag, "URI gen "+fileUri.getPath());
+		  if(fileUri!=null){
+			  imegesUri.add(fileUri);
+			  intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+			    // start the image capture Intent
+			  startActivityForResult(intent, Constants.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+		  }
+		 
+	  }
+	  
+	  @Override
+	  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	      if (requestCode == Constants.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+	          if (resultCode == RESULT_OK) {
+	              // Image captured and saved to fileUri specified in the Intent
+	              Toast.makeText(this, "Image saved to:\n" +
+	                       imegesUri.get(imegesUri.size()-1).getPath(), Toast.LENGTH_LONG).show();
+	              final int THUMBSIZE = 96;
+	              Bitmap ThumbImage = MediaFile.resizeImageUri(imegesUri.get(0),THUMBSIZE, THUMBSIZE);
+	              ImageView foodImage = (ImageView) findViewById(R.id.imageFood);
+	              foodImage.setImageBitmap(ThumbImage);
+	          } else if (resultCode == RESULT_CANCELED) {
+	              // User cancelled the image capture
+	          } else {
+	              // Image capture failed, advise user
+	          }
+	      }
 	  }
 }
