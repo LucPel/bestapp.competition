@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.net.Uri;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -63,7 +67,7 @@ public class FoodTrasformer {
 		return day+"-"+month+"-"+year;
 	}
 	
-	public Food trasformParseObjectToFood(ParseObject food) throws ParseException{
+	public Food trasformParseObjectToFood(ParseObject food) throws ParseException, JSONException{
 		Food foodT=new Food();
 		foodT.setFoodId(food.getObjectId());
 		foodT.setName(food.getString(Constants.foodNamePO));
@@ -78,6 +82,20 @@ public class FoodTrasformer {
 		userTrasformer=new UserTransformer();
 		User user=userTrasformer.trasformUserFromParseObject(userObj);
 		foodT.setOwner(user);
+		JSONArray images=food.getJSONArray(Constants.foodImagesPO);
+		ArrayList<ImageWrapper> imagesWrapper=new ArrayList<ImageWrapper>();
+		JSONObject jsonObjImage;
+		String currentImage;
+		if(images!=null){
+			for(int i=0;i<images.length();i++){
+				jsonObjImage=(JSONObject) images.get(i);
+				currentImage=jsonObjImage.getString("base64");
+				ImageWrapper imgWrapper=new ImageWrapper();
+				imgWrapper.setImage(Base64.decode(currentImage, Base64.DEFAULT));
+				imagesWrapper.add(imgWrapper);
+			}
+			foodT.setImages(imagesWrapper);
+		}
 		Log.d(logTag, JsonMapper.convertObject2String(foodT));
 		return foodT;
 	}

@@ -90,7 +90,7 @@ public class AddFoodActivity extends FragmentActivity{
 			}
 			ArrayList<byte[]> imagesByte=new ArrayList<byte[]>();
 			for(Uri currentUri : imegesUri){
-				imagesByte.add(MediaFile.getImageBytes(this, currentUri));		
+				imagesByte.add(MediaFile.bitmapResized2Bytes(currentUri, 256, 256));		
 			}
 			Log.d(logTag, JsonMapper.convertObject2String(imagesByte));
 			fproxy.addFood(ftransformer.trasformInFood(view.getRootView(), commonsData,imagesByte),user);
@@ -168,7 +168,7 @@ public class AddFoodActivity extends FragmentActivity{
 	              Toast.makeText(this, "Image saved to:\n" +
 	                       imegesUri.get(imegesUri.size()-1).getPath(), Toast.LENGTH_LONG).show();
 	              final int THUMBSIZE = 96;
-	              Bitmap ThumbImage = MediaFile.resizeImageUri(imegesUri.get(0),THUMBSIZE, THUMBSIZE);
+	              Bitmap ThumbImage = MediaFile.bitmapResized(imegesUri.get(imegesUri.size()-1),THUMBSIZE, THUMBSIZE);
 	              ImageView foodImage = (ImageView) findViewById(R.id.imageFood);
 	              foodImage.setImageBitmap(ThumbImage);
 	          } else if (resultCode == RESULT_CANCELED) {

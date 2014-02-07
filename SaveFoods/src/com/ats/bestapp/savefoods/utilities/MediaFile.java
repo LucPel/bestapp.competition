@@ -1,5 +1,6 @@
 package com.ats.bestapp.savefoods.utilities;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -73,9 +74,24 @@ public class MediaFile {
 	      return byteBuffer.toByteArray();
 	}
 	
-	public static Bitmap resizeImageUri(Uri imagesUri,int SizeX,int SizeY){
+	public static Bitmap bitmapResized(Uri imagesUri,int SizeX,int SizeY){
 		Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imagesUri.getPath()), 
                 SizeX, SizeY);
 		return ThumbImage;
+	}
+	
+	public static byte[] bitmapResized2Bytes(Uri imagesUri,int SizeX,int SizeY){
+		Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imagesUri.getPath()), 
+                SizeX, SizeY);
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		ThumbImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+		byte[] byteArray = stream.toByteArray();
+		return byteArray;
+	}
+	
+	public static Bitmap bitmapFromBytesImage(byte[] byteImage){
+		ByteArrayInputStream imageStream = new ByteArrayInputStream(byteImage);
+		Bitmap theImage = BitmapFactory.decodeStream(imageStream);
+		return theImage;
 	}
 }

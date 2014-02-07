@@ -18,6 +18,7 @@ public class Constants {
 	public static final String foodCategoryPO="type";
 	public static final String foodOwnerPO="owner";
 	public static final String foodDueDatePO="dueDate";
+	public static final String foodImagesPO="images";
 	public static final String appName="SaveFoods";
 	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 	

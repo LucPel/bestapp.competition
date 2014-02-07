@@ -41,6 +41,7 @@ public class HomeActivity extends Activity{
 	private HashMap<String, Object> commonsData;
 	private UserProxy userProxy;
 	private SharedPreferences settings;
+	private HomeTableAdapter homeTableAdapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -130,16 +131,18 @@ public class HomeActivity extends Activity{
 	
 	private void fillGrid(ArrayList<Food> foods){
 		GridView gridView = (GridView) findViewById(R.id.gridview);
-		 
-		gridView.setAdapter(new HomeTableAdapter(this, foods));
- 
+		if(homeTableAdapter==null){
+			homeTableAdapter=new HomeTableAdapter(this, foods);
+		}
+		else{
+			homeTableAdapter.setFoods(foods);
+		}
+		gridView.setAdapter(homeTableAdapter);
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
-				Toast.makeText(
-				   getApplicationContext(),
-				   "esempio", Toast.LENGTH_SHORT).show();
- 
+				Food foodSelected=(Food) homeTableAdapter.getItem(position);
+				
 			}
 		});
 	}
