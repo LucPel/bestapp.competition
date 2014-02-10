@@ -10,5 +10,12 @@
     <string name="categoryAutoComplete">Categoria</string>
     <string name="saveFoodButtonLabel">Salva Alimento</string>
     <string name="addFoodImageButtonLabel">Aggiungi Foto</string>
+    <string name="sendCommment">Invia</string>
+    <string-array name="foodStatus">
+      <item>Disponibile</item>
+      <item>In Assegnazione</item>
+      <item>Assegnato</item>
+      <item>Scaduto</item>
+   </string-array>
 
 </resources>

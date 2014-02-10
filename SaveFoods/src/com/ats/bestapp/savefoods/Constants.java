@@ -20,6 +20,10 @@ public class Constants {
 	public static final String foodDueDatePO="dueDate";
 	public static final String foodImagesPO="images";
 	public static final String appName="SaveFoods";
+	public static final String foodStatusDisponibile="Disponibile";
+	public static final String foodStatusInAssegnazione="In Assegnazione";
+	public static final String foodStatusAssegnato="Assegnato";
+	public static final String foodStatusScaduto="Scaduto";
 	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 	
 	

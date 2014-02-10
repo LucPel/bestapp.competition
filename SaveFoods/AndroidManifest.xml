@@ -45,6 +45,13 @@
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.ats.bestapp.savefoods.HomeActivity" />
         </activity>
+        <activity android:name="FoodAssignmentActivity"
+            android:theme="@style/Theme.Savefoodab"
+            android:parentActivityName="com.ats.bestapp.savefoods.HomeActivity">
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.ats.bestapp.savefoods.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

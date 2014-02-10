@@ -1,7 +1,13 @@
 package com.ats.bestapp.savefoods.data;
 
-public class Comment {
+import java.io.Serializable;
 
+public class Comment implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private User user;
 	private String message;
 	

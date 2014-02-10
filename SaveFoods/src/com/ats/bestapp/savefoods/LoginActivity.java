@@ -64,7 +64,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
-		if (mConnectionProgressDialog.isShowing()) {
             // The user clicked the sign-in button already. Start to resolve
             // connection errors. Wait until onConnected() to dismiss the
             // connection dialog.
@@ -75,7 +74,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
                             mPlusClient.connect();
                     }
             }
-    }
 
     // Save the intent so that we can start an activity when the user clicks
     // the sign-in button.

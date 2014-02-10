@@ -28,6 +28,7 @@ import com.ats.bestapp.savefoods.trasformer.FoodTrasformer;
 import com.ats.bestapp.savefoods.trasformer.UserTransformer;
 import com.ats.bestapp.savefoods.utilities.JsonMapper;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -87,5 +88,19 @@ public class FoodProxy {
 		return foods;
 	}
 	
-	
+	public void updateFoodStatus(final Food food){
+		Log.d(logTag, JsonMapper.convertObject2String(food));
+		ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);
+		query.getInBackground(food.getFoodId(), new GetCallback<ParseObject>() {
+			  public void done(ParseObject foodPO, ParseException e) {
+			    if (e == null) {
+			      // Now let's update it with some new data. In this case, only cheatMode and score
+			      // will get sent to the Parse Cloud. playerName hasn't changed.
+			    	Log.d(logTag, JsonMapper.convertObject2String(foodPO));
+			    	foodPO.put("status", food.getStatus());
+			    	foodPO.saveInBackground();
+			    }
+			  }
+			});
+	}
 }

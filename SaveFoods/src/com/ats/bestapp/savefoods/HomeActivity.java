@@ -142,7 +142,9 @@ public class HomeActivity extends Activity{
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 				Food foodSelected=(Food) homeTableAdapter.getItem(position);
-				
+				Intent foodAss=new Intent(parent.getContext(),FoodAssignmentActivity.class);
+				foodAss.putExtra("food", foodSelected);
+				startActivity(foodAss);
 			}
 		});
 	}
