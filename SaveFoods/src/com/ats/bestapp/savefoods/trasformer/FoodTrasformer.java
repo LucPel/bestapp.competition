@@ -17,8 +17,10 @@ import android.widget.EditText;
 
 import com.ats.bestapp.savefoods.Constants;
 import com.ats.bestapp.savefoods.R;
+import com.ats.bestapp.savefoods.data.Comment;
 import com.ats.bestapp.savefoods.data.Food;
 import com.ats.bestapp.savefoods.data.ImageWrapper;
+import com.ats.bestapp.savefoods.data.SavingFoodAssignment;
 import com.ats.bestapp.savefoods.data.User;
 import com.ats.bestapp.savefoods.utilities.JsonMapper;
 import com.parse.ParseException;
@@ -55,17 +57,13 @@ public class FoodTrasformer {
 			imageWrapper.setImage(imageByte);
 			imagesWrapper.add(imageWrapper);
 		}
+		food.setSavingFoodAssignment(new SavingFoodAssignment());
 		Log.d(logTag, JsonMapper.convertObject2String(imagesWrapper));
 		food.setImages(imagesWrapper);
 		return food;
 	}
 	
-	private String date2String(DatePicker date){
-		String day=Integer.toString(date.getDayOfMonth());
-		String month=Integer.toString(date.getMonth());
-		String year=Integer.toString(date.getYear());
-		return day+"-"+month+"-"+year;
-	}
+	
 	
 	public Food trasformParseObjectToFood(ParseObject food) throws ParseException, JSONException{
 		Food foodT=new Food();
@@ -95,6 +93,18 @@ public class FoodTrasformer {
 				imagesWrapper.add(imgWrapper);
 			}
 			foodT.setImages(imagesWrapper);
+		}
+		foodT.setSavingFoodAssignment(new SavingFoodAssignment());
+		JSONArray commentsArray=food.getJSONArray(Constants.foodAssigmentCommentPO);
+		JSONObject currentComment;
+		for(int i=0; i<commentsArray.length();i++){
+			currentComment=commentsArray.getJSONObject(i);
+			Comment comment=new Comment();
+			comment.setMessage(currentComment.getString(Constants.foodAssigmentCommentTextPO));
+			User usercomment=new User();
+			usercomment.setUsername(currentComment.getString(Constants.foodAssigmentCommentUserPO));
+			comment.setUser(usercomment);
+			foodT.getSavingFoodAssignment().addComment(comment);
 		}
 		Log.d(logTag, JsonMapper.convertObject2String(foodT));
 		return foodT;

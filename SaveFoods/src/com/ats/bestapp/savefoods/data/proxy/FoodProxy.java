@@ -21,6 +21,7 @@ import android.widget.EditText;
 
 import com.ats.bestapp.savefoods.Constants;
 import com.ats.bestapp.savefoods.R;
+import com.ats.bestapp.savefoods.data.Comment;
 import com.ats.bestapp.savefoods.data.Food;
 import com.ats.bestapp.savefoods.data.ImageWrapper;
 import com.ats.bestapp.savefoods.data.User;
@@ -49,12 +50,14 @@ public class FoodProxy {
 	public void addFood(Food food,ParseObject user) throws JsonGenerationException, JsonMappingException, IOException, JSONException{
 		//Parse.initialize(context, "PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla", "lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp"); 
 		ParseObject foodObj = new ParseObject(Constants.foodObject);
+		JSONArray assigment=new JSONArray();
 		if(user==null){
 			foodObj.put("owner", userTrasformer.createParseObjectUser(food.getOwner()));
 		}
 		else{
 			foodObj.put("owner", user);
 		}
+		foodObj.put(Constants.foodAssigmentCommentPO, assigment);
 		foodObj.put("name", food.getName());
 		foodObj.put("status", food.getStatus());
 		foodObj.put("type", food.getType());
@@ -72,7 +75,6 @@ public class FoodProxy {
 	
 	public HashMap<String,Food> getFoods4User(String user,Context context) throws ParseException, JsonParseException, JsonMappingException, JsonGenerationException, IOException, JSONException{
 		HashMap<String,Food> foods=new HashMap<String,Food>();
-		//Parse.initialize(context, "PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla", "lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp"); 
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);
 		ParseQuery<ParseObject> queryUser=ParseQuery.getQuery(Constants.userObject);
 		ParseObject userObj=queryUser.get(user);
@@ -93,6 +95,21 @@ public class FoodProxy {
 		ParseObject foodPO=new ParseObject(Constants.foodObject);
 		foodPO.setObjectId(food.getFoodId());
 		foodPO.put("status", food.getStatus());
+		foodPO.saveInBackground();
+	}
+	
+	public void addCommentToAssigment(Food food) throws JSONException{
+		ParseObject foodPO=new ParseObject(Constants.foodObject);
+		foodPO.setObjectId(food.getFoodId());
+		ArrayList<Comment> commentList=(ArrayList<Comment>) food.getSavingFoodAssignment().getConversation();
+		JSONArray commentArray=new JSONArray();
+		for(Comment currComment : commentList){
+			JSONObject jsonComment=new JSONObject();
+			jsonComment.put(Constants.foodAssigmentCommentTextPO, currComment.getMessage());
+			jsonComment.put(Constants.foodAssigmentCommentUserPO, currComment.getUser().getUsername());
+			commentArray.put(jsonComment);
+		}
+		foodPO.put(Constants.foodAssigmentCommentPO, commentArray);
 		foodPO.saveInBackground();
 	}
 }

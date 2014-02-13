@@ -1,6 +1,7 @@
 package com.ats.bestapp.savefoods.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SavingFoodAssignment implements Serializable{
@@ -20,6 +21,9 @@ public class SavingFoodAssignment implements Serializable{
 	}
 	
 	public void addComment(Comment comment){
+		if(conversation==null){
+			conversation=new ArrayList<Comment>();
+		}
 		this.conversation.add(comment);
 	}
 }
