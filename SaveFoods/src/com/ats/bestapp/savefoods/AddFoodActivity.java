@@ -24,6 +24,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -53,10 +54,8 @@ public class AddFoodActivity extends FragmentActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		init();
 		setContentView(R.layout.activity_add_food);
-		ActionBar actionBar = getActionBar();
-	    actionBar.setDisplayHomeAsUpEnabled(true);
+		init();
 	    initCategoryAutoComplete();
 	    SharedPreferences settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
 		commonsData=new HashMap<String, Object>();
@@ -75,8 +74,20 @@ public class AddFoodActivity extends FragmentActivity{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.action_bar, menu);
+		//getMenuInflater().inflate(R.menu.action_bar, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle presses on the action bar items
+	    switch (item.getItemId()) {
+	        case android.R.id.home:
+	        	onBackPressed();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
 	}
 	
 	public void saveFood(View view){
@@ -144,6 +155,8 @@ public class AddFoodActivity extends FragmentActivity{
 		ftransformer=new FoodTrasformer();
 		userProxy=new UserProxy();
 		imegesUri=new ArrayList<Uri>();
+		ActionBar actionBar = getActionBar();
+	    actionBar.setDisplayHomeAsUpEnabled(true);
 		Parse.initialize(this, "PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla", "lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp");
 	  }
 	  

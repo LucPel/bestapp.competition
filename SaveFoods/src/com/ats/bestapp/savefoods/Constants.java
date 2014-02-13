@@ -24,7 +24,9 @@ public class Constants {
 	public static final String foodStatusInAssegnazione="In Assegnazione";
 	public static final String foodStatusAssegnato="Assegnato";
 	public static final String foodStatusScaduto="Scaduto";
+	public static final String foodDetailSP="foodDetail";
 	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+	public static final int FOOD_DETAIL_REQUEST_CODE = 100;
 	
 	
 }

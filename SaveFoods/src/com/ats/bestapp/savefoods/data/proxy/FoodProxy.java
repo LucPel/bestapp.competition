@@ -70,8 +70,8 @@ public class FoodProxy {
 		foodObj.saveInBackground();
 	}
 	
-	public List<Food> getFoods4User(String user,Context context) throws ParseException, JsonParseException, JsonMappingException, JsonGenerationException, IOException, JSONException{
-		ArrayList<Food> foods=new ArrayList<Food>();
+	public HashMap<String,Food> getFoods4User(String user,Context context) throws ParseException, JsonParseException, JsonMappingException, JsonGenerationException, IOException, JSONException{
+		HashMap<String,Food> foods=new HashMap<String,Food>();
 		//Parse.initialize(context, "PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla", "lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp"); 
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);
 		ParseQuery<ParseObject> queryUser=ParseQuery.getQuery(Constants.userObject);
@@ -83,24 +83,16 @@ public class FoodProxy {
 		for(ParseObject food : parseFoods){
 			//Food foodvalue=mapper.readValue(mapper.writeValueAsString(food), Food.class);
 			Log.d(logTag, mapper.writeValueAsString(food));
-			foods.add(foodTrasformer.trasformParseObjectToFood(food));
+			foods.put(food.getObjectId(), foodTrasformer.trasformParseObjectToFood(food));
 		}
 		return foods;
 	}
 	
-	public void updateFoodStatus(final Food food){
+	public void updateFoodStatus(Food food){
 		Log.d(logTag, JsonMapper.convertObject2String(food));
-		ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);
-		query.getInBackground(food.getFoodId(), new GetCallback<ParseObject>() {
-			  public void done(ParseObject foodPO, ParseException e) {
-			    if (e == null) {
-			      // Now let's update it with some new data. In this case, only cheatMode and score
-			      // will get sent to the Parse Cloud. playerName hasn't changed.
-			    	Log.d(logTag, JsonMapper.convertObject2String(foodPO));
-			    	foodPO.put("status", food.getStatus());
-			    	foodPO.saveInBackground();
-			    }
-			  }
-			});
+		ParseObject foodPO=new ParseObject(Constants.foodObject);
+		foodPO.setObjectId(food.getFoodId());
+		foodPO.put("status", food.getStatus());
+		foodPO.saveInBackground();
 	}
 }

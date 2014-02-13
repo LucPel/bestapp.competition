@@ -9,17 +9,15 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 public class FoodStatusSpinnerOnItemClickListener implements OnItemSelectedListener{
 
-	private String foodId;
+	private Food food;
 	
-	public FoodStatusSpinnerOnItemClickListener(String foodId){
-		this.foodId=foodId;
+	public FoodStatusSpinnerOnItemClickListener(Food food){
+		this.food=food;
 	}
 	
 	@Override
 	public void onItemSelected(AdapterView<?> adapterView, View view, int position,
 			long id) {
-		Food food=new Food();
-		food.setFoodId(foodId);
 		food.setStatus(adapterView.getItemAtPosition(position).toString());
 		FoodProxy foodProxy=new FoodProxy();
 		foodProxy.updateFoodStatus(food);

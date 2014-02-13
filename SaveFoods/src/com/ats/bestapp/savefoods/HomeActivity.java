@@ -14,6 +14,7 @@ import com.ats.bestapp.savefoods.data.User;
 import com.ats.bestapp.savefoods.data.proxy.FoodProxy;
 import com.ats.bestapp.savefoods.data.proxy.UserProxy;
 import com.ats.bestapp.savefoods.trasformer.UserTransformer;
+import com.ats.bestapp.savefoods.utilities.JsonMapper;
 import com.google.android.gms.plus.PlusClient;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -25,6 +26,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,12 +44,13 @@ public class HomeActivity extends Activity{
 	private UserProxy userProxy;
 	private SharedPreferences settings;
 	private HomeTableAdapter homeTableAdapter;
+	private HashMap<String, Food> foods;
+	private String logTag="HomeActivity";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-		//Parse.initialize(this, "PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla", "lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp"); 
 		init();
 		settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
 		commonsData=new HashMap<String, Object>();
@@ -57,8 +60,10 @@ public class HomeActivity extends Activity{
 			commonsData.put(Constants.userNameSP, settings.getString(Constants.userNameSP, null));
 			if(user.getUserId()!=null && !user.getUserId().isEmpty()){
 				settings.edit().putString(Constants.userIdSP, user.getUserId()).commit();
-				ArrayList<Food> foods=(ArrayList<Food>) foodProxy.getFoods4User(user.getUserId(), this);
-				fillGrid(foods);
+				if(findViewById(R.id.grid_item_label)==null){
+					foods=(HashMap<String, Food>) foodProxy.getFoods4User(user.getUserId(), this);
+					fillGrid();
+				}
 			}
 			
 		} catch (ParseException e1) {
@@ -126,10 +131,9 @@ public class HomeActivity extends Activity{
 	@Override
 	public void onResume(){
 		super.onResume();
-		
 	}
 	
-	private void fillGrid(ArrayList<Food> foods){
+	private void fillGrid(){
 		GridView gridView = (GridView) findViewById(R.id.gridview);
 		if(homeTableAdapter==null){
 			homeTableAdapter=new HomeTableAdapter(this, foods);
@@ -143,11 +147,25 @@ public class HomeActivity extends Activity{
 					int position, long id) {
 				Food foodSelected=(Food) homeTableAdapter.getItem(position);
 				Intent foodAss=new Intent(parent.getContext(),FoodAssignmentActivity.class);
-				foodAss.putExtra("food", foodSelected);
-				startActivity(foodAss);
+				//settings.edit().putString(Constants.foodDetailSP, JsonMapper.convertObject2String(foodSelected)).apply();
+				foodAss.putExtra(Constants.foodDetailSP, foodSelected);
+				Log.d(logTag, JsonMapper.convertObject2String(foodSelected));
+				startActivityForResult(foodAss, Constants.FOOD_DETAIL_REQUEST_CODE);
 			}
 		});
 	}
 	
+	@Override
+	protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
+		Log.d(logTag, "requestCode "+requestCode+" responseCode "+responseCode);
+		if (requestCode == Constants.FOOD_DETAIL_REQUEST_CODE && responseCode == RESULT_OK) {
+	        Food food=(Food) intent.getSerializableExtra(Constants.foodDetailSP);
+	        if(food!=null){
+	        	foods.remove(food.getFoodId());
+				foods.put(food.getFoodId(), food);
+				Log.d(logTag, "onActivityResult "+food.getStatus());
+	        }
+	    }
+	}
 	
 }

@@ -2,6 +2,7 @@ package com.ats.bestapp.savefoods;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import com.ats.bestapp.savefoods.data.Food;
 import com.ats.bestapp.savefoods.utilities.MediaFile;
@@ -19,10 +20,10 @@ import android.widget.TextView;
 public class HomeTableAdapter extends BaseAdapter{
 
 	private Context context;
-	private ArrayList<Food> items;
+	private HashMap<String, Food> items;
 	private final String logTag="HomeTableAdapter";
  
-	public HomeTableAdapter(Context context, ArrayList<Food> items) {
+	public HomeTableAdapter(Context context, HashMap<String, Food> items) {
 		this.context = context;
 		this.items = items;
 	}
@@ -40,32 +41,44 @@ public class HomeTableAdapter extends BaseAdapter{
 			gridView = new View(context);
 			// get layout from mobile.xml
 			gridView = inflater.inflate(R.layout.home_table_item, null);
-			Food item=items.get(position);
-			// set value into textview
-			TextView textView = (TextView) gridView
-					.findViewById(R.id.grid_item_label);
-			textView.setText(item.getName()+" scade il:"+item.getDueDate());
-			TextView idItemText = (TextView) gridView
-					.findViewById(R.id.grid_item_id);
-			idItemText.setText(item.getFoodId());
- 
-			// set image based on selected text
-			ImageView imageView = (ImageView) gridView
-				.findViewById(R.id.grid_item_image);
-			if(item.getImages()!=null && item.getImages().size()!=0){
-				Bitmap image=MediaFile.bitmapFromBytesImage(item.getImages().get(0).getImage());
-				if(image!=null){
-					imageView.setImageBitmap(Bitmap.createScaledBitmap(image, 150, 150, false));
+			Iterator it=items.keySet().iterator();
+			int pos=0;
+			boolean found=false;
+			Food item;
+			while(it.hasNext() && !found){
+				if(pos==position){
+					item=items.get(it.next());
+					found=true;
+					// set value into textview
+					TextView textView = (TextView) gridView
+							.findViewById(R.id.grid_item_label);
+					textView.setText(item.getName()+" scade il:"+item.getDueDate());
+					TextView idItemText = (TextView) gridView
+							.findViewById(R.id.grid_item_id);
+					idItemText.setText(item.getFoodId());
+		 
+					// set image based on selected text
+					ImageView imageView = (ImageView) gridView
+						.findViewById(R.id.grid_item_image);
+					if(item.getImages()!=null && item.getImages().size()!=0){
+						Bitmap image=MediaFile.bitmapFromBytesImage(item.getImages().get(0).getImage());
+						if(image!=null){
+							imageView.setImageBitmap(Bitmap.createScaledBitmap(image, 150, 150, false));
+						}
+						else{
+							imageView.setImageResource(R.drawable.logo_launcher);
+						}
+					}
+					else{
+						imageView.setImageResource(R.drawable.logo_launcher);
+					}
 				}
-				else{
-					imageView.setImageResource(R.drawable.logo_launcher);
+				else {
+					it.next();
+					pos++;
 				}
-			}
-			else{
-				imageView.setImageResource(R.drawable.logo_launcher);
 			}
 			
-
 		} else {
 			gridView = (View) convertView;
 		}
@@ -81,7 +94,21 @@ public class HomeTableAdapter extends BaseAdapter{
  
 	@Override
 	public Object getItem(int position) {
-		return items.get(position);
+		Iterator it=items.keySet().iterator();
+		int pos=0;
+		boolean found=false;
+		Object item=null;
+		while(it.hasNext() && !found){
+			if(pos==position){
+				item=items.get(it.next());
+				found=true;
+			}
+			else {
+				it.next();
+				pos++;
+			}
+		}
+		return item;
 	}
  
 	@Override
@@ -89,7 +116,7 @@ public class HomeTableAdapter extends BaseAdapter{
 		return 0;
 	}
 	
-	public void setFoods(ArrayList<Food> items){
+	public void setFoods(HashMap<String, Food> items){
 		this.items=items;
 	}
 }
