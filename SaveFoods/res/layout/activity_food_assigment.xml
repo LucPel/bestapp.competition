@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <TextView
+        android:id="@+id/food_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@+id/label"
+        android:layout_marginLeft="5dp"
+        android:textSize="25sp" 
+        android:layout_toRightOf="@+id/food_image">
+    </TextView>
+    
+    <ImageView
+        android:id="@+id/food_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo_launcher" 
+        >
+    </ImageView>
+ 
+    <TextView
+        android:id="@+id/food_id_label"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@+id/label"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/food_image"
+        android:visibility="invisible">
+    </TextView>
+    
+    <LinearLayout 
+        android:id="@+id/ll_insert_comment"
+        android:orientation="horizontal" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:paddingLeft="5dp" 
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
+        android:baselineAligned="true"
+        android:layout_alignParentBottom="true">
+
+       <EditText
+            android:id="@+id/comment_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="textMultiLine">
+        </EditText>
+        <Button android:text="@string/sendCommment"
+            android:layout_height="wrap_content" android:layout_width="wrap_content"
+            android:id="@+id/send_comment_button"></Button>
+    </LinearLayout>
+
+    <Spinner
+        android:id="@+id/food_status_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/food_name_label"
+        android:layout_below="@+id/food_name_label"
+        android:entries="@array/foodStatus" />
+
+</RelativeLayout>

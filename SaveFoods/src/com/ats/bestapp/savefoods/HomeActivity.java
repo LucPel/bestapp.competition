@@ -125,7 +125,7 @@ public class HomeActivity extends Activity{
 	private void init(){
 		foodProxy=new FoodProxy();
 		userProxy=new UserProxy();
-		Parse.initialize(this, "PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla", "lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp");
+		Parse.initialize(this, Constants.parseAppId, Constants.parseClientKey);
 	}
 	
 	@Override

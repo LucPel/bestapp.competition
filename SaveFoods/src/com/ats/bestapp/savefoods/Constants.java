@@ -27,6 +27,8 @@ public class Constants {
 	public static final String foodDetailSP="foodDetail";
 	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 	public static final int FOOD_DETAIL_REQUEST_CODE = 100;
+	public static final String parseAppId="PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla";
+	public static final String parseClientKey="lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp";
 	
 	
 }

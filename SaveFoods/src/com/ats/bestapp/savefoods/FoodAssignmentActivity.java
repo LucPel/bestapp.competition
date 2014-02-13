@@ -70,7 +70,7 @@ public class FoodAssignmentActivity extends Activity{
 	}
 	
 	private void init(){
-		Parse.initialize(this, "PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla", "lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp");
+		Parse.initialize(this, Constants.parseAppId, Constants.parseClientKey);
 		ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 	    food=(Food) getIntent().getSerializableExtra(Constants.foodDetailSP);

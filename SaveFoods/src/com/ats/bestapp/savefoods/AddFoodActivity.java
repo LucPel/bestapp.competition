@@ -157,7 +157,7 @@ public class AddFoodActivity extends FragmentActivity{
 		imegesUri=new ArrayList<Uri>();
 		ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
-		Parse.initialize(this, "PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla", "lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp");
+		Parse.initialize(this, Constants.parseAppId, Constants.parseClientKey);
 	  }
 	  
 	  public void addImage(View view){
