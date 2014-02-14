@@ -28,12 +28,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class FoodAssignmentActivity extends Activity{
 	
@@ -42,6 +45,7 @@ public class FoodAssignmentActivity extends Activity{
 	private SharedPreferences settings;
 	private UserProxy userProxy;
 	private FoodProxy foodProxy;
+	private CommentTableAdapter commentTableAdapter;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,6 +74,8 @@ public class FoodAssignmentActivity extends Activity{
 		statusSpinner.setSelection(statusSpinnerPosition(food.getStatus()));
 		Log.d(logTag, "Stato "+food.getStatus()+ "Position "+statusSpinnerPosition(food.getStatus()));
 		statusSpinner.setOnItemSelectedListener(new FoodStatusSpinnerOnItemClickListener(food));
+		fillGrid();
+		
 	}
 	
 	private int statusSpinnerPosition(String status){
@@ -161,4 +167,16 @@ public class FoodAssignmentActivity extends Activity{
 			e.printStackTrace();
 		}
 	}
+	
+	private void fillGrid(){
+		GridView gridView = (GridView) findViewById(R.id.gridviewComment);
+		if(commentTableAdapter==null){
+			commentTableAdapter=new CommentTableAdapter(this, food.getSavingFoodAssignment().getConversation());
+		}
+		else{
+			commentTableAdapter.setComments(food.getSavingFoodAssignment().getConversation());
+		}
+		gridView.setAdapter(commentTableAdapter);
+	}
+	
 }

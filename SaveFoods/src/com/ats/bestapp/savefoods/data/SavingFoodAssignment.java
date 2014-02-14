@@ -12,6 +12,10 @@ public class SavingFoodAssignment implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private List<Comment> conversation;
 
+	public SavingFoodAssignment(){
+		conversation=new ArrayList<Comment>();
+	}
+	
 	public List<Comment> getConversation() {
 		return conversation;
 	}
