@@ -84,7 +84,7 @@ public class MediaFile {
 		Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imagesUri.getPath()), 
                 SizeX, SizeY);
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		ThumbImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+		ThumbImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 		byte[] byteArray = stream.toByteArray();
 		return byteArray;
 	}

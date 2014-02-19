@@ -105,6 +105,7 @@ public class AddFoodActivity extends FragmentActivity{
 			}
 			Log.d(logTag, JsonMapper.convertObject2String(imagesByte));
 			fproxy.addFood(ftransformer.trasformInFood(view.getRootView(), commonsData,imagesByte),user);
+			finish();
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
