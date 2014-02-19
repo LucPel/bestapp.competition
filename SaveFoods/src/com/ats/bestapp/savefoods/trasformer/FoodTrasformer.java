@@ -43,8 +43,12 @@ public class FoodTrasformer {
 		food.setName(name.getText().toString());
 		food.setDescription(description.getText().toString());
 		food.setType(category.getText().toString());
-		food.setStatus("Disponibile");
-		food.setDueDate(date.getText().toString());
+		food.setStatus(Constants.foodStatusDisponibile);
+		String day=date.getText().subSequence(0, 2).toString();
+		String month=date.getText().subSequence(3, 5).toString();
+		String year=date.getText().subSequence(6, date.getText().length()).toString();
+		Log.d(logTag, "Converted Date: "+year+month+day);
+		food.setDueDate(year+month+day);
 		food.setLatitude((Double) commonsData.get(Constants.latitudeKey));
 		food.setLongitude((Double) commonsData.get(Constants.longitudeKey));
 		String userd = (String) commonsData.get(Constants.userIdSP);

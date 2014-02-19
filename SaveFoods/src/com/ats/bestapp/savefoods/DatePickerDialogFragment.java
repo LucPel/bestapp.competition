@@ -1,6 +1,10 @@
 package com.ats.bestapp.savefoods;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import com.parse.codec.binary.StringUtils;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -8,6 +12,7 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.format.DateFormat;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
@@ -35,8 +40,7 @@ public class DatePickerDialogFragment extends DialogFragment implements DatePick
 	@Override
 	public void onDateSet(DatePicker view, int year, int monthOfYear,
 			int dayOfMonth) {
-		editableDate.setText(String.valueOf(dayOfMonth) + "-" + String.valueOf(monthOfYear+1) + "-" + String.valueOf(year));
-		
+		editableDate.setText(DateFormat.format("dd-MM-yyyy", new GregorianCalendar(year, monthOfYear, dayOfMonth)));
 	}
  
 }

@@ -3,6 +3,7 @@ package com.ats.bestapp.savefoods;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import org.codehaus.jackson.JsonGenerationException;
@@ -22,6 +23,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -64,10 +66,7 @@ public class AddFoodActivity extends FragmentActivity{
 		Calendar cal = Calendar.getInstance();
 		EditText dueDate=(EditText)findViewById(R.id.food_due_date);
 		dueDate.clearComposingText();
-		String day=Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
-		String month=Integer.toString(cal.get(Calendar.MONTH)+1);
-		String year=Integer.toString(cal.get(Calendar.YEAR));
-		dueDate.setText(day+"-"+month+"-"+year);
+		dueDate.setText(DateFormat.format("dd-MM-yyyy", new GregorianCalendar(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))));
 		locListenerWrap=new LocationListenerWrapper(this);
 	}
 

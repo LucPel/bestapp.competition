@@ -78,7 +78,7 @@ public class FoodProxy {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);
 		ParseQuery<ParseObject> queryUser=ParseQuery.getQuery(Constants.userObject);
 		ParseObject userObj=queryUser.get(user);
-		query.whereEqualTo(Constants.foodOwnerPO, userObj);
+		query.whereEqualTo(Constants.foodOwnerPO, userObj).whereNotEqualTo(Constants.foodStatusPO, Constants.foodStatusScaduto).orderByAscending(Constants.foodDueDatePO);
 		ArrayList<ParseObject> parseFoods=(ArrayList<ParseObject>) query.find();
 		Log.d(logTag, String.valueOf(parseFoods.size()));
 		ObjectMapper mapper=new ObjectMapper();
