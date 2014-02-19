@@ -103,8 +103,6 @@ public class FoodAssignmentActivity extends Activity{
 	}
 	
 	public void onStop(){
-		Log.d(logTag, "Stop: "+food.getStatus());
-		setResultActivity();
 		super.onStop();
 		
 	}
@@ -127,6 +125,7 @@ public class FoodAssignmentActivity extends Activity{
 	    switch (item.getItemId()) {
 	        case android.R.id.home:
 	        	setResultActivity();
+	        	Log.d(logTag, "HomeBack: "+food.getStatus());
 	        	onBackPressed();
 	            return true;
 	        default:
@@ -162,6 +161,8 @@ public class FoodAssignmentActivity extends Activity{
 		food.getSavingFoodAssignment().addComment(comment);
 		try {
 			foodProxy.addCommentToAssigment(food);
+			commentTableAdapter.setComments(food.getSavingFoodAssignment().getConversation());
+			commentTableAdapter.notifyDataSetChanged();	
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -177,6 +178,15 @@ public class FoodAssignmentActivity extends Activity{
 			commentTableAdapter.setComments(food.getSavingFoodAssignment().getConversation());
 		}
 		gridView.setAdapter(commentTableAdapter);
+	}
+	
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent();
+		intent.putExtra(Constants.foodDetailSP, food);
+		setResult(RESULT_OK, intent);
+		Log.d(logTag, "OnBackPressed: "+food.getStatus());
+	    finish();
 	}
 	
 }

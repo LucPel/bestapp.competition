@@ -135,7 +135,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 	    public void onClick(View view) {
 	        if (view.getId() == R.id.sign_in_button && !mPlusClient.isConnected()) {
 	            if (mConnectionResult == null) {
-	                mConnectionProgressDialog.show();
+	            	mPlusClient.connect();
 	            } else {
 	                try {
 	                    mConnectionResult.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);

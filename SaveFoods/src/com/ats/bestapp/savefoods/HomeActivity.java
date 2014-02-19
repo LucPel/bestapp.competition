@@ -158,7 +158,7 @@ public class HomeActivity extends Activity{
 	@Override
 	protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
 		Log.d(logTag, "requestCode "+requestCode+" responseCode "+responseCode);
-		if (requestCode == Constants.FOOD_DETAIL_REQUEST_CODE && responseCode == RESULT_OK) {
+		if (requestCode == Constants.FOOD_DETAIL_REQUEST_CODE && (responseCode == RESULT_OK || responseCode==RESULT_CANCELED)) {
 	        Food food=(Food) intent.getSerializableExtra(Constants.foodDetailSP);
 	        if(food!=null){
 	        	foods.remove(food.getFoodId());

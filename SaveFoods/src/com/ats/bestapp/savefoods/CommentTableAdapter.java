@@ -52,6 +52,7 @@ public class CommentTableAdapter extends BaseAdapter{
 			View commentItemView;
 			Log.d(logTag, "Posizione "+position );
 			if(convertView==null){
+				Log.d(logTag, "PosizioneCW "+position );
 				Comment currComment=items.get(position);
 				commentItemView = new View(context);
 				// get layout from mobile.xml
@@ -61,7 +62,12 @@ public class CommentTableAdapter extends BaseAdapter{
 				textView.setText(currComment.getMessage());
 			}
 			else {
+				Log.d(logTag, "PosizioneNCW "+position );
 				commentItemView = (View) convertView;
+				Comment currComment=items.get(position);
+				TextView textView = (TextView) commentItemView
+							.findViewById(R.id.comment_grid_item_text);
+					textView.setText(currComment.getMessage());
 			}
 		return commentItemView;
 	}
