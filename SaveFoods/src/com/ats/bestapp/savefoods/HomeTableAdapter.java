@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.ats.bestapp.savefoods.data.Food;
+import com.ats.bestapp.savefoods.utilities.Commons;
 import com.ats.bestapp.savefoods.utilities.MediaFile;
 
 import android.content.Context;
@@ -52,7 +53,8 @@ public class HomeTableAdapter extends BaseAdapter{
 					// set value into textview
 					TextView textView = (TextView) gridView
 							.findViewById(R.id.grid_item_label);
-					textView.setText(item.getName()+" scade il:"+item.getDueDate());
+					
+					textView.setText(item.getName()+" scade il:"+Commons.convertToDate(item.getDueDate()));
 					TextView idItemText = (TextView) gridView
 							.findViewById(R.id.grid_item_id);
 					idItemText.setText(item.getFoodId());
@@ -119,4 +121,6 @@ public class HomeTableAdapter extends BaseAdapter{
 	public void setFoods(HashMap<String, Food> items){
 		this.items=items;
 	}
+	
+	
 }

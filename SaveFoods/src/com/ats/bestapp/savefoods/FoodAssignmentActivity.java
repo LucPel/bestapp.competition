@@ -13,6 +13,7 @@ import com.ats.bestapp.savefoods.data.SavingFoodAssignment;
 import com.ats.bestapp.savefoods.data.User;
 import com.ats.bestapp.savefoods.data.proxy.FoodProxy;
 import com.ats.bestapp.savefoods.data.proxy.UserProxy;
+import com.ats.bestapp.savefoods.utilities.Commons;
 import com.ats.bestapp.savefoods.utilities.JsonMapper;
 import com.ats.bestapp.savefoods.utilities.MediaFile;
 import com.parse.Parse;
@@ -52,8 +53,14 @@ public class FoodAssignmentActivity extends Activity{
 		setContentView(R.layout.activity_food_assigment);
 		init();
 	    Log.d(logTag, JsonMapper.convertObject2String(food));
-	    TextView name_food=(TextView) findViewById(R.id.food_name_label);
-	    name_food.setText(food.getName()+" scade il "+food.getDueDate());
+	    setViewComponents();
+		fillGrid();
+		
+	}
+	
+	private void setViewComponents(){
+		TextView name_food=(TextView) findViewById(R.id.food_name_label);
+	    name_food.setText(food.getName()+" scade il "+Commons.convertToDate(food.getDueDate()));
 	    TextView id_food=(TextView) findViewById(R.id.food_id_label);
 	    id_food.setText(food.getFoodId());
 		ImageView imageView = (ImageView) findViewById(R.id.food_image);
@@ -74,8 +81,6 @@ public class FoodAssignmentActivity extends Activity{
 		statusSpinner.setSelection(statusSpinnerPosition(food.getStatus()));
 		Log.d(logTag, "Stato "+food.getStatus()+ "Position "+statusSpinnerPosition(food.getStatus()));
 		statusSpinner.setOnItemSelectedListener(new FoodStatusSpinnerOnItemClickListener(food));
-		fillGrid();
-		
 	}
 	
 	private int statusSpinnerPosition(String status){

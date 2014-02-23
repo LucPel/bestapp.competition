@@ -35,6 +35,7 @@ import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 public class FoodProxy {
 
@@ -69,7 +70,7 @@ public class FoodProxy {
 			jsonArrayImages.put(wrapper.getImage());
 		}
 		foodObj.put("images", jsonArrayImages);
-		Log.d(logTag, JsonMapper.convertObject2String(foodObj));
+		Log.d(logTag, "FoodID: "+foodObj.getObjectId());
 		foodObj.saveInBackground();
 	}
 	
@@ -78,7 +79,7 @@ public class FoodProxy {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);
 		ParseQuery<ParseObject> queryUser=ParseQuery.getQuery(Constants.userObject);
 		ParseObject userObj=queryUser.get(user);
-		query.whereEqualTo(Constants.foodOwnerPO, userObj).whereNotEqualTo(Constants.foodStatusPO, Constants.foodStatusScaduto).orderByAscending(Constants.foodDueDatePO);
+		query.whereEqualTo(Constants.foodOwnerPO, userObj).whereNotEqualTo(Constants.foodStatusPO, Constants.foodStatusScaduto).orderByAscending(Constants.foodDueDatePO).setLimit(10);
 		ArrayList<ParseObject> parseFoods=(ArrayList<ParseObject>) query.find();
 		Log.d(logTag, String.valueOf(parseFoods.size()));
 		ObjectMapper mapper=new ObjectMapper();

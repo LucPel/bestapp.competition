@@ -119,7 +119,7 @@ public class HomeActivity extends Activity{
 	
 	private void openAddFoodActivity(){
 		Intent intent = new Intent(HomeActivity.this, AddFoodActivity.class);
-		startActivity(intent);
+		startActivityForResult(intent, Constants.ADD_FOOD_REQUEST_CODE);
 	}
 	
 	private void init(){
@@ -166,6 +166,32 @@ public class HomeActivity extends Activity{
 				Log.d(logTag, "onActivityResult "+food.getStatus());
 	        }
 	    }
+		else if (requestCode == Constants.ADD_FOOD_REQUEST_CODE && responseCode == Constants.ADD_FOOD_RESPONSE_CODE) {
+			
+				try {
+					foods=(HashMap<String, Food>) foodProxy.getFoods4User(user.getUserId(), this);
+					homeTableAdapter.notifyDataSetChanged();
+				} catch (JsonParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonGenerationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+		}
 	}
 	
 }

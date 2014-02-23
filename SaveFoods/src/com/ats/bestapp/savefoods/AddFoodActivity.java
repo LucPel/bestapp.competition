@@ -34,6 +34,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.ats.bestapp.savefoods.data.Food;
 import com.ats.bestapp.savefoods.data.proxy.FoodProxy;
 import com.ats.bestapp.savefoods.data.proxy.UserProxy;
 import com.ats.bestapp.savefoods.trasformer.FoodTrasformer;
@@ -103,7 +104,10 @@ public class AddFoodActivity extends FragmentActivity{
 				imagesByte.add(MediaFile.bitmapResized2Bytes(currentUri, 256, 256));		
 			}
 			Log.d(logTag, JsonMapper.convertObject2String(imagesByte));
-			fproxy.addFood(ftransformer.trasformInFood(view.getRootView(), commonsData,imagesByte),user);
+			Food food2add=ftransformer.trasformInFood(view.getRootView(), commonsData,imagesByte);
+			fproxy.addFood(food2add,user);
+			Intent intent = new Intent();
+			setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent);
 			finish();
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block
