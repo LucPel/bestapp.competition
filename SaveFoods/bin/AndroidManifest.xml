@@ -14,10 +14,12 @@
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.CAMERA" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/logo_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -32,11 +34,21 @@
         </activity>
         <meta-data android:name="com.google.android.gms.version"
            android:value="@integer/google_play_services_version" />
-        <activity android:name="HomeActivity"></activity>
-        <activity android:name="AddFoodActivity" android:parentActivityName="com.ats.bestapp.savefoods.HomeActivity">
+        <activity android:name="HomeActivity"
+            android:theme="@style/Theme.Savefoodab"></activity>
+        <activity android:name="AddFoodActivity" 
+            android:parentActivityName="com.ats.bestapp.savefoods.HomeActivity"
+            android:theme="@style/Theme.Savefoodab">
              >
         	<!-- Parent activity meta-data to support API level 7+ -->
         	<meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.ats.bestapp.savefoods.HomeActivity" />
+        </activity>
+        <activity android:name="FoodAssignmentActivity"
+            android:theme="@style/Theme.Savefoodab"
+            android:parentActivityName="com.ats.bestapp.savefoods.HomeActivity">
+            <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.ats.bestapp.savefoods.HomeActivity" />
         </activity>

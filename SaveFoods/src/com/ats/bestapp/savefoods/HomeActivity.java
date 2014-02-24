@@ -105,6 +105,7 @@ public class HomeActivity extends Activity{
 	            return true;
 	        case R.id.action_searchFoods:
 	            //composeMessage();
+	        	openSearchFoodsActivity();
 	            return true;
 	        case R.id.action_addFoodRequest:
 	            //composeMessage();
@@ -121,6 +122,13 @@ public class HomeActivity extends Activity{
 		Intent intent = new Intent(HomeActivity.this, AddFoodActivity.class);
 		startActivityForResult(intent, Constants.ADD_FOOD_REQUEST_CODE);
 	}
+	
+	//LUCPEL
+	private void openSearchFoodsActivity(){
+		Intent intent = new Intent(HomeActivity.this, SearchFoodsActivity.class);
+		startActivity(intent);
+	}
+	
 	
 	private void init(){
 		foodProxy=new FoodProxy();
