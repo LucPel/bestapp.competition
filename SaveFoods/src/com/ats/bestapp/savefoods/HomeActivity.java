@@ -129,7 +129,6 @@ public class HomeActivity extends Activity{
 		startActivity(intent);
 	}
 	
-	
 	private void init(){
 		foodProxy=new FoodProxy();
 		userProxy=new UserProxy();
