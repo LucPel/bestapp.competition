@@ -38,14 +38,14 @@
         android:inputType="textAutoComplete"
         android:text="@string/categoryAutoComplete" />
 
-    <Button
+    <!-- <Button
         android:id="@+id/add_image_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="22dp"
         android:onClick="addImage"
         android:layout_below="@+id/food_due_date"
-        android:text="@string/addFoodImageButtonLabel" />
+        android:text="@string/addFoodImageButtonLabel" /> -->
     
     <Button
         android:id="@+id/add_food_button"
@@ -54,6 +54,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="49dp"
+        android:background="@drawable/save_food_button"
         android:onClick="saveFood"
         android:text="@string/saveFoodButtonLabel" />
 
@@ -73,8 +74,8 @@
         android:id="@+id/imageFood"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/add_image_button"
-        android:layout_below="@+id/add_image_button"
+        android:layout_alignLeft="@+id/food_due_date"
+        android:layout_below="@+id/food_due_date"
         android:layout_marginTop="14dp"
         android:src="@drawable/logo_launcher" />
 

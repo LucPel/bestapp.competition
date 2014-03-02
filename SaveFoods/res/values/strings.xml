@@ -8,7 +8,7 @@
     <string name="searchFoodAB">Ricerca Alimento</string>
     <string name="addFoodRequestAB">Aggiungi Richiesta Alimento</string>
     <string name="categoryAutoComplete">Categoria</string>
-    <string name="saveFoodButtonLabel">Salva Alimento</string>
+    <string name="saveFoodButtonLabel">Save</string>
     <string name="addFoodImageButtonLabel">Aggiungi Foto</string>
     <string name="sendCommment">Invia</string>
     <string-array name="foodStatus">

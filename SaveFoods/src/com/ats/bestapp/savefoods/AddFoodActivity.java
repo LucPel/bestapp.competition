@@ -74,7 +74,7 @@ public class AddFoodActivity extends FragmentActivity{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		//getMenuInflater().inflate(R.menu.action_bar, menu);
+		getMenuInflater().inflate(R.menu.action_bar_add_food, menu);
 		return true;
 	}
 	
@@ -85,6 +85,8 @@ public class AddFoodActivity extends FragmentActivity{
 	        case android.R.id.home:
 	        	onBackPressed();
 	            return true;
+	        case R.id.action_addFoodPhoto :
+	        	addImage();
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -164,7 +166,7 @@ public class AddFoodActivity extends FragmentActivity{
 		Parse.initialize(this, Constants.parseAppId, Constants.parseClientKey);
 	  }
 	  
-	  public void addImage(View view){
+	  public void addImage(){
 		  Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		  Uri fileUri = MediaFile.getOutputMediaFileUri(MediaFile.MEDIA_TYPE_IMAGE); // create a file to save the image
 		  Log.d(logTag, "URI gen "+fileUri.getPath());
@@ -184,14 +186,14 @@ public class AddFoodActivity extends FragmentActivity{
 	              // Image captured and saved to fileUri specified in the Intent
 	              Toast.makeText(this, "Image saved to:\n" +
 	                       imegesUri.get(imegesUri.size()-1).getPath(), Toast.LENGTH_LONG).show();
-	              final int THUMBSIZE = 96;
+	              final int THUMBSIZE = 512;
 	              Bitmap ThumbImage = MediaFile.bitmapResized(imegesUri.get(imegesUri.size()-1),THUMBSIZE, THUMBSIZE);
 	              ImageView foodImage = (ImageView) findViewById(R.id.imageFood);
 	              foodImage.setImageBitmap(ThumbImage);
 	          } else if (resultCode == RESULT_CANCELED) {
-	              // User cancelled the image capture
+	        	  
 	          } else {
-	              // Image capture failed, advise user
+	        	  Toast.makeText(this, "Error during image saving", Toast.LENGTH_LONG).show();
 	          }
 	      }
 	  }
