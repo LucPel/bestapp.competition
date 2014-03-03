@@ -1,12 +1,19 @@
 package com.ats.bestapp.savefoods;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.json.JSONException;
+
 import com.ats.bestapp.savefoods.data.Food;
+import com.ats.bestapp.savefoods.data.User;
 import com.ats.bestapp.savefoods.data.proxy.FoodProxy;
 import com.ats.bestapp.savefoods.data.proxy.UserProxy;
 import com.ats.bestapp.savefoods.trasformer.FoodTrasformer;
@@ -37,37 +44,53 @@ import android.widget.AdapterView.OnItemClickListener;
 public class SearchFoodsActivity extends FragmentActivity{
 
 	private String logTag="SearchFoodsActivity";
+	private SharedPreferences settings;
+	
 	private LocationListenerWrapper locListenerWrap;
-	private HomeTableAdapter homeTableAdapter;
+	
+	private User	user;
+	private UserProxy userProxy;
+	private FoodProxy foodProxy;
 	private HashMap<String, Food> foods;
+	private HomeTableAdapter homeTableAdapter;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
-		init();				
-		ParseGeoPoint userLocation = new ParseGeoPoint(locListenerWrap.getLatitude(), locListenerWrap.getLongitude());
-		ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);
-		query.whereNear("location", userLocation);
-		query.setLimit(5);
-		query.findInBackground(new FindCallback<ParseObject>() {
-			   public void done(List<ParseObject> foodsList, ParseException e) {
-			        if (e == null) {
-			        	Log.d(logTag, "Retrieved " + foodsList.size());
-			        	if(findViewById(R.id.grid_item_label)==null){
-							//foods=(HashMap<String, Food>) foodProxy.getFoods4User(user.getUserId(), this);
-							fillGrid();
-						}
-			        	
-			            
-			        } else {
-			            Log.d(logTag, "Error: " + e.getMessage());
-			        }
-			    }
-			});
+		init();
 		
+		try {
+			user=userProxy.getUser(settings.getString(Constants.userNameSP, null), this);
+				if(findViewById(R.id.grid_item_label)==null){
+					foods=(HashMap<String, Food>) foodProxy.getFoods4Location(user.getUserId(),locListenerWrap,this);
+					fillGrid();
+				}				
+		} catch (ParseException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
 		
+		}catch (JSONException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 		
+		}catch (JsonParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		
+		} catch (JsonMappingException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		
+		} catch (JsonGenerationException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		
+		}catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
 		
 	}
 
@@ -84,6 +107,9 @@ public class SearchFoodsActivity extends FragmentActivity{
 	private void init(){
 		locListenerWrap=new LocationListenerWrapper(this);
 		Parse.initialize(this, Constants.parseAppId, Constants.parseClientKey);	
+		userProxy=new UserProxy();
+		foodProxy=new FoodProxy();
+		settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
 	}
 
 	private void fillGrid(){
@@ -107,13 +133,5 @@ public class SearchFoodsActivity extends FragmentActivity{
 			}
 		});
 	}
-
-
-
-
-
-
-
-
 
 }
