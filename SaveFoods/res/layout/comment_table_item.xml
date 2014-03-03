@@ -10,7 +10,17 @@
         android:layout_height="wrap_content"
         android:text="@+id/label"
         android:layout_marginLeft="5dp"
+        android:background="@drawable/chat_bubbles"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold|italic"
+        android:gravity="center"
         android:textSize="20sp">
     </TextView>
+    
+    <View
+    android:layout_width="fill_parent"
+    android:layout_height="1dp"
+    android:background="@android:color/darker_gray"
+    android:layout_below="@+id/comment_grid_item_text"/>
     
 </RelativeLayout>

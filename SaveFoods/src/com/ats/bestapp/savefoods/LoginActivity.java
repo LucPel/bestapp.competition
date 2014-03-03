@@ -32,6 +32,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 	private PlusClient mPlusClient;
     private ConnectionResult mConnectionResult;
 	private boolean loggedin=false;
+
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +65,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
-            // The user clicked the sign-in button already. Start to resolve
-            // connection errors. Wait until onConnected() to dismiss the
-            // connection dialog.
             if (result.hasResolution()) {
                     try {
                             result.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
@@ -74,7 +72,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
                             mPlusClient.connect();
                     }
             }
-
+		
     // Save the intent so that we can start an activity when the user clicks
     // the sign-in button.
     mConnectionResult = result;

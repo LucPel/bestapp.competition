@@ -54,7 +54,13 @@ public class HomeTableAdapter extends BaseAdapter{
 					TextView textView = (TextView) gridView
 							.findViewById(R.id.grid_item_label);
 					
-					textView.setText(item.getName()+" scade il:"+Commons.convertToDate(item.getDueDate()));
+					textView.setText(item.getName());
+					
+					TextView textDueDateView = (TextView) gridView
+							.findViewById(R.id.grid_item_due_date);
+					
+					textDueDateView.setText("Scadenza: "+Commons.convertToDate(item.getDueDate()));
+					
 					TextView idItemText = (TextView) gridView
 							.findViewById(R.id.grid_item_id);
 					idItemText.setText(item.getFoodId());
