@@ -24,6 +24,7 @@ import com.ats.bestapp.savefoods.data.SavingFoodAssignment;
 import com.ats.bestapp.savefoods.data.User;
 import com.ats.bestapp.savefoods.utilities.JsonMapper;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 
 public class FoodTrasformer {
@@ -31,43 +32,36 @@ public class FoodTrasformer {
 	private UserTransformer userTrasformer;
 	private static final String logTag = "FoodTrasformer";
 
-	public Food trasformInFood(View view, HashMap<String, Object> commonsData,
-			ArrayList<byte[]> imagesByte) {
+	public ParseObject trasformInFood(View view, HashMap<String, Object> commonsData,
+			ArrayList<byte[]> imagesByte,ParseObject user) {
 		EditText name = (EditText) view.findViewById(R.id.food_name_text);
 		EditText description = (EditText) view
 				.findViewById(R.id.food_description_text);
 		EditText category = (EditText) view
 				.findViewById(R.id.food_category_text);
 		EditText date = (EditText) view.findViewById(R.id.food_due_date);
-		Food food = new Food();
-		food.setName(name.getText().toString());
-		food.setDescription(description.getText().toString());
-		food.setType(category.getText().toString());
-		food.setStatus(Constants.foodStatusDisponibile);
+		EditText quantityET = (EditText) view.findViewById(R.id.food_quantity_text);
 		String day=date.getText().subSequence(0, 2).toString();
 		String month=date.getText().subSequence(3, 5).toString();
 		String year=date.getText().subSequence(6, date.getText().length()).toString();
 		Log.d(logTag, "Converted Date: "+year+month+day);
-		food.setDueDate(year+month+day);
-		food.setLatitude((Double) commonsData.get(Constants.latitudeKey));
-		food.setLongitude((Double) commonsData.get(Constants.longitudeKey));
-		String userd = (String) commonsData.get(Constants.userIdSP);
-		if (userd == null) {
-			User user = new User();
-			user.setUsername((String) commonsData.get(Constants.userNameSP));
-			user.setNickname((String) commonsData.get(Constants.userNameSP));
-			food.setOwner(user);
-		}
-		ArrayList<ImageWrapper> imagesWrapper = new ArrayList<ImageWrapper>();
+		ParseObject foodObj = new ParseObject(Constants.foodObject);
+		JSONArray assigment=new JSONArray();
+		foodObj.put(Constants.foodAssigmentCommentPO, assigment);
+		foodObj.put(Constants.foodNamePO, name.getText().toString());
+		foodObj.put(Constants.foodStatusPO, Constants.foodStatusDisponibile);
+		foodObj.put(Constants.foodCategoryPO, category.getText().toString());
+		foodObj.put(Constants.foodDescritpionPO, description.getText().toString());
+		foodObj.put(Constants.foodDueDatePO, year+month+day);
+		foodObj.put(Constants.foodQuantityPO, quantityET.getText().toString());
+		foodObj.put(Constants.locationObject, new ParseGeoPoint((Double) commonsData.get(Constants.latitudeKey), (Double) commonsData.get(Constants.longitudeKey)));
+		foodObj.put(Constants.foodOwnerPO, user);
+		JSONArray jsonArrayImages=new JSONArray();
 		for (byte[] imageByte : imagesByte) {
-			ImageWrapper imageWrapper = new ImageWrapper();
-			imageWrapper.setImage(imageByte);
-			imagesWrapper.add(imageWrapper);
+			jsonArrayImages.put(imageByte);
 		}
-		food.setSavingFoodAssignment(new SavingFoodAssignment());
-		Log.d(logTag, JsonMapper.convertObject2String(imagesWrapper));
-		food.setImages(imagesWrapper);
-		return food;
+		foodObj.put(Constants.foodImagesPO, jsonArrayImages);
+		return foodObj;
 	}
 
 	public Food trasformParseObjectToFood(ParseObject food)
@@ -83,6 +77,7 @@ public class FoodTrasformer {
 		foodT.setLongitude(food.getParseGeoPoint(Constants.locationObject)
 				.getLongitude());
 		foodT.setDueDate(food.getString(Constants.foodDueDatePO));
+		foodT.setQuantity(food.getString(Constants.foodQuantityPO));
 		ParseObject userObj = food.getParseObject(Constants.foodOwnerPO);
 		userObj.fetchIfNeeded();
 		userTrasformer = new UserTransformer();

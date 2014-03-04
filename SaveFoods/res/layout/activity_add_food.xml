@@ -8,14 +8,23 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".AddFoodActivity" >
 
+    
+       <ImageView
+        android:id="@+id/imageFood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/logo_launcher" />
+    
     <EditText
         android:id="@+id/food_name_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_toRightOf="@id/imageFood"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:hint="@string/foodNameHint"
         android:inputType="text" >
         <requestFocus />
     </EditText>
@@ -24,20 +33,30 @@
         android:id="@+id/food_description_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/food_name_text"
-        android:layout_below="@+id/food_name_text"
-        android:layout_marginTop="22dp"
+        android:layout_below="@id/imageFood"
+        android:layout_marginTop="20dp"
+        android:hint="@string/foodDescriptionHint"
         android:inputType="text" />
 
     <AutoCompleteTextView
         android:id="@+id/food_category_text"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/food_description_text"
-        android:layout_marginTop="22dp"
-        android:inputType="textAutoComplete"
-        android:text="@string/categoryAutoComplete" />
+        android:layout_below="@id/food_description_text"
+        android:layout_marginTop="20dp"
+        android:hint="@string/categoryAutoComplete"
+        android:inputType="textAutoComplete" />
 
+    <EditText
+        android:id="@+id/food_quantity_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/food_description_text"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@id/food_category_text"
+        android:hint="@string/foodQuantityHint"
+        android:inputType="text|number" />
+    
     <!-- <Button
         android:id="@+id/add_image_button"
         android:layout_width="wrap_content"
@@ -68,19 +87,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/food_category_text"
-        	android:layout_marginTop="22dp"
+        	android:layout_marginTop="20dp"
             android:focusable="false"
             android:inputType="date"
             android:onClick="showDatePickerDialog" >
    </EditText>
 
-    <ImageView
-        android:id="@+id/imageFood"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/food_due_date"
-        android:layout_below="@+id/food_due_date"
-        android:layout_marginTop="14dp"
-        android:src="@drawable/logo_launcher" />
+
 
 </RelativeLayout>

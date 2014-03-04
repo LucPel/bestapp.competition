@@ -47,6 +47,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 		 String userName = settings.getString(Constants.userNameSP, null);
 		 if(userName!=null){
 			 mPlusClient.connect();
+			 mConnectionProgressDialog=ProgressDialog.show(this, "", 
+	                    "Loading. Please wait...", true);
 		 }
 		 else{
 			 findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
@@ -81,7 +83,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
-		  String accountName = mPlusClient.getAccountName();
+		mConnectionProgressDialog.dismiss();
+		String accountName = mPlusClient.getAccountName();
 	      Toast.makeText(this, accountName + " is connected.", Toast.LENGTH_LONG).show();
 	      SharedPreferences settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
 	      SharedPreferences.Editor editor = settings.edit();
@@ -134,6 +137,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 	        if (view.getId() == R.id.sign_in_button && !mPlusClient.isConnected()) {
 	            if (mConnectionResult == null) {
 	            	mPlusClient.connect();
+	            	mConnectionProgressDialog=ProgressDialog.show(this, "", 
+		                    "Loading. Please wait...", true);
 	            } else {
 	                try {
 	                    mConnectionResult.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
@@ -141,6 +146,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 	                    // Try connecting again.
 	                    mConnectionResult = null;
 	                    mPlusClient.connect();
+	                    mConnectionProgressDialog=ProgressDialog.show(this, "", 
+	    	                    "Loading. Please wait...", true);
 	                }
 	            }
 	        }

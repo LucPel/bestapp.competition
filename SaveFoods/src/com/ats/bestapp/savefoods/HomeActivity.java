@@ -44,8 +44,9 @@ public class HomeActivity extends Activity{
 	private UserProxy userProxy;
 	private SharedPreferences settings;
 	private HomeTableAdapter homeTableAdapter;
-	private HashMap<String, Food> foods;
+	private ArrayList<Food> foods;
 	private String logTag="HomeActivity";
+	private ProgressDialog homeProgressDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,10 @@ public class HomeActivity extends Activity{
 			if(user.getUserId()!=null && !user.getUserId().isEmpty()){
 				settings.edit().putString(Constants.userIdSP, user.getUserId()).commit();
 				if(findViewById(R.id.grid_item_label)==null){
-					foods=(HashMap<String, Food>) foodProxy.getFoods4User(user.getUserId(), this);
+					homeProgressDialog=ProgressDialog.show(this, "", 
+		                    "Loading. Please wait...", true);
+					foods=foodProxy.getFoods4User(user.getUserId(), this);
+					homeProgressDialog.dismiss();
 					fillGrid();
 				}
 			}
@@ -168,16 +172,24 @@ public class HomeActivity extends Activity{
 		if (requestCode == Constants.FOOD_DETAIL_REQUEST_CODE && (responseCode == RESULT_OK || responseCode==RESULT_CANCELED)) {
 	        Food food=(Food) intent.getSerializableExtra(Constants.foodDetailSP);
 	        if(food!=null){
-	        	foods.remove(food.getFoodId());
-				foods.put(food.getFoodId(), food);
+	        	Food c_food=null;
+	        	for(int i=0; i<foods.size() ; i++){
+	        		c_food=foods.get(i);
+	        		if(c_food.getFoodId().equalsIgnoreCase(food.getFoodId())){
+	        			foods.set(i, food);
+	        		}
+	        	}
+	        	homeTableAdapter.setFoods(foods);
+	        	homeTableAdapter.notifyDataSetChanged();
 				Log.d(logTag, "onActivityResult "+food.getStatus());
 	        }
 	    }
 		else if (requestCode == Constants.ADD_FOOD_REQUEST_CODE && responseCode == Constants.ADD_FOOD_RESPONSE_CODE) {
 			
 				try {
-					foods=(HashMap<String, Food>) foodProxy.getFoods4User(user.getUserId(), this);
-					homeTableAdapter.notifyDataSetChanged();
+					foods=foodProxy.getFoods4User(user.getUserId(), this);
+					homeTableAdapter.setFoods(foods);
+		        	homeTableAdapter.notifyDataSetChanged();
 				} catch (JsonParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

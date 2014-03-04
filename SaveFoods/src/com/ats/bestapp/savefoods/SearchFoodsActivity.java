@@ -51,7 +51,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 	private User	user;
 	private UserProxy userProxy;
 	private FoodProxy foodProxy;
-	private HashMap<String, Food> foods;
+	private ArrayList<Food> foods;
 	private HomeTableAdapter homeTableAdapter;
 	
 	
@@ -64,7 +64,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 		try {
 			user=userProxy.getUser(settings.getString(Constants.userNameSP, null), this);
 				if(findViewById(R.id.grid_item_label)==null){
-					foods=(HashMap<String, Food>) foodProxy.getFoods4Location(user.getUserId(),locListenerWrap,this);
+					foods=foodProxy.getFoods4Location(user.getUserId(),locListenerWrap,this);
 					fillGrid();
 				}				
 		} catch (ParseException e1) {

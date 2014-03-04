@@ -16,7 +16,8 @@
 
             <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="3dp">
             	<ImageView
                 android:id="@+id/food_image"
                 android:layout_width="wrap_content"
@@ -28,12 +29,23 @@
                 android:id="@+id/food_name_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@+id/food_image"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/food_image"
                 android:text="@+id/label"
-                android:textSize="25sp" >
+                android:textSize="22sp" >
             </TextView>
 
+            <TextView
+                android:id="@+id/food_dueDate_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/food_name_label"
+                android:layout_alignLeft="@id/food_name_label"
+                android:text="@+id/label"
+                android:textSize="10sp" >
+            </TextView>
+            
             <TextView
                 android:id="@+id/food_id_label"
                 android:layout_width="0dp"
@@ -46,10 +58,12 @@
              <Spinner
                 android:id="@+id/food_status_spinner"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_below="@+id/food_name_label"
-                android:layout_alignParentRight="true"
-                android:entries="@array/foodStatus" />
+                android:layout_toRightOf="@id/food_dueDate_label"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:entries="@array/foodStatus"/>
           
           </RelativeLayout>
             
@@ -58,8 +72,15 @@
       
     </LinearLayout>
 
+    <View
+    android:layout_width="fill_parent"
+    android:layout_height="1dp"
+    android:background="@android:color/darker_gray"
+    android:layout_marginTop="5dp"/>
+   
     <GridView
         android:id="@+id/gridviewComment"
+        android:layout_marginTop="5dp"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="50"

@@ -21,10 +21,10 @@ import android.widget.TextView;
 public class HomeTableAdapter extends BaseAdapter{
 
 	private Context context;
-	private HashMap<String, Food> items;
+	private ArrayList<Food> items;
 	private final String logTag="HomeTableAdapter";
  
-	public HomeTableAdapter(Context context, HashMap<String, Food> items) {
+	public HomeTableAdapter(Context context,ArrayList<Food> items) {
 		this.context = context;
 		this.items = items;
 	}
@@ -42,53 +42,11 @@ public class HomeTableAdapter extends BaseAdapter{
 			gridView = new View(context);
 			// get layout from mobile.xml
 			gridView = inflater.inflate(R.layout.home_table_item, null);
-			Iterator it=items.keySet().iterator();
-			int pos=0;
-			boolean found=false;
-			Food item;
-			while(it.hasNext() && !found){
-				if(pos==position){
-					item=items.get(it.next());
-					found=true;
-					// set value into textview
-					TextView textView = (TextView) gridView
-							.findViewById(R.id.grid_item_label);
-					
-					textView.setText(item.getName());
-					
-					TextView textDueDateView = (TextView) gridView
-							.findViewById(R.id.grid_item_due_date);
-					
-					textDueDateView.setText("Scadenza: "+Commons.convertToDate(item.getDueDate()));
-					
-					TextView idItemText = (TextView) gridView
-							.findViewById(R.id.grid_item_id);
-					idItemText.setText(item.getFoodId());
-		 
-					// set image based on selected text
-					ImageView imageView = (ImageView) gridView
-						.findViewById(R.id.grid_item_image);
-					if(item.getImages()!=null && item.getImages().size()!=0){
-						Bitmap image=MediaFile.bitmapFromBytesImage(item.getImages().get(0).getImage());
-						if(image!=null){
-							imageView.setImageBitmap(Bitmap.createScaledBitmap(image, 150, 150, false));
-						}
-						else{
-							imageView.setImageResource(R.drawable.logo_launcher);
-						}
-					}
-					else{
-						imageView.setImageResource(R.drawable.logo_launcher);
-					}
-				}
-				else {
-					it.next();
-					pos++;
-				}
-			}
+			setGridItemUI(gridView, position);
 			
 		} else {
 			gridView = (View) convertView;
+			setGridItemUI(gridView, position);
 		}
  
 		return gridView;
@@ -102,21 +60,7 @@ public class HomeTableAdapter extends BaseAdapter{
  
 	@Override
 	public Object getItem(int position) {
-		Iterator it=items.keySet().iterator();
-		int pos=0;
-		boolean found=false;
-		Object item=null;
-		while(it.hasNext() && !found){
-			if(pos==position){
-				item=items.get(it.next());
-				found=true;
-			}
-			else {
-				it.next();
-				pos++;
-			}
-		}
-		return item;
+		return items.get(position);
 	}
  
 	@Override
@@ -124,9 +68,48 @@ public class HomeTableAdapter extends BaseAdapter{
 		return 0;
 	}
 	
-	public void setFoods(HashMap<String, Food> items){
+	public void setFoods(ArrayList<Food> items){
 		this.items=items;
 	}
 	
-	
+	private void setGridItemUI(View gridView, int position){
+		Food item=items.get(position);
+		// set value into textview
+		TextView textView = (TextView) gridView
+				.findViewById(R.id.grid_item_label);
+		
+		textView.setText(item.getName());
+		
+		TextView textDueDateView = (TextView) gridView
+				.findViewById(R.id.grid_item_due_date);
+		
+		textDueDateView.setText(context.getString(R.string.foodDueDateLabel)+" "+Commons.convertToDate(item.getDueDate()));
+		
+		TextView textQuantityView = (TextView) gridView
+				.findViewById(R.id.grid_item_quantity);
+		
+		String quantity=item.getQuantity();
+		if(quantity==null) quantity="1";
+		textQuantityView.setText("Quantità "+quantity);
+		
+		TextView idItemText = (TextView) gridView
+				.findViewById(R.id.grid_item_id);
+		idItemText.setText(item.getFoodId());
+
+		// set image based on selected text
+		ImageView imageView = (ImageView) gridView
+			.findViewById(R.id.grid_item_image);
+		if(item.getImages()!=null && item.getImages().size()!=0){
+			Bitmap image=MediaFile.bitmapFromBytesImage(item.getImages().get(0).getImage());
+			if(image!=null){
+				imageView.setImageBitmap(Bitmap.createScaledBitmap(image, Constants.standard_image_size, Constants.standard_image_size, false));
+			}
+			else{
+				imageView.setImageResource(R.drawable.logo_launcher);
+			}
+		}
+		else{
+			imageView.setImageResource(R.drawable.logo_launcher);
+		}
+	}
 }

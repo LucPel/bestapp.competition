@@ -60,7 +60,9 @@ public class FoodAssignmentActivity extends Activity{
 	
 	private void setViewComponents(){
 		TextView name_food=(TextView) findViewById(R.id.food_name_label);
-	    name_food.setText(food.getName()+" scade il "+Commons.convertToDate(food.getDueDate()));
+	    name_food.setText(food.getName());
+	    TextView dueDate_food=(TextView) findViewById(R.id.food_dueDate_label);
+	    dueDate_food.setText(getString(R.string.foodDueDateLabel)+" "+Commons.convertToDate(food.getDueDate()));
 	    TextView id_food=(TextView) findViewById(R.id.food_id_label);
 	    id_food.setText(food.getFoodId());
 		ImageView imageView = (ImageView) findViewById(R.id.food_image);
@@ -78,6 +80,9 @@ public class FoodAssignmentActivity extends Activity{
 			}
 			
 		Spinner statusSpinner=(Spinner)findViewById(R.id.food_status_spinner);
+		ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.foodStatus, R.layout.assignment_spinner_item);
+		adapter.setDropDownViewResource(R.layout.assignment_spinner_dropdown_list);
+		statusSpinner.setAdapter(adapter);
 		statusSpinner.setSelection(statusSpinnerPosition(food.getStatus()));
 		Log.d(logTag, "Stato "+food.getStatus()+ "Position "+statusSpinnerPosition(food.getStatus()));
 		statusSpinner.setOnItemSelectedListener(new FoodStatusSpinnerOnItemClickListener(food));

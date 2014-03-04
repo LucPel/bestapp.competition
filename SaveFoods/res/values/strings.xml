@@ -11,6 +11,10 @@
     <string name="saveFoodButtonLabel">Save</string>
     <string name="addFoodImageButtonLabel">Aggiungi Foto</string>
     <string name="sendCommment">Invia</string>
+    <string name="foodNameHint">Nome Food</string>
+    <string name="foodDescriptionHint">Descrizione Food</string>
+    <string name="foodDueDateLabel">Scadenza:</string>
+    <string name="foodQuantityHint">Quantità</string>
     <string-array name="foodStatus">
       <item>Disponibile</item>
       <item>In Assegnazione</item>

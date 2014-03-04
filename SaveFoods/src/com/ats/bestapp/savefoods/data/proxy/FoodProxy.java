@@ -49,34 +49,12 @@ public class FoodProxy {
 		foodTrasformer=new FoodTrasformer();
 	}
 	
-	public void addFood(Food food,ParseObject user) throws JsonGenerationException, JsonMappingException, IOException, JSONException{
-		//Parse.initialize(context, "PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla", "lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp"); 
-		ParseObject foodObj = new ParseObject(Constants.foodObject);
-		JSONArray assigment=new JSONArray();
-		if(user==null){
-			foodObj.put("owner", userTrasformer.createParseObjectUser(food.getOwner()));
-		}
-		else{
-			foodObj.put("owner", user);
-		}
-		foodObj.put(Constants.foodAssigmentCommentPO, assigment);
-		foodObj.put("name", food.getName());
-		foodObj.put("status", food.getStatus());
-		foodObj.put("type", food.getType());
-		foodObj.put("description", food.getDescription());
-		foodObj.put("dueDate", food.getDueDate());
-		foodObj.put(Constants.locationObject, new ParseGeoPoint(food.getLatitude(), food.getLongitude()));
-		JSONArray jsonArrayImages=new JSONArray();
-		for(ImageWrapper wrapper: food.getImages()){
-			jsonArrayImages.put(wrapper.getImage());
-		}
-		foodObj.put("images", jsonArrayImages);
-		Log.d(logTag, "FoodID: "+foodObj.getObjectId());
-		foodObj.saveInBackground();
+	public void addFood(ParseObject food) throws JsonGenerationException, JsonMappingException, IOException, JSONException{
+		food.saveInBackground();
 	}
 	
-	public HashMap<String,Food> getFoods4User(String user,Context context) throws ParseException, JsonParseException, JsonMappingException, JsonGenerationException, IOException, JSONException{
-		HashMap<String,Food> foods=new HashMap<String,Food>();
+	public ArrayList<Food> getFoods4User(String user,Context context) throws ParseException, JsonParseException, JsonMappingException, JsonGenerationException, IOException, JSONException{
+		ArrayList<Food> foods=new ArrayList<Food>();
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);
 		ParseQuery<ParseObject> queryUser=ParseQuery.getQuery(Constants.userObject);
 		ParseObject userObj=queryUser.get(user);
@@ -87,7 +65,7 @@ public class FoodProxy {
 		for(ParseObject food : parseFoods){
 			//Food foodvalue=mapper.readValue(mapper.writeValueAsString(food), Food.class);
 			Log.d(logTag, mapper.writeValueAsString(food));
-			foods.put(food.getObjectId(), foodTrasformer.trasformParseObjectToFood(food));
+			foods.add(foodTrasformer.trasformParseObjectToFood(food));
 		}
 		return foods;
 	}
@@ -96,7 +74,7 @@ public class FoodProxy {
 		Log.d(logTag, JsonMapper.convertObject2String(food));
 		ParseObject foodPO=new ParseObject(Constants.foodObject);
 		foodPO.setObjectId(food.getFoodId());
-		foodPO.put("status", food.getStatus());
+		foodPO.put(Constants.foodStatusPO, food.getStatus());
 		foodPO.saveInBackground();
 	}
 	
@@ -116,10 +94,10 @@ public class FoodProxy {
 	}
 	
 	//LUCPEL
-		public HashMap<String,Food> getFoods4Location(String user,LocationListenerWrapper locListenerWrap, Context context) 
+		public ArrayList<Food> getFoods4Location(String user,LocationListenerWrapper locListenerWrap, Context context) 
 				throws ParseException, JsonParseException, JsonMappingException, JsonGenerationException, IOException, JSONException{
 			
-			HashMap<String,Food> foods=new HashMap<String,Food>();		
+			ArrayList<Food> foods=new ArrayList<Food>();		
 			ParseGeoPoint userLocation = new ParseGeoPoint(locListenerWrap.getLatitude(), locListenerWrap.getLongitude());
 			ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);	
 			ParseQuery<ParseObject> queryUser=ParseQuery.getQuery(Constants.userObject);
@@ -132,14 +110,13 @@ public class FoodProxy {
 			query.whereNear("location", userLocation)
 			.whereNotEqualTo(Constants.foodOwnerPO, userObj)
 			.whereNotEqualTo(Constants.foodStatusPO, Constants.foodStatusScaduto).orderByAscending(Constants.foodDueDatePO);
-			
 			query.setLimit(5);
 			ArrayList<ParseObject> parseFoods=(ArrayList<ParseObject>) query.find();
 			Log.d(logTag, String.valueOf(parseFoods.size()));
 			ObjectMapper mapper=new ObjectMapper();
 			for(ParseObject food : parseFoods){
-				Log.d(logTag+logTag, mapper.writeValueAsString(food));
-				foods.put(food.getObjectId(), foodTrasformer.trasformParseObjectToFood(food));
+				Log.d(logTag, mapper.writeValueAsString(food));
+				foods.add(foodTrasformer.trasformParseObjectToFood(food));
 			}
 			return foods;
 		}

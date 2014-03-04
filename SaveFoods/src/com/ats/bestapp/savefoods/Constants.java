@@ -23,6 +23,7 @@ public class Constants {
 	public static final String foodOwnerPO="owner";
 	public static final String foodDueDatePO="dueDate";
 	public static final String foodImagesPO="images";
+	public static final String foodQuantityPO="quantity";
 	public static final String appName="SaveFoods";
 	public static final String foodStatusDisponibile="Disponibile";
 	public static final String foodStatusInAssegnazione="In Assegnazione";
@@ -34,6 +35,7 @@ public class Constants {
 	public static final int FOOD_DETAIL_REQUEST_CODE = 100;
 	public static final int ADD_FOOD_REQUEST_CODE = 101;
 	public static final int ADD_FOOD_RESPONSE_CODE = 201;
+	public static final int standard_image_size = 96;
 	public static final String parseAppId="PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla";
 	public static final String parseClientKey="lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp";
 	

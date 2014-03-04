@@ -1,35 +1,39 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp" >
+    android:padding="3dp">
  
      <TextView
         android:id="@+id/grid_item_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@+id/label"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="5dp"
         android:textSize="22sp" 
         android:layout_toRightOf="@+id/grid_item_image">
     </TextView>
-    
-      <View
-    android:layout_width="fill_parent"
-    android:layout_height="1dp"
-    android:background="@android:color/darker_gray"
-    android:layout_below="@+id/grid_item_label"
-    android:layout_toRightOf="@+id/grid_item_image"/>
+     
      
    <TextView
         android:id="@+id/grid_item_due_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@+id/label"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp"
         android:textSize="10sp" 
-        android:layout_below="@+id/grid_item_label"
-        android:layout_toRightOf="@+id/grid_item_image">
+        android:layout_below="@id/grid_item_label"
+        android:layout_toRightOf="@id/grid_item_image">
+    </TextView>
+    
+   <TextView
+        android:id="@+id/grid_item_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:textSize="10sp" 
+        android:layout_below="@id/grid_item_label"
+        android:layout_toRightOf="@id/grid_item_due_date">
     </TextView>
      
     <ImageView
@@ -44,9 +48,9 @@
         android:id="@+id/grid_item_id"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="@+id/label"
+        android:text="@id/label"
         android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/grid_item_image"
+        android:layout_toRightOf="@id/grid_item_image"
         android:visibility="invisible">
     </TextView>
     
@@ -54,7 +58,7 @@
     android:layout_width="fill_parent"
     android:layout_height="1dp"
     android:background="@android:color/darker_gray"
-    android:layout_below="@+id/grid_item_label"
+    android:layout_below="@id/grid_item_due_date"
     android:layout_marginTop="15dp"/>
    
  

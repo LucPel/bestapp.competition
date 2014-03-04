@@ -20,6 +20,7 @@ public class Food implements Serializable{
 	private double latitude;
 	private double longitude;
 	private SavingFoodAssignment savingFoodAssignment;
+	private String quantity;
 	
 
 	public String getName() {
@@ -87,5 +88,11 @@ public class Food implements Serializable{
 	}
 	public void setImages(ArrayList<ImageWrapper> images) {
 		this.images = images;
+	}
+	public String getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(String quantity) {
+		this.quantity = quantity;
 	}
 }

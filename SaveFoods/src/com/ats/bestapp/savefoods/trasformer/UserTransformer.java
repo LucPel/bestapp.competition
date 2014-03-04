@@ -35,4 +35,11 @@ public class UserTransformer {
 		userObj.put(Constants.usernamePO, user.getUsername());
 		return userObj;
 	}
+	
+	public ParseObject createParseObjectUser(String username){
+		ParseObject userObj = new ParseObject(Constants.userObject);
+		userObj.put(Constants.nicknamePO, username);
+		userObj.put(Constants.usernamePO, username);
+		return userObj;
+	}
 }

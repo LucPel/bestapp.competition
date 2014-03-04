@@ -38,6 +38,7 @@ import com.ats.bestapp.savefoods.data.Food;
 import com.ats.bestapp.savefoods.data.proxy.FoodProxy;
 import com.ats.bestapp.savefoods.data.proxy.UserProxy;
 import com.ats.bestapp.savefoods.trasformer.FoodTrasformer;
+import com.ats.bestapp.savefoods.trasformer.UserTransformer;
 import com.ats.bestapp.savefoods.utilities.JsonMapper;
 import com.ats.bestapp.savefoods.utilities.MediaFile;
 import com.parse.Parse;
@@ -49,8 +50,9 @@ public class AddFoodActivity extends FragmentActivity{
 	private HashMap<String, Object> commonsData;
 	private LocationListenerWrapper locListenerWrap;
 	private FoodProxy fproxy;
-	private FoodTrasformer ftransformer;
+	private FoodTrasformer ftrasformer;
 	private UserProxy userProxy;
+	private UserTransformer userTrasformer;
 	private ArrayList<Uri> imegesUri;
 	private String logTag="AddFoodActivity";
 	
@@ -101,13 +103,16 @@ public class AddFoodActivity extends FragmentActivity{
 			if(userd!=null && !userd.isEmpty()){
 				user=userProxy.getUserParseObject((String)commonsData.get(Constants.userNameSP));
 			}
+			else{
+				user=userTrasformer.createParseObjectUser((String) commonsData.get(Constants.userNameSP));
+			}
 			ArrayList<byte[]> imagesByte=new ArrayList<byte[]>();
 			for(Uri currentUri : imegesUri){
 				imagesByte.add(MediaFile.bitmapResized2Bytes(currentUri, 256, 256));		
 			}
 			Log.d(logTag, JsonMapper.convertObject2String(imagesByte));
-			Food food2add=ftransformer.trasformInFood(view.getRootView(), commonsData,imagesByte);
-			fproxy.addFood(food2add,user);
+			ParseObject food2add=ftrasformer.trasformInFood(view.getRootView(), commonsData,imagesByte,user);
+			fproxy.addFood(food2add);
 			Intent intent = new Intent();
 			setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent);
 			finish();
@@ -134,7 +139,7 @@ public class AddFoodActivity extends FragmentActivity{
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
         		this,
         		android.R.layout.simple_dropdown_item_1line, 
-        		new String[] {"farinaceo","carne","latticino","verdura"}
+        		new String[] {"Frutta","Carne","Latticini","Verdura","Pesce","Crostaceo","Cereali","Legumi","Bibite","Farinaceo"}
         	);
         autocomplete.setAdapter(adapter);
 	}
@@ -158,7 +163,8 @@ public class AddFoodActivity extends FragmentActivity{
 	  
 	  private void init(){
 		fproxy=new FoodProxy();
-		ftransformer=new FoodTrasformer();
+		ftrasformer=new FoodTrasformer();
+		userTrasformer=new UserTransformer();
 		userProxy=new UserProxy();
 		imegesUri=new ArrayList<Uri>();
 		ActionBar actionBar = getActionBar();
@@ -172,6 +178,7 @@ public class AddFoodActivity extends FragmentActivity{
 		  Log.d(logTag, "URI gen "+fileUri.getPath());
 		  if(fileUri!=null){
 			  imegesUri.add(fileUri);
+			  Log.d(logTag, "URI gen "+fileUri.getPath());
 			  intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
 			    // start the image capture Intent
 			  startActivityForResult(intent, Constants.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
@@ -186,8 +193,7 @@ public class AddFoodActivity extends FragmentActivity{
 	              // Image captured and saved to fileUri specified in the Intent
 	              Toast.makeText(this, "Image saved to:\n" +
 	                       imegesUri.get(imegesUri.size()-1).getPath(), Toast.LENGTH_LONG).show();
-	              final int THUMBSIZE = 512;
-	              Bitmap ThumbImage = MediaFile.bitmapResized(imegesUri.get(imegesUri.size()-1),THUMBSIZE, THUMBSIZE);
+	              Bitmap ThumbImage = MediaFile.bitmapResized(imegesUri.get(imegesUri.size()-1),Constants.standard_image_size, Constants.standard_image_size);
 	              ImageView foodImage = (ImageView) findViewById(R.id.imageFood);
 	              foodImage.setImageBitmap(ThumbImage);
 	          } else if (resultCode == RESULT_CANCELED) {
