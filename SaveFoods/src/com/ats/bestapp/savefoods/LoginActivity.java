@@ -47,8 +47,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 		 String userName = settings.getString(Constants.userNameSP, null);
 		 if(userName!=null){
 			 mPlusClient.connect();
-			 mConnectionProgressDialog=ProgressDialog.show(this, "", 
-	                    "Loading. Please wait...", true);
+			 startDialogLoading();
 		 }
 		 else{
 			 findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
@@ -72,13 +71,11 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
                             result.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
                     } catch (SendIntentException e) {
                             mPlusClient.connect();
+                            startDialogLoading();
                     }
             }
 		
-    // Save the intent so that we can start an activity when the user clicks
-    // the sign-in button.
-    mConnectionResult = result;
-		
+            mConnectionResult = result;
 	}
 
 	@Override
@@ -94,9 +91,16 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 	      loggedin=true;
 	      Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
           startActivity(intent);
-          
 	}
 
+	private void startDialogLoading(){
+		mConnectionProgressDialog= new ProgressDialog(this);
+		mConnectionProgressDialog.setMessage("Loading");
+		mConnectionProgressDialog.setProgressStyle(ProgressDialog.THEME_HOLO_LIGHT);
+		mConnectionProgressDialog.setCancelable(false);        
+		mConnectionProgressDialog.show();
+	}
+	
 	@Override
 	public void onDisconnected() {
 		Log.d(LogTag, "disconnected");
@@ -109,6 +113,9 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 	    if (requestCode == REQUEST_CODE_RESOLVE_ERR && responseCode == RESULT_OK) {
 	        mConnectionResult = null;
 	        mPlusClient.connect();
+	    }
+	    else{
+	    	mConnectionProgressDialog.dismiss();
 	    }
 	}
 	
@@ -137,8 +144,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 	        if (view.getId() == R.id.sign_in_button && !mPlusClient.isConnected()) {
 	            if (mConnectionResult == null) {
 	            	mPlusClient.connect();
-	            	mConnectionProgressDialog=ProgressDialog.show(this, "", 
-		                    "Loading. Please wait...", true);
+	            	startDialogLoading();
 	            } else {
 	                try {
 	                    mConnectionResult.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
@@ -146,27 +152,27 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 	                    // Try connecting again.
 	                    mConnectionResult = null;
 	                    mPlusClient.connect();
-	                    mConnectionProgressDialog=ProgressDialog.show(this, "", 
-	    	                    "Loading. Please wait...", true);
+	                    startDialogLoading();
 	                }
 	            }
 	        }
 	    }
 	    
 	    public void onBackPressed(){
-			showDialog4Exit();
+			mConnectionProgressDialog.dismiss();
+	    	showDialog4Exit();
 		}
 	    
 	    private void showDialog4Exit(){
 	    	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-					this);
+					this,AlertDialog.THEME_HOLO_LIGHT);
 	 
 				// set title
 				alertDialogBuilder.setTitle("Exit");
 	 
 				// set dialog message
 				alertDialogBuilder
-					.setMessage("Click yes to exit!")
+					.setMessage("Do you want to exit ?")
 					.setCancelable(false)
 					.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog,int id) {
@@ -181,12 +187,12 @@ public class LoginActivity extends Activity implements View.OnClickListener,Conn
 							// the dialog box and do nothing
 							dialog.cancel();
 							mPlusClient.connect();
+							startDialogLoading();
 						}
 					});
 	 
 					// create alert dialog
 					AlertDialog alertDialog = alertDialogBuilder.create();
-	 
 					// show it
 					alertDialog.show();
 	    }

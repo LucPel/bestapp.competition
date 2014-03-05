@@ -72,11 +72,11 @@ public class FoodAssignmentActivity extends Activity{
 					imageView.setImageBitmap(Bitmap.createScaledBitmap(image, 150, 150, false));
 				}
 				else{
-					imageView.setImageResource(R.drawable.logo_launcher);
+					imageView.setImageResource(R.drawable.food_no_image_icon);
 				}
 			}
 			else{
-				imageView.setImageResource(R.drawable.logo_launcher);
+				imageView.setImageResource(R.drawable.food_no_image_icon);
 			}
 			
 		Spinner statusSpinner=(Spinner)findViewById(R.id.food_status_spinner);

@@ -22,7 +22,7 @@
                 android:id="@+id/food_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/logo_launcher" >
+                android:src="@drawable/food_no_image_icon" >
             </ImageView>
 
             <TextView
@@ -40,8 +40,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_below="@id/food_name_label"
                 android:layout_alignLeft="@id/food_name_label"
+                android:layout_alignBottom="@+id/food_status_spinner"
                 android:text="@+id/label"
                 android:textSize="10sp" >
             </TextView>
@@ -56,7 +56,7 @@
             </TextView>
             
              <Spinner
-                android:id="@+id/food_status_spinner"
+                android:id="@id/food_status_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_below="@+id/food_name_label"

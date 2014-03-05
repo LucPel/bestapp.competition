@@ -8,6 +8,7 @@ import com.ats.bestapp.savefoods.data.Food;
 import com.ats.bestapp.savefoods.utilities.Commons;
 import com.ats.bestapp.savefoods.utilities.MediaFile;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
@@ -37,6 +38,11 @@ public class HomeTableAdapter extends BaseAdapter{
  
 		View gridView;
 		Log.d(logTag, "Posizione "+position );
+		ProgressDialog dialog= new ProgressDialog(context);
+        dialog.setMessage("Loading");
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setCancelable(false);        
+        dialog.show();
 		if (convertView == null) {
 			Log.d(logTag, "Posizione In "+position );
 			gridView = new View(context);
@@ -48,7 +54,7 @@ public class HomeTableAdapter extends BaseAdapter{
 			gridView = (View) convertView;
 			setGridItemUI(gridView, position);
 		}
- 
+		dialog.dismiss();
 		return gridView;
 	}
  
@@ -105,11 +111,11 @@ public class HomeTableAdapter extends BaseAdapter{
 				imageView.setImageBitmap(Bitmap.createScaledBitmap(image, Constants.standard_image_size, Constants.standard_image_size, false));
 			}
 			else{
-				imageView.setImageResource(R.drawable.logo_launcher);
+				imageView.setImageResource(R.drawable.food_no_image_icon);
 			}
 		}
 		else{
-			imageView.setImageResource(R.drawable.logo_launcher);
+			imageView.setImageResource(R.drawable.food_no_image_icon);
 		}
 	}
 }

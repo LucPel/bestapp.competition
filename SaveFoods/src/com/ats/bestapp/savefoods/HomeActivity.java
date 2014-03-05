@@ -25,6 +25,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -62,34 +63,13 @@ public class HomeActivity extends Activity{
 			if(user.getUserId()!=null && !user.getUserId().isEmpty()){
 				settings.edit().putString(Constants.userIdSP, user.getUserId()).commit();
 				if(findViewById(R.id.grid_item_label)==null){
-					homeProgressDialog=ProgressDialog.show(this, "", 
-		                    "Loading. Please wait...", true);
-					foods=foodProxy.getFoods4User(user.getUserId(), this);
-					homeProgressDialog.dismiss();
-					fillGrid();
+					new GetUserFoodTask().execute(user.getUserId());
 				}
 			}
 			
 		} catch (ParseException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
-		catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 
@@ -105,10 +85,9 @@ public class HomeActivity extends Activity{
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
 	        case R.id.action_addFood2Save:
-	            openAddFoodActivity();
+	        	openAddFoodActivity();
 	            return true;
 	        case R.id.action_searchFoods:
-	            //composeMessage();
 	        	openSearchFoodsActivity();
 	            return true;
 	        case R.id.action_addFoodRequest:
@@ -187,7 +166,7 @@ public class HomeActivity extends Activity{
 		else if (requestCode == Constants.ADD_FOOD_REQUEST_CODE && responseCode == Constants.ADD_FOOD_RESPONSE_CODE) {
 			
 				try {
-					foods=foodProxy.getFoods4User(user.getUserId(), this);
+					foods=foodProxy.getFoods4User(user.getUserId());
 					homeTableAdapter.setFoods(foods);
 		        	homeTableAdapter.notifyDataSetChanged();
 				} catch (JsonParseException e) {
@@ -212,5 +191,53 @@ public class HomeActivity extends Activity{
 				
 		}
 	}
+	private void startDialogLoading(){
+		homeProgressDialog= new ProgressDialog(this);
+		homeProgressDialog.setMessage("Loading");
+		homeProgressDialog.setProgressStyle(ProgressDialog.THEME_HOLO_LIGHT);
+		homeProgressDialog.setCancelable(false);        
+		homeProgressDialog.show();
+	}
 	
+	
+	//ASYNC TASKS
+	
+	private class GetUserFoodTask extends AsyncTask<String, Integer, ArrayList<Food>>{
+
+		@Override
+		protected ArrayList<Food> doInBackground(String... params) {
+			try {
+				foods= foodProxy.getFoods4User(params[0]);
+			} catch (JsonParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonGenerationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return foods;
+		}
+		
+		 protected void onPostExecute(ArrayList<Food> foods_out) {
+			 homeProgressDialog.dismiss();
+			 fillGrid();
+	     }
+		 
+		 protected void onPreExecute() {
+			 startDialogLoading();
+		 }
+
+	}
 }
