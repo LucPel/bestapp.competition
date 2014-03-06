@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="3dp">
+    android:padding="3dp"
+    android:background="@android:color/white">
  
      <TextView
         android:id="@+id/grid_item_label"
@@ -12,7 +13,29 @@
         android:textSize="22sp" 
         android:layout_toRightOf="@+id/grid_item_image">
     </TextView>
+    
+     <TextView
+        android:id="@+id/grid_item_category_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="5dp"
+        android:textSize="12sp" 
+        android:layout_toRightOf="@id/grid_item_label"
+        android:layout_alignBottom="@id/grid_item_label">
+    </TextView>
      
+   
+     <ImageView
+        android:id="@+id/grid_due_date_calendar_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mini_calendar_icon"
+        android:layout_below="@id/grid_item_label"
+        android:layout_toRightOf="@id/grid_item_image" 
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="5dp"/>
+ 
      
    <TextView
         android:id="@+id/grid_item_due_date"
@@ -20,20 +43,33 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp"
-        android:textSize="10sp" 
-        android:layout_below="@id/grid_item_label"
-        android:layout_toRightOf="@id/grid_item_image">
+        android:textSize="12sp"
+        android:text="pippo" 
+        android:layout_alignBottom="@id/grid_due_date_calendar_image"
+        android:layout_toRightOf="@id/grid_due_date_calendar_image">
     </TextView>
     
+   
+   <ImageView
+        android:id="@+id/grid_scale_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mini_scale_icon"
+        android:layout_below="@id/grid_item_label"
+        android:layout_toRightOf="@id/grid_item_due_date"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"/>
+   
    <TextView
         android:id="@+id/grid_item_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
-        android:textSize="10sp" 
-        android:layout_below="@id/grid_item_label"
-        android:layout_toRightOf="@id/grid_item_due_date">
+        android:layout_marginLeft="5dp"
+        android:textSize="12sp"
+        android:text="pippo"  
+        android:layout_alignBottom="@id/grid_scale_image"
+        android:layout_toRightOf="@id/grid_scale_image">
     </TextView>
      
     <ImageView
@@ -59,7 +95,7 @@
     android:layout_height="1dp"
     android:background="@android:color/darker_gray"
     android:layout_below="@id/grid_item_due_date"
-    android:layout_marginTop="15dp"/>
+    android:layout_marginTop="10dp"/>
    
  
 </RelativeLayout>

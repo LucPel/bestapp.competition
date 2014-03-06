@@ -86,17 +86,22 @@ public class HomeTableAdapter extends BaseAdapter{
 		
 		textView.setText(item.getName());
 		
+		TextView categoryText = (TextView) gridView
+				.findViewById(R.id.grid_item_category_label);
+		
+		categoryText.setText("("+item.getType()+")");
+		
 		TextView textDueDateView = (TextView) gridView
 				.findViewById(R.id.grid_item_due_date);
 		
-		textDueDateView.setText(context.getString(R.string.foodDueDateLabel)+" "+Commons.convertToDate(item.getDueDate()));
+		textDueDateView.setText(Commons.convertToDate(item.getDueDate()));
 		
 		TextView textQuantityView = (TextView) gridView
 				.findViewById(R.id.grid_item_quantity);
 		
 		String quantity=item.getQuantity();
 		if(quantity==null) quantity="1";
-		textQuantityView.setText("Quantità "+quantity);
+		textQuantityView.setText(quantity);
 		
 		TextView idItemText = (TextView) gridView
 				.findViewById(R.id.grid_item_id);
