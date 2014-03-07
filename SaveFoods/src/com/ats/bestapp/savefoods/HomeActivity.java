@@ -37,40 +37,33 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.Toast;
 
-public class HomeActivity extends Activity{
+public class HomeActivity extends Activity {
 
 	private FoodProxy foodProxy;
-	private User	user;
 	private HashMap<String, Object> commonsData;
 	private UserProxy userProxy;
 	private SharedPreferences settings;
 	private HomeTableAdapter homeTableAdapter;
 	private ArrayList<Food> foods;
-	private String logTag="HomeActivity";
+	private String logTag = "HomeActivity";
 	private ProgressDialog homeProgressDialog;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		init();
-		settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
-		commonsData=new HashMap<String, Object>();
-		try {
-			user=userProxy.getUser(settings.getString(Constants.userNameSP, null), this);
-			commonsData.put(Constants.userIdSP, user.getUserId());
-			commonsData.put(Constants.userNameSP, settings.getString(Constants.userNameSP, null));
-			if(user.getUserId()!=null && !user.getUserId().isEmpty()){
-				settings.edit().putString(Constants.userIdSP, user.getUserId()).commit();
-				if(findViewById(R.id.grid_item_label)==null){
-					new GetUserFoodTask().execute(user.getUserId());
-				}
+		commonsData = new HashMap<String, Object>();
+		commonsData.put(Constants.userNameSP,
+				settings.getString(Constants.userNameSP, null));
+		String userid = settings.getString(Constants.userIdSP, null);
+		if (userid != null && !userid.isEmpty()) {
+			commonsData.put(Constants.userIdSP, userid);
+			if (findViewById(R.id.grid_item_label) == null) {
+				new GetUserFoodTask().execute(userid);
 			}
-			
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
+
 	}
 
 	@Override
@@ -79,135 +72,154 @@ public class HomeActivity extends Activity{
 		getMenuInflater().inflate(R.menu.action_bar, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle presses on the action bar items
-	    switch (item.getItemId()) {
-	        case R.id.action_addFood2Save:
-	        	openAddFoodActivity();
-	            return true;
-	        case R.id.action_searchFoods:
-	        	openSearchFoodsActivity();
-	            return true;
-	        case R.id.action_addFoodRequest:
-	            //composeMessage();
-	            return true;
-	        case R.id.action_settings:
-	            //composeMessage();
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.action_addFood2Save:
+			openAddFoodActivity();
+			return true;
+		case R.id.action_searchFoods:
+			openSearchFoodsActivity();
+			return true;
+		case R.id.action_addFoodRequest:
+			// composeMessage();
+			return true;
+		case R.id.action_settings:
+			// composeMessage();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
-	
-	private void openAddFoodActivity(){
+
+	private void openAddFoodActivity() {
 		Intent intent = new Intent(HomeActivity.this, AddFoodActivity.class);
 		startActivityForResult(intent, Constants.ADD_FOOD_REQUEST_CODE);
 	}
-	
-	//LUCPEL
-	private void openSearchFoodsActivity(){
+
+	// LUCPEL
+	private void openSearchFoodsActivity() {
 		Intent intent = new Intent(HomeActivity.this, SearchFoodsActivity.class);
 		startActivity(intent);
 	}
-	
-	private void init(){
-		foodProxy=new FoodProxy();
-		userProxy=new UserProxy();
+
+	private void init() {
+		foodProxy = new FoodProxy();
+		userProxy = new UserProxy();
+		settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
 		Parse.initialize(this, Constants.parseAppId, Constants.parseClientKey);
 	}
-	
+
 	@Override
-	public void onResume(){
+	public void onResume() {
 		super.onResume();
 	}
-	
-	private void fillGrid(){
+
+	private void fillGrid() {
 		GridView gridView = (GridView) findViewById(R.id.gridview);
-		if(homeTableAdapter==null){
-			homeTableAdapter=new HomeTableAdapter(this, foods);
-		}
-		else{
+		if (homeTableAdapter == null) {
+			homeTableAdapter = new HomeTableAdapter(this, foods);
+		} else {
 			homeTableAdapter.setFoods(foods);
 		}
 		gridView.setAdapter(homeTableAdapter);
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
-				Food foodSelected=(Food) homeTableAdapter.getItem(position);
-				Intent foodAss=new Intent(parent.getContext(),FoodAssignmentActivity.class);
-				//settings.edit().putString(Constants.foodDetailSP, JsonMapper.convertObject2String(foodSelected)).apply();
+				Food foodSelected = (Food) homeTableAdapter.getItem(position);
+				Intent foodAss = new Intent(parent.getContext(),
+						FoodAssignmentActivity.class);
+				// settings.edit().putString(Constants.foodDetailSP,
+				// JsonMapper.convertObject2String(foodSelected)).apply();
 				foodAss.putExtra(Constants.foodDetailSP, foodSelected);
 				Log.d(logTag, JsonMapper.convertObject2String(foodSelected));
-				startActivityForResult(foodAss, Constants.FOOD_DETAIL_REQUEST_CODE);
+				startActivityForResult(foodAss,
+						Constants.FOOD_DETAIL_REQUEST_CODE);
 			}
 		});
 	}
-	
+
 	@Override
-	protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
-		Log.d(logTag, "requestCode "+requestCode+" responseCode "+responseCode);
-		if (requestCode == Constants.FOOD_DETAIL_REQUEST_CODE && (responseCode == RESULT_OK || responseCode==RESULT_CANCELED)) {
-	        Food food=(Food) intent.getSerializableExtra(Constants.foodDetailSP);
-	        if(food!=null){
-	        	Food c_food=null;
-	        	for(int i=0; i<foods.size() ; i++){
-	        		c_food=foods.get(i);
-	        		if(c_food.getFoodId().equalsIgnoreCase(food.getFoodId())){
-	        			foods.set(i, food);
-	        		}
-	        	}
-	        	homeTableAdapter.setFoods(foods);
-	        	homeTableAdapter.notifyDataSetChanged();
-				Log.d(logTag, "onActivityResult "+food.getStatus());
-	        }
-	    }
-		else if (requestCode == Constants.ADD_FOOD_REQUEST_CODE && responseCode == Constants.ADD_FOOD_RESPONSE_CODE) {
-			
-				try {
-					foods=foodProxy.getFoods4User(user.getUserId());
-					homeTableAdapter.setFoods(foods);
-		        	homeTableAdapter.notifyDataSetChanged();
-				} catch (JsonParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JsonMappingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JsonGenerationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+	protected void onActivityResult(int requestCode, int responseCode,
+			Intent intent) {
+		Log.d(logTag, "requestCode " + requestCode + " responseCode "
+				+ responseCode);
+		if (requestCode == Constants.FOOD_DETAIL_REQUEST_CODE
+				&& (responseCode == RESULT_OK || responseCode == RESULT_CANCELED)) {
+			Food food = (Food) intent
+					.getSerializableExtra(Constants.foodDetailSP);
+			if (food != null) {
+				Food c_food = null;
+				for (int i = 0; i < foods.size(); i++) {
+					c_food = foods.get(i);
+					if (c_food.getFoodId().equalsIgnoreCase(food.getFoodId())) {
+						foods.set(i, food);
+					}
 				}
-				
+				homeTableAdapter.setFoods(foods);
+				homeTableAdapter.notifyDataSetChanged();
+				Log.d(logTag, "onActivityResult " + food.getStatus());
+			}
+		} else if (requestCode == Constants.ADD_FOOD_REQUEST_CODE
+				&& responseCode == Constants.ADD_FOOD_RESPONSE_CODE) {
+
+			try {
+				if (foods == null || foods.isEmpty()) {
+					User user = userProxy.getUser(
+							settings.getString(Constants.userNameSP, null),
+							this);
+					if (user != null && !user.getUserId().isEmpty()) {
+						settings.edit()
+								.putString(Constants.userIdSP, user.getUserId())
+								.commit();
+					}
+				}
+				foods = foodProxy.getFoods4User(settings.getString(
+						Constants.userIdSP, null));
+				homeTableAdapter.setFoods(foods);
+				homeTableAdapter.notifyDataSetChanged();
+			} catch (JsonParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonGenerationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 	}
-	private void startDialogLoading(){
-		homeProgressDialog= new ProgressDialog(this);
+
+	private void startDialogLoading() {
+		homeProgressDialog = new ProgressDialog(this);
 		homeProgressDialog.setMessage("Loading");
 		homeProgressDialog.setProgressStyle(ProgressDialog.THEME_HOLO_LIGHT);
-		homeProgressDialog.setCancelable(false);        
+		homeProgressDialog.setCancelable(false);
 		homeProgressDialog.show();
 	}
-	
-	
-	//ASYNC TASKS
-	
-	private class GetUserFoodTask extends AsyncTask<String, Integer, ArrayList<Food>>{
+
+	// ASYNC TASKS
+
+	private class GetUserFoodTask extends
+			AsyncTask<String, Integer, ArrayList<Food>> {
 
 		@Override
 		protected ArrayList<Food> doInBackground(String... params) {
 			try {
-				foods= foodProxy.getFoods4User(params[0]);
+				foods = foodProxy.getFoods4User(params[0]);
 			} catch (JsonParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -229,15 +241,15 @@ public class HomeActivity extends Activity{
 			}
 			return foods;
 		}
-		
-		 protected void onPostExecute(ArrayList<Food> foods_out) {
-			 homeProgressDialog.dismiss();
-			 fillGrid();
-	     }
-		 
-		 protected void onPreExecute() {
-			 startDialogLoading();
-		 }
+
+		protected void onPostExecute(ArrayList<Food> foods_out) {
+			homeProgressDialog.dismiss();
+			fillGrid();
+		}
+
+		protected void onPreExecute() {
+			startDialogLoading();
+		}
 
 	}
 }

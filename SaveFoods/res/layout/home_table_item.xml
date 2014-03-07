@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="3dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
     android:background="@android:color/white">
  
      <TextView
@@ -20,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
         android:textSize="12sp" 
         android:layout_toRightOf="@id/grid_item_label"
         android:layout_alignBottom="@id/grid_item_label">
@@ -41,9 +43,10 @@
         android:id="@+id/grid_item_due_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
         android:textSize="12sp"
+        android:textStyle="bold"
         android:text="pippo" 
         android:layout_alignBottom="@id/grid_due_date_calendar_image"
         android:layout_toRightOf="@id/grid_due_date_calendar_image">
@@ -64,9 +67,10 @@
         android:id="@+id/grid_item_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:textSize="12sp"
+        android:textStyle="bold"
         android:text="pippo"  
         android:layout_alignBottom="@id/grid_scale_image"
         android:layout_toRightOf="@id/grid_scale_image">
@@ -90,12 +94,4 @@
         android:visibility="invisible">
     </TextView>
     
-        <View
-    android:layout_width="fill_parent"
-    android:layout_height="1dp"
-    android:background="@android:color/darker_gray"
-    android:layout_below="@id/grid_item_due_date"
-    android:layout_marginTop="10dp"/>
-   
- 
 </RelativeLayout>

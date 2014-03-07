@@ -62,7 +62,13 @@ public class FoodAssignmentActivity extends Activity{
 		TextView name_food=(TextView) findViewById(R.id.food_name_label);
 	    name_food.setText(food.getName());
 	    TextView dueDate_food=(TextView) findViewById(R.id.food_dueDate_label);
-	    dueDate_food.setText(getString(R.string.foodDueDateLabel)+" "+Commons.convertToDate(food.getDueDate()));
+	    dueDate_food.setText(Commons.convertToDate(food.getDueDate()));
+	    TextView category_food=(TextView) findViewById(R.id.food_category_label);
+	    category_food.setText(food.getType());
+	    
+	    TextView quantity_food=(TextView) findViewById(R.id.food_quantity_label);
+	    quantity_food.setText(food.getQuantity());
+	    
 	    TextView id_food=(TextView) findViewById(R.id.food_id_label);
 	    id_food.setText(food.getFoodId());
 		ImageView imageView = (ImageView) findViewById(R.id.food_image);

@@ -38,11 +38,6 @@ public class HomeTableAdapter extends BaseAdapter{
  
 		View gridView;
 		Log.d(logTag, "Posizione "+position );
-		ProgressDialog dialog= new ProgressDialog(context);
-        dialog.setMessage("Loading");
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setCancelable(false);        
-        dialog.show();
 		if (convertView == null) {
 			Log.d(logTag, "Posizione In "+position );
 			gridView = new View(context);
@@ -54,7 +49,6 @@ public class HomeTableAdapter extends BaseAdapter{
 			gridView = (View) convertView;
 			setGridItemUI(gridView, position);
 		}
-		dialog.dismiss();
 		return gridView;
 	}
  
