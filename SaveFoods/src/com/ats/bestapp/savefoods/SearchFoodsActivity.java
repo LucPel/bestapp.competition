@@ -40,7 +40,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.AdapterView.OnItemClickListener;
 
-//LUCPEL branchLUCPEL
+//LUCPEL branch LUCPEL
 public class SearchFoodsActivity extends FragmentActivity{
 
 	private String logTag="SearchFoodsActivity";
