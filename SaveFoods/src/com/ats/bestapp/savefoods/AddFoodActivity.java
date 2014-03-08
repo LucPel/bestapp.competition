@@ -13,6 +13,7 @@ import org.json.JSONException;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -41,17 +42,28 @@ import com.ats.bestapp.savefoods.trasformer.FoodTrasformer;
 import com.ats.bestapp.savefoods.trasformer.UserTransformer;
 import com.ats.bestapp.savefoods.utilities.JsonMapper;
 import com.ats.bestapp.savefoods.utilities.MediaFile;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
+import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.plus.PlusClient;
+import com.google.android.gms.plus.PlusShare;
+import com.google.android.gms.plus.model.moments.ItemScope;
+import com.google.android.gms.plus.model.moments.Moment;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 
-public class AddFoodActivity extends FragmentActivity{
+public class AddFoodActivity extends FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener{
 
 	private HashMap<String, Object> commonsData;
 	private LocationListenerWrapper locListenerWrap;
 	private FoodProxy fproxy;
+	private ProgressDialog progressDialog;
 	private FoodTrasformer ftrasformer;
 	private UserProxy userProxy;
+	private ParseObject food;
+	private PlusClient mPlusClient;
 	private UserTransformer userTrasformer;
 	private ArrayList<Uri> imegesUri;
 	private String logTag="AddFoodActivity";
@@ -62,10 +74,6 @@ public class AddFoodActivity extends FragmentActivity{
 		setContentView(R.layout.activity_add_food);
 		init();
 	    initCategoryAutoComplete();
-	    SharedPreferences settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
-		commonsData=new HashMap<String, Object>();
-		commonsData.put(Constants.userNameSP, settings.getString(Constants.userNameSP, null));
-		commonsData.put(Constants.userIdSP, settings.getString(Constants.userIdSP, null));
 		Calendar cal = Calendar.getInstance();
 		EditText dueDate=(EditText)findViewById(R.id.food_due_date);
 		dueDate.clearComposingText();
@@ -95,6 +103,7 @@ public class AddFoodActivity extends FragmentActivity{
 	}
 	
 	public void saveFood(View view){
+		startDialogLoading();
 		try {
 			commonsData.put(Constants.latitudeKey, locListenerWrap.getLatitude());
 			commonsData.put(Constants.longitudeKey, locListenerWrap.getLongitude());
@@ -111,11 +120,11 @@ public class AddFoodActivity extends FragmentActivity{
 				imagesByte.add(MediaFile.bitmapResized2Bytes(currentUri, 256, 256));		
 			}
 			Log.d(logTag, JsonMapper.convertObject2String(imagesByte));
-			ParseObject food2add=ftrasformer.trasformInFood(view.getRootView(), commonsData,imagesByte,user);
-			fproxy.addFood(food2add);
-			Intent intent = new Intent();
-			setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent);
-			finish();
+			food=ftrasformer.trasformInFood(view.getRootView(), commonsData,imagesByte,user);
+			fproxy.addFood(food);
+			progressDialog.dismiss();
+			shareOnGPlus();
+			
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -169,6 +178,10 @@ public class AddFoodActivity extends FragmentActivity{
 		imegesUri=new ArrayList<Uri>();
 		ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
+	    SharedPreferences settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
+		commonsData=new HashMap<String, Object>();
+		commonsData.put(Constants.userNameSP, settings.getString(Constants.userNameSP, null));
+		commonsData.put(Constants.userIdSP, settings.getString(Constants.userIdSP, null));
 		Parse.initialize(this, Constants.parseAppId, Constants.parseClientKey);
 	  }
 	  
@@ -203,4 +216,66 @@ public class AddFoodActivity extends FragmentActivity{
 	          }
 	      }
 	  }
+	  
+		private void startDialogLoading() {
+			progressDialog = new ProgressDialog(this);
+			progressDialog.setMessage("Loading");
+			progressDialog.setProgressStyle(ProgressDialog.THEME_HOLO_LIGHT);
+			progressDialog.setCancelable(false);
+			progressDialog.show();
+		}
+		
+		private void shareOnGPlus(){
+			
+		mPlusClient = new PlusClient.Builder(this, this, this).setActions(
+				"http://schemas.google.com/AddActivity",
+				"http://schemas.google.com/BuyActivity")
+		// .setScopes(Scopes.PLUS_LOGIN) // recommended login scope for social
+		// features
+		// .setScopes("profile") // alternative basic login scope
+				.build();
+		mPlusClient.connect();
+				
+	    }
+
+		@Override
+		public void onConnectionFailed(ConnectionResult arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onConnected(Bundle arg0) {
+			PlusShare.Builder builder = new PlusShare.Builder(this, mPlusClient);
+
+	          // Imposta i metadati di invito all'azione.
+	          builder.addCallToAction(
+	              "CREATE_ITEM", /** etichetta pulsante invito all'azione */
+	              Uri.parse("http://plus.google.com/pages/create"), /** url invito all'azione (per uso su desktop) */
+	              "/pages/create" /** ID deep link di invito all'azione (per uso su dispositivi mobili), massimo 512 caratteri */);
+
+	          // Imposta l'url dei contenuti (per uso su desktop).
+	          builder.setContentUrl(Uri.parse("https://plus.google.com/pages/"));
+
+	          // Imposta l'ID di deep link di destinazione (per uso su dispositivi mobili).
+	          builder.setContentDeepLinkId("/pages/",
+	                  null, null, null);
+
+	          // Imposta il testo di condivisione.
+	          builder.setText("Salva il mio alimento "+food.getString(Constants.foodNamePO)+" che scade il "+food.getString(Constants.foodDueDatePO));
+
+	          startActivityForResult(builder.getIntent(), 0);
+			Intent intent = new Intent();
+		
+			setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent);
+			finish();
+			
+		}
+
+		@Override
+		public void onDisconnected() {
+			// TODO Auto-generated method stub
+			
+		}
+		
 }

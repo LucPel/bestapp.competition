@@ -64,10 +64,12 @@ public class FoodAssignmentActivity extends Activity{
 	    TextView dueDate_food=(TextView) findViewById(R.id.food_dueDate_label);
 	    dueDate_food.setText(Commons.convertToDate(food.getDueDate()));
 	    TextView category_food=(TextView) findViewById(R.id.food_category_label);
-	    category_food.setText(food.getType());
+	    category_food.setText("("+food.getType()+")");
 	    
+	    String quantity=food.getQuantity();
+		if(quantity==null) quantity="1";
 	    TextView quantity_food=(TextView) findViewById(R.id.food_quantity_label);
-	    quantity_food.setText(food.getQuantity());
+	    quantity_food.setText(quantity);
 	    
 	    TextView id_food=(TextView) findViewById(R.id.food_id_label);
 	    id_food.setText(food.getFoodId());
@@ -75,7 +77,7 @@ public class FoodAssignmentActivity extends Activity{
 			if(food.getImages()!=null && food.getImages().size()!=0){
 				Bitmap image=MediaFile.bitmapFromBytesImage(food.getImages().get(0).getImage());
 				if(image!=null){
-					imageView.setImageBitmap(Bitmap.createScaledBitmap(image, 150, 150, false));
+					imageView.setImageBitmap(Bitmap.createScaledBitmap(image, Constants.standard_image_size, Constants.standard_image_size, false));
 				}
 				else{
 					imageView.setImageResource(R.drawable.food_no_image_icon);
@@ -159,6 +161,7 @@ public class FoodAssignmentActivity extends Activity{
 		EditText comment_text=(EditText) findViewById(R.id.comment_text);
 		Comment comment=new Comment();
 		comment.setMessage(comment_text.getText().toString());
+		
 		if(food.getOwner().getUsername().equalsIgnoreCase(settings.getString(Constants.userNameSP, null))){
 			comment.setUser(food.getOwner());
 		}
@@ -178,7 +181,8 @@ public class FoodAssignmentActivity extends Activity{
 		try {
 			foodProxy.addCommentToAssigment(food);
 			commentTableAdapter.setComments(food.getSavingFoodAssignment().getConversation());
-			commentTableAdapter.notifyDataSetChanged();	
+			commentTableAdapter.notifyDataSetChanged();
+			comment_text.setText("");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

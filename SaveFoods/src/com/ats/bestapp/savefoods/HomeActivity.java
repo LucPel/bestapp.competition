@@ -63,6 +63,23 @@ public class HomeActivity extends Activity {
 				new GetUserFoodTask().execute(userid);
 			}
 		}
+		else{
+			User user=null;
+			try {
+				user = userProxy.getUser(
+						settings.getString(Constants.userNameSP, null),
+						this);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (user != null && !user.getUserId().isEmpty()) {
+				settings.edit()
+						.putString(Constants.userIdSP, user.getUserId())
+						.commit();
+				new GetUserFoodTask().execute(user.getUserId());
+			}
+		}
 
 	}
 
