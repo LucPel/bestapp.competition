@@ -54,8 +54,9 @@ public class HomeTableAdapter extends BaseAdapter{
  
 	@Override
 	public int getCount() {
-		Log.d(logTag, "Count "+items.size() );
-		return items.size();
+		//Log.d(logTag, "Count "+items.size() );
+		if(items==null) return 0;
+		else return items.size();
 	}
  
 	@Override

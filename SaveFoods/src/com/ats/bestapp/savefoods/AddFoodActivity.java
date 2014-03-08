@@ -246,29 +246,17 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 
 		@Override
 		public void onConnected(Bundle arg0) {
-			PlusShare.Builder builder = new PlusShare.Builder(this, mPlusClient);
+			 Intent shareIntent = new PlusShare.Builder(this)
+	          .setType("text/plain")
+	          .setText("Salva il mio alimento "+food.getString(Constants.foodNamePO)+" che scade il "+food.getString(Constants.foodDueDatePO))
+	          .setContentUrl(Uri.parse("https://developers.google.com/+/"))
+	          .getIntent();
 
-	          // Imposta i metadati di invito all'azione.
-	          builder.addCallToAction(
-	              "CREATE_ITEM", /** etichetta pulsante invito all'azione */
-	              Uri.parse("http://plus.google.com/pages/create"), /** url invito all'azione (per uso su desktop) */
-	              "/pages/create" /** ID deep link di invito all'azione (per uso su dispositivi mobili), massimo 512 caratteri */);
-
-	          // Imposta l'url dei contenuti (per uso su desktop).
-	          builder.setContentUrl(Uri.parse("https://plus.google.com/pages/"));
-
-	          // Imposta l'ID di deep link di destinazione (per uso su dispositivi mobili).
-	          builder.setContentDeepLinkId("/pages/",
-	                  null, null, null);
-
-	          // Imposta il testo di condivisione.
-	          builder.setText("Salva il mio alimento "+food.getString(Constants.foodNamePO)+" che scade il "+food.getString(Constants.foodDueDatePO));
-
-	          startActivityForResult(builder.getIntent(), 0);
-			Intent intent = new Intent();
-		
-			setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent);
-			finish();
+	      startActivityForResult(shareIntent, 0);
+			
+		Intent intent_back = new Intent();
+		setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent_back);
+		finish();
 			
 		}
 

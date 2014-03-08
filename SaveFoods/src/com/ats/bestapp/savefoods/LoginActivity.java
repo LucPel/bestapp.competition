@@ -4,6 +4,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.PlusClient;
 
 import android.os.Bundle;
@@ -88,7 +89,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,
 		SharedPreferences settings = getSharedPreferences(
 				Constants.sharedPreferencesName, 0);
 		String username=settings.getString(Constants.userNameSP, null);
-		if(username!=null && !username.isEmpty()){
+		if(username==null || username.isEmpty()){
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putString(Constants.userNameSP, accountName);
 			// Commit the edits!

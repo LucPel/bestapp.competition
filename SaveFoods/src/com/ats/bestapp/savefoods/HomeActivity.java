@@ -195,7 +195,11 @@ public class HomeActivity extends Activity {
 				}
 				foods = foodProxy.getFoods4User(settings.getString(
 						Constants.userIdSP, null));
-				homeTableAdapter.setFoods(foods);
+				if (homeTableAdapter == null) {
+					homeTableAdapter = new HomeTableAdapter(this, foods);
+				} else {
+					homeTableAdapter.setFoods(foods);
+				}
 				homeTableAdapter.notifyDataSetChanged();
 			} catch (JsonParseException e) {
 				// TODO Auto-generated catch block
