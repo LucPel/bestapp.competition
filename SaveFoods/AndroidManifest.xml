@@ -53,6 +53,7 @@
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.ats.bestapp.savefoods.HomeActivity" />
         </activity>
+        
         <activity android:name="SearchFoodsActivity"
             android:theme="@style/Theme.Savefoodab"
             android:parentActivityName="com.ats.bestapp.savefoods.HomeActivity">
@@ -60,6 +61,13 @@
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.ats.bestapp.savefoods.HomeActivity" />
          </activity>
+         <activity android:name="FoodDetailsActivity"
+            android:theme="@style/Theme.Savefoodab"
+            android:parentActivityName="com.ats.bestapp.savefoods.SearchFoodsActivity">
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.ats.bestapp.savefoods.SearchFoodsActivity" />
+        </activity>
     </application>
 
 </manifest>
