@@ -43,7 +43,7 @@ public class FoodProxy {
 	private UserTransformer userTrasformer;
 	private FoodTrasformer foodTrasformer;
 	private static final String logTag="FoodProxy";
-	private static final int maxFoods=5;
+	private static final int maxFoods=6;
 	
 	public FoodProxy(){
 		userTrasformer=new UserTransformer();
@@ -54,12 +54,13 @@ public class FoodProxy {
 		food.saveInBackground();
 	}
 	
-	public ArrayList<Food> getFoods4User(String user) throws ParseException, JsonParseException, JsonMappingException, JsonGenerationException, IOException, JSONException{
+	public ArrayList<Food> getFoods4User(String user,int skippableItems) throws ParseException, JsonParseException, JsonMappingException, JsonGenerationException, IOException, JSONException{
 		ArrayList<Food> foods=new ArrayList<Food>();
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);
 		ParseQuery<ParseObject> queryUser=ParseQuery.getQuery(Constants.userObject);
 		ParseObject userObj=queryUser.get(user);
 		query.whereEqualTo(Constants.foodOwnerPO, userObj).whereNotEqualTo(Constants.foodStatusPO, Constants.foodStatusScaduto).orderByAscending(Constants.foodDueDatePO).setLimit(maxFoods);
+		query.setSkip(skippableItems);
 		long start=System.currentTimeMillis();
 		ArrayList<ParseObject> parseFoods=(ArrayList<ParseObject>) query.find();
 		Log.d(logTag, String.valueOf(System.currentTimeMillis()-start));

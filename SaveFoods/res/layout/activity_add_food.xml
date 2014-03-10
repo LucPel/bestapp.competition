@@ -73,10 +73,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="49dp"
+        android:layout_marginBottom="10dp"
+        android:padding="10dp"
         android:background="@drawable/chat_bubbles"
         android:onClick="saveFood"
-        android:textSize="25sp"
+        android:textSize="22sp"
         android:textColor="#FFFFFF"
         android:textStyle="bold|italic"
         android:gravity="center"
@@ -94,6 +95,14 @@
             android:onClick="showDatePickerDialog" >
    </EditText>
 
-
+    <ToggleButton
+        android:id="@+id/share_tb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/food_due_date"
+        android:layout_below="@+id/food_due_date"
+        android:layout_marginTop="20dp"
+        android:textOff="No Share"
+        android:textOn="Share" />
 
 </RelativeLayout>

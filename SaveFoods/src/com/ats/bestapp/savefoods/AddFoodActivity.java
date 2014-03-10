@@ -34,6 +34,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.ats.bestapp.savefoods.data.Food;
 import com.ats.bestapp.savefoods.data.proxy.FoodProxy;
@@ -123,7 +124,15 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 			food=ftrasformer.trasformInFood(view.getRootView(), commonsData,imagesByte,user);
 			fproxy.addFood(food);
 			progressDialog.dismiss();
-			shareOnGPlus();
+			ToggleButton shareTB=(ToggleButton) findViewById(R.id.share_tb);
+			if(shareTB.isChecked()){
+				shareOnGPlus();
+			}
+			else{
+				Intent intent_back = new Intent();
+				setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent_back);
+				finish();
+			}
 			
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block

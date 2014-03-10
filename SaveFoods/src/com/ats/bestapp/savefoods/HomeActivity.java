@@ -142,6 +142,7 @@ public class HomeActivity extends Activity {
 			homeTableAdapter.setFoods(foods);
 		}
 		gridView.setAdapter(homeTableAdapter);
+		gridView.setOnScrollListener(homeTableAdapter);
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
@@ -194,7 +195,7 @@ public class HomeActivity extends Activity {
 					}
 				}
 				foods = foodProxy.getFoods4User(settings.getString(
-						Constants.userIdSP, null));
+						Constants.userIdSP, null),0);
 				if (homeTableAdapter == null) {
 					homeTableAdapter = new HomeTableAdapter(this, foods);
 				} else {
@@ -240,7 +241,7 @@ public class HomeActivity extends Activity {
 		@Override
 		protected ArrayList<Food> doInBackground(String... params) {
 			try {
-				foods = foodProxy.getFoods4User(params[0]);
+				foods = foodProxy.getFoods4User(params[0],0);
 			} catch (JsonParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
