@@ -6,6 +6,7 @@ import java.util.List;
 import com.ats.bestapp.savefoods.data.Comment;
 
 import android.content.Context;
+import android.opengl.Visibility;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -68,6 +69,11 @@ public class CommentTableAdapter extends BaseAdapter {
 			textView.setText(currComment.getMessage());
 			if (!owner.equalsIgnoreCase(currComment.getUser().getUsername())) {
 				commentItemView.setGravity(Gravity.RIGHT);
+				TextView ownerTV = (TextView) commentItemView
+						.findViewById(R.id.comment_grid_item_username);
+				String userComment=currComment.getUser().getUsername();
+				ownerTV.setText(userComment.substring(0, currComment.getUser().getUsername().indexOf("@")));
+				ownerTV.setVisibility(View.VISIBLE);
 			}
 		} else {
 			Log.d(logTag, "PosizioneNCW " + position);
@@ -78,6 +84,11 @@ public class CommentTableAdapter extends BaseAdapter {
 			textView.setText(currComment.getMessage());
 			if (!owner.equalsIgnoreCase(currComment.getUser().getUsername())) {
 				commentItemView.setGravity(Gravity.RIGHT);
+				TextView ownerTV = (TextView) commentItemView
+						.findViewById(R.id.comment_grid_item_username);
+				String userComment=currComment.getUser().getUsername();
+				ownerTV.setText(userComment.substring(0, currComment.getUser().getUsername().indexOf("@")));
+				ownerTV.setVisibility(View.VISIBLE);
 			}
 		}
 		return commentItemView;

@@ -33,8 +33,12 @@ public class Constants {
 	public static final String foodDetailSP="foodDetail";
 	public static final String addedFoodExtra="addedFood";
 	public static final String plusClientExtra="plusClient";
+	public static final String alert_pn="alert";
+	public static final String action_pn="action";
+	public static final String title_pn="title";
 	public static final String foodSellerChannelPrefix="S";
 	public static final String foodBuyerChannelPrefix="B";
+	public static final String chatChannelPrefix="C";
 	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 	public static final int FOOD_DETAIL_REQUEST_CODE = 100;
 	public static final int ADD_FOOD_REQUEST_CODE = 101;

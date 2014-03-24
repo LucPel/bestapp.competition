@@ -20,6 +20,7 @@ import com.ats.bestapp.savefoods.utilities.MediaFile;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParsePush;
+import com.parse.PushService;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -59,6 +60,9 @@ public class FoodAssignmentActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_food_assigment);
 		init();
+		if(food==null){
+			//food=foodProxy.getFood(foodId)
+		}
 	    Log.d(logTag, JsonMapper.convertObject2String(food));
 	    setViewComponents();
 		fillGrid();
@@ -122,35 +126,51 @@ public class FoodAssignmentActivity extends Activity{
         filter.addCategory(Intent.CATEGORY_DEFAULT);
         updateCommentsReceiver = new UpdateCommentsReceiver();
         registerReceiver(updateCommentsReceiver, filter);
+        registerChatChannel();
 	    settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
+	}
+	
+	private void registerChatChannel(){
+		PushService.subscribe(this, Constants.chatChannelPrefix+food.getChannel(), FoodAssignmentActivity.class);
+        PushService.unsubscribe(this, Constants.foodSellerChannelPrefix+food.getChannel());
+	}
+	
+	private void unregisterChatChannel(){
+		PushService.subscribe(this, Constants.foodSellerChannelPrefix+food.getChannel(), FoodAssignmentActivity.class);
+        PushService.unsubscribe(this, Constants.chatChannelPrefix+food.getChannel());
 	}
 	
 	public void onPause(){
 		Log.d(logTag, "Pause: ");
+		unregisterChatChannel();
 		super.onPause();
 		
 	}
 	
 	public void onResume(){
 		Log.d(logTag, "Resume: ");
+		registerChatChannel();
 		super.onResume();
 		
 	}
 	
 	public void onRestart(){
 		Log.d(logTag, "Restart	: ");
+		registerChatChannel();
 		super.onRestart();
 		
 	}
 	
 	public void onStop(){
 		Log.d(logTag, "Stop: ");
+		unregisterChatChannel();
 		super.onStop();
 		
 	}
 	
 	public void onDestroy(){
 		Log.d(logTag, "Destroy: ");
+		unregisterChatChannel();
 		this.unregisterReceiver(updateCommentsReceiver);
 		super.onDestroy();
 		//Log.d(logTag, "Destroy: "+food.getStatus());
@@ -219,13 +239,18 @@ public class FoodAssignmentActivity extends Activity{
 	private void sendPushNotification(Comment comment){
 		JSONObject dt=new JSONObject();
 		try {
-			dt.put("action", "com.ats.bestapp.savefoods.UPDATE_COMMENTS");
+			dt.put(Constants.action_pn, "com.ats.bestapp.savefoods.UPDATE_COMMENTS");
 			dt.put("foodId", food.getFoodId());
 			ParsePush push = new ParsePush();
-			push.setChannel(Constants.foodSellerChannelPrefix+food.getChannel());
+			push.setChannel(Constants.chatChannelPrefix+food.getChannel());
 			push.setMessage(comment.getMessage());
 			push.setData(dt);
+			push.setExpirationTimeInterval(60);
 			push.sendInBackground();
+			ParsePush pushLonger=new ParsePush();
+			pushLonger.setChannel(Constants.foodBuyerChannelPrefix+food.getChannel());
+			pushLonger.setMessage(comment.getMessage());
+			pushLonger.sendInBackground();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
