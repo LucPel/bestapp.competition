@@ -75,7 +75,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="10dp"
         android:padding="10dp"
-        android:background="@drawable/chat_bubbles"
+        android:background="@drawable/button"
         android:onClick="saveFood"
         android:textSize="22sp"
         android:textColor="#FFFFFF"

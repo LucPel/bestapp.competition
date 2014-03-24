@@ -20,6 +20,7 @@ public class Constants {
 	public static final String foodStatusPO="status";
 	public static final String foodDescritpionPO="description";
 	public static final String foodCategoryPO="type";
+	public static final String foodChannelPO="channel";
 	public static final String foodOwnerPO="owner";
 	public static final String foodDueDatePO="dueDate";
 	public static final String foodImagesPO="images";
@@ -32,6 +33,8 @@ public class Constants {
 	public static final String foodDetailSP="foodDetail";
 	public static final String addedFoodExtra="addedFood";
 	public static final String plusClientExtra="plusClient";
+	public static final String foodSellerChannelPrefix="S";
+	public static final String foodBuyerChannelPrefix="B";
 	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 	public static final int FOOD_DETAIL_REQUEST_CODE = 100;
 	public static final int ADD_FOOD_REQUEST_CODE = 101;

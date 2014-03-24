@@ -74,6 +74,14 @@ public class FoodProxy {
 		return foods;
 	}
 	
+	public Food getFood(String foodId) throws ParseException, JSONException{
+		ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);
+		query.whereEqualTo("objectId", foodId);
+		ArrayList<ParseObject> parseFoods=(ArrayList<ParseObject>) query.find();
+		return foodTrasformer.trasformParseObjectToFood(parseFoods.get(0));
+		
+	}
+	
 	public void updateFoodStatus(Food food){
 		Log.d(logTag, JsonMapper.convertObject2String(food));
 		ParseObject foodPO=new ParseObject(Constants.foodObject);

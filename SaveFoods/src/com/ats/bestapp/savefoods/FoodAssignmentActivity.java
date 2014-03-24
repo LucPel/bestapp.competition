@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.ats.bestapp.savefoods.R.id;
 import com.ats.bestapp.savefoods.data.Comment;
@@ -18,10 +19,14 @@ import com.ats.bestapp.savefoods.utilities.JsonMapper;
 import com.ats.bestapp.savefoods.utilities.MediaFile;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParsePush;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -37,6 +42,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class FoodAssignmentActivity extends Activity{
@@ -47,6 +53,7 @@ public class FoodAssignmentActivity extends Activity{
 	private UserProxy userProxy;
 	private FoodProxy foodProxy;
 	private CommentTableAdapter commentTableAdapter;
+	private UpdateCommentsReceiver updateCommentsReceiver;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -108,24 +115,43 @@ public class FoodAssignmentActivity extends Activity{
 	private void init(){
 		userProxy=new UserProxy();
 		foodProxy=new FoodProxy();
-		Parse.initialize(this, Constants.parseAppId, Constants.parseClientKey);
 		ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 	    food=(Food) getIntent().getSerializableExtra(Constants.foodDetailSP);
+	    IntentFilter filter = new IntentFilter(UpdateCommentsReceiver.UPDATE_COMMENTS);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        updateCommentsReceiver = new UpdateCommentsReceiver();
+        registerReceiver(updateCommentsReceiver, filter);
 	    settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
 	}
 	
 	public void onPause(){
+		Log.d(logTag, "Pause: ");
 		super.onPause();
-		//Log.d(logTag, "Pause: "+food.getStatus());
+		
+	}
+	
+	public void onResume(){
+		Log.d(logTag, "Resume: ");
+		super.onResume();
+		
+	}
+	
+	public void onRestart(){
+		Log.d(logTag, "Restart	: ");
+		super.onRestart();
+		
 	}
 	
 	public void onStop(){
+		Log.d(logTag, "Stop: ");
 		super.onStop();
 		
 	}
 	
 	public void onDestroy(){
+		Log.d(logTag, "Destroy: ");
+		this.unregisterReceiver(updateCommentsReceiver);
 		super.onDestroy();
 		//Log.d(logTag, "Destroy: "+food.getStatus());
 	}
@@ -183,16 +209,34 @@ public class FoodAssignmentActivity extends Activity{
 			commentTableAdapter.setComments(food.getSavingFoodAssignment().getConversation());
 			commentTableAdapter.notifyDataSetChanged();
 			comment_text.setText("");
+			sendPushNotification(comment);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
+	private void sendPushNotification(Comment comment){
+		JSONObject dt=new JSONObject();
+		try {
+			dt.put("action", "com.ats.bestapp.savefoods.UPDATE_COMMENTS");
+			dt.put("foodId", food.getFoodId());
+			ParsePush push = new ParsePush();
+			push.setChannel(Constants.foodSellerChannelPrefix+food.getChannel());
+			push.setMessage(comment.getMessage());
+			push.setData(dt);
+			push.sendInBackground();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
 	private void fillGrid(){
 		GridView gridView = (GridView) findViewById(R.id.gridviewComment);
 		if(commentTableAdapter==null){
-			commentTableAdapter=new CommentTableAdapter(this, food.getSavingFoodAssignment().getConversation());
+			commentTableAdapter=new CommentTableAdapter(this, food.getSavingFoodAssignment().getConversation(),food.getOwner().getUsername());
 		}
 		else{
 			commentTableAdapter.setComments(food.getSavingFoodAssignment().getConversation());
@@ -209,4 +253,38 @@ public class FoodAssignmentActivity extends Activity{
 	    finish();
 	}
 	
+	public class UpdateCommentsReceiver extends BroadcastReceiver{
+
+		private static final String TAG = "UpdateCommentsReceiver";
+		public static final String UPDATE_COMMENTS = "com.ats.bestapp.savefoods.UPDATE_COMMENTS";
+		 
+		  @Override
+		  public void onReceive(Context context, Intent intent) {
+		    try {
+		      String action = intent.getAction();
+		      String channel = intent.getExtras().getString("com.parse.Channel");
+		      JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
+		      Log.d(TAG, "got action " + action + " on channel " + channel + " with:");
+		      try {
+				food=foodProxy.getFood(food.getFoodId());
+				commentTableAdapter.setComments(food.getSavingFoodAssignment().getConversation());
+				commentTableAdapter.notifyDataSetChanged();
+				Toast.makeText(context.getApplicationContext(), food.getName() + " is connected.", Toast.LENGTH_LONG)
+				.show();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		      /*String foodId=json.getString("foodId");
+		      Intent foodAssA=new Intent(context.getApplicationContext(), FoodAssignmentActivity.class);
+			    foodAssA.putExtra("foodId", foodId);
+			    foodAssA.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			    context.startActivity(foodAssA);*/
+		    } catch (JSONException e) {
+		      Log.d(TAG, "JSONException: " + e.getMessage());
+		    }
+		    
+		  }
+
+	}
 }

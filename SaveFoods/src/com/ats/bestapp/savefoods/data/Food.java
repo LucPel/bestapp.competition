@@ -21,6 +21,7 @@ public class Food implements Serializable{
 	private double longitude;
 	private SavingFoodAssignment savingFoodAssignment;
 	private String quantity;
+	private String channel;
 	
 
 	public String getName() {
@@ -94,5 +95,11 @@ public class Food implements Serializable{
 	}
 	public void setQuantity(String quantity) {
 		this.quantity = quantity;
+	}
+	public String getChannel() {
+		return channel;
+	}
+	public void setChannel(String channel) {
+		this.channel = channel;
 	}
 }

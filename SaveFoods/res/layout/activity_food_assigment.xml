@@ -155,8 +155,9 @@
             android:id="@+id/send_comment_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="sendComment"
-            android:text="@string/sendCommment" >
+            android:background="@drawable/send_message_icon"
+            android:onClick="sendComment" >
+
         </Button>
     </LinearLayout>
 

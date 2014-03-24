@@ -2,6 +2,7 @@ package com.ats.bestapp.savefoods.trasformer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
@@ -47,6 +48,7 @@ public class FoodTrasformer {
 		Log.d(logTag, "Converted Date: "+year+month+day);
 		ParseObject foodObj = new ParseObject(Constants.foodObject);
 		JSONArray assigment=new JSONArray();
+		foodObj.put(Constants.foodChannelPO,UUID.randomUUID().toString().replace("-", ""));
 		foodObj.put(Constants.foodAssigmentCommentPO, assigment);
 		foodObj.put(Constants.foodNamePO, name.getText().toString());
 		foodObj.put(Constants.foodStatusPO, Constants.foodStatusDisponibile);
@@ -78,6 +80,7 @@ public class FoodTrasformer {
 				.getLongitude());
 		foodT.setDueDate(food.getString(Constants.foodDueDatePO));
 		foodT.setQuantity(food.getString(Constants.foodQuantityPO));
+		foodT.setChannel(food.getString(Constants.foodChannelPO));
 		ParseObject userObj = food.getParseObject(Constants.foodOwnerPO);
 		userObj.fetchIfNeeded();
 		userTrasformer = new UserTransformer();

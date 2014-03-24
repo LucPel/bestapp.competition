@@ -126,7 +126,6 @@ public class HomeActivity extends Activity {
 		foodProxy = new FoodProxy();
 		userProxy = new UserProxy();
 		settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
-		Parse.initialize(this, Constants.parseAppId, Constants.parseClientKey);
 	}
 
 	@Override

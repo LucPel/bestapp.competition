@@ -54,6 +54,7 @@ import com.google.android.gms.plus.model.moments.Moment;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.PushService;
 
 public class AddFoodActivity extends FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener{
 
@@ -125,6 +126,7 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 			fproxy.addFood(food);
 			progressDialog.dismiss();
 			ToggleButton shareTB=(ToggleButton) findViewById(R.id.share_tb);
+			PushService.subscribe(this, Constants.foodSellerChannelPrefix+food.getString(Constants.foodChannelPO), FoodAssignmentActivity.class);
 			if(shareTB.isChecked()){
 				shareOnGPlus();
 			}
@@ -191,7 +193,6 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 		commonsData=new HashMap<String, Object>();
 		commonsData.put(Constants.userNameSP, settings.getString(Constants.userNameSP, null));
 		commonsData.put(Constants.userIdSP, settings.getString(Constants.userIdSP, null));
-		Parse.initialize(this, Constants.parseAppId, Constants.parseClientKey);
 	  }
 	  
 	  public void addImage(){
