@@ -68,6 +68,15 @@
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.ats.bestapp.savefoods.SearchFoodsActivity" />
         </activity>
+         <activity android:name="ChatNotOwnerFoodActivity"
+            android:theme="@style/Theme.Savefoodab"
+            android:parentActivityName="com.ats.bestapp.savefoods.FoodDetailsActivity">
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.ats.bestapp.savefoods.FoodDetailsActivity" />
+        </activity>
+         
+         
     </application>
 
 </manifest>
