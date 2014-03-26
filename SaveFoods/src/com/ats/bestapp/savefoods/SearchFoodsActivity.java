@@ -2,10 +2,6 @@ package com.ats.bestapp.savefoods;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
@@ -16,82 +12,50 @@ import com.ats.bestapp.savefoods.data.Food;
 import com.ats.bestapp.savefoods.data.User;
 import com.ats.bestapp.savefoods.data.proxy.FoodProxy;
 import com.ats.bestapp.savefoods.data.proxy.UserProxy;
-import com.ats.bestapp.savefoods.trasformer.FoodTrasformer;
 import com.ats.bestapp.savefoods.utilities.JsonMapper;
-import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
-import android.app.ActionBar;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.AdapterView.OnItemClickListener;
 
-//LUCPEL
+//LUCPEL BranchLucPel
 public class SearchFoodsActivity extends FragmentActivity{
 
 	private String logTag="SearchFoodsActivity";
 	private SharedPreferences settings;
-	
-	private LocationListenerWrapper locListenerWrap;
-	
-	private User	user;
+
+
 	private UserProxy userProxy;
 	private FoodProxy foodProxy;
 	private ArrayList<Food> foods;
-	private HomeTableAdapter homeTableAdapter;
-	
-	
+	private LocationListenerWrapper locListenerWrap;
+	private SearchTableAdapter searchTableAdapter;
+	private ProgressDialog searchProgressDialog;
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 		init();
-		
-		try {
-			user=userProxy.getUser(settings.getString(Constants.userNameSP, null), this);
-				if(findViewById(R.id.grid_item_label)==null){
-					foods=foodProxy.getFoods4Location(user.getUserId(),locListenerWrap,this);
-					fillGrid();
-				}				
-		} catch (ParseException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-		
-		}catch (JSONException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-		
-		}catch (JsonParseException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-		
-		} catch (JsonMappingException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-		
-		} catch (JsonGenerationException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-		
-		}catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+
+		String userid = settings.getString(Constants.userIdSP, null);
+		if(findViewById(R.id.grid_item_label)==null){			
+				new GetUserFoodTask(userid,locListenerWrap).execute();
 		}
-		
+
+
 	}
 
 
@@ -114,24 +78,83 @@ public class SearchFoodsActivity extends FragmentActivity{
 
 	private void fillGrid(){
 		GridView gridView = (GridView) findViewById(R.id.gridview);
-		if(homeTableAdapter==null){
-			homeTableAdapter=new HomeTableAdapter(this, foods);
+		if(searchTableAdapter==null){
+			searchTableAdapter=new SearchTableAdapter(this, foods);
 		}
 		else{
-			homeTableAdapter.setFoods(foods);
+			searchTableAdapter.setFoods(foods);
 		}
-		gridView.setAdapter(homeTableAdapter);
+		gridView.setAdapter(searchTableAdapter);
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
-				Food foodSelected=(Food) homeTableAdapter.getItem(position);
-				Intent foodAss=new Intent(parent.getContext(),FoodAssignmentActivity.class);
-				//settings.edit().putString(Constants.foodDetailSP, JsonMapper.convertObject2String(foodSelected)).apply();
+				Food foodSelected=(Food) searchTableAdapter.getItem(position);
+				Intent foodAss=new Intent(parent.getContext(),FoodDetailsActivity.class);
 				foodAss.putExtra(Constants.foodDetailSP, foodSelected);
 				Log.d(logTag, JsonMapper.convertObject2String(foodSelected));
 				startActivityForResult(foodAss, Constants.FOOD_DETAIL_REQUEST_CODE);
 			}
 		});
 	}
+
+	private void startDialogLoading() {
+		searchProgressDialog = new ProgressDialog(this);
+		searchProgressDialog.setMessage("Loading");
+		searchProgressDialog.setProgressStyle(ProgressDialog.THEME_HOLO_LIGHT);
+		searchProgressDialog.setCancelable(false);
+		searchProgressDialog.show();
+	}
+
+	// ASYNC TASKS
+	private class GetUserFoodTask extends
+			AsyncTask<Void, Integer, ArrayList<Food>> {
+
+		String user;
+		LocationListenerWrapper locListenerWrap;
+
+		public GetUserFoodTask(String user_,LocationListenerWrapper locListenerWrap_){
+			user=user_;
+			locListenerWrap=locListenerWrap_;			
+		}
+
+		@Override
+		protected ArrayList<Food> doInBackground(Void... params) {
+			try {
+				foods = foodProxy.getFoods4Location(user,locListenerWrap);
+			} catch (JsonParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonGenerationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return foods;
+		}
+
+	
+		protected void onPostExecute(ArrayList<Food> foods_out) {
+			searchProgressDialog.dismiss();
+			fillGrid();
+		}
+
+		protected void onPreExecute() {
+			startDialogLoading();
+		}
+
+	}
+
+
 
 }

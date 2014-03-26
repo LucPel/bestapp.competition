@@ -233,7 +233,6 @@ public class HomeActivity extends Activity {
 	}
 
 	// ASYNC TASKS
-
 	private class GetUserFoodTask extends
 			AsyncTask<String, Integer, ArrayList<Food>> {
 

@@ -83,6 +83,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ats.bestapp.savefoods.HomeActivity" />
         </activity>
+<activity android:name="FoodDetailsActivity"
+            android:theme="@style/Theme.Savefoodab"
+            android:parentActivityName="com.ats.bestapp.savefoods.SearchFoodsActivity">
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.ats.bestapp.savefoods.SearchFoodsActivity" />
+        </activity>
+         <activity android:name="ChatNotOwnerFoodActivity"
+            android:theme="@style/Theme.Savefoodab"
+            android:parentActivityName="com.ats.bestapp.savefoods.FoodDetailsActivity">
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.ats.bestapp.savefoods.FoodDetailsActivity" />
+        </activity>
 
         <!-- PushNotifications -->
         <service android:name="com.parse.PushService" />
