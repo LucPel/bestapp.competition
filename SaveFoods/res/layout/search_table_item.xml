@@ -1,0 +1,124 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:background="@android:color/white">
+ 
+     <TextView
+        android:id="@+id/grid_item_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="5dp"
+        android:textSize="22sp" 
+        android:layout_toRightOf="@+id/grid_item_image">
+    </TextView>
+    
+     <TextView
+        android:id="@+id/grid_item_category_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:textSize="12sp" 
+        android:layout_toRightOf="@id/grid_item_label"
+        android:layout_alignBottom="@id/grid_item_label">
+    </TextView>
+     
+   
+    <ImageView
+        android:id="@+id/grid_due_date_calendar_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mini_calendar_icon"
+        android:layout_below="@id/grid_item_label"
+        android:layout_toRightOf="@id/grid_item_image" 
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="5dp"/>
+ 
+     
+   <TextView
+        android:id="@+id/grid_item_due_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:text="date" 
+        android:layout_alignBottom="@id/grid_due_date_calendar_image"
+        android:layout_toRightOf="@id/grid_due_date_calendar_image">
+    </TextView>
+    
+   
+   <ImageView
+        android:id="@+id/grid_scale_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mini_scale_icon"
+        android:layout_below="@id/grid_item_label"
+        android:layout_toRightOf="@id/grid_item_due_date"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"/>
+   
+   <TextView
+        android:id="@+id/grid_item_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:text="quan"  
+        android:layout_alignBottom="@id/grid_scale_image"
+        android:layout_toRightOf="@id/grid_scale_image">
+    </TextView>
+     
+   <ImageView
+        android:id="@+id/grid_distance_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/grid_scale_image"
+        android:layout_marginLeft="14dp"
+        android:layout_toRightOf="@+id/grid_item_quantity"
+        android:src="@drawable/mini_scale_icon" />
+   
+	<TextView
+        android:id="@+id/grid_item_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"    
+		android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:textSize="12sp"
+        android:textStyle="bold"       
+		android:text="dist"
+        android:layout_alignBottom="@id/grid_distance_image"
+        android:layout_toRightOf="@id/grid_distance_image">
+    </TextView>
+   
+    
+    <ImageView
+        android:id="@+id/grid_item_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/food_no_image_icon" 
+        >
+    </ImageView>
+ 
+    <TextView
+        android:id="@+id/grid_item_id"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@id/label"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/grid_item_image"
+        android:visibility="invisible">
+    </TextView>
+
+ 
+    
+</RelativeLayout>
