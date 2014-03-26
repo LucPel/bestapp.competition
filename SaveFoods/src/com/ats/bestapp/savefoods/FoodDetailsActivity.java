@@ -133,7 +133,7 @@ public class FoodDetailsActivity extends Activity{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		//getMenuInflater().inflate(R.menu.action_bar, menu);
+		getMenuInflater().inflate(R.menu.action_bar_food_details, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 	
@@ -141,7 +141,10 @@ public class FoodDetailsActivity extends Activity{
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
-	        case android.R.id.home:
+	    case R.id.action_foodAssignment:
+			openFoodAssignmentActivity();
+			return true;    
+	    case android.R.id.home:
 	        	setResultActivity();
 	        	Log.d(logTag, "HomeBack: "+food.getStatus());
 	        	onBackPressed();
@@ -151,15 +154,16 @@ public class FoodDetailsActivity extends Activity{
 	    }
 	}
 	
+	
 	private void setResultActivity(){
 		Intent intent = new Intent();
 		intent.putExtra(Constants.foodDetailSP, food);
 		setResult(RESULT_OK, intent);	
 	}
 		
-	public void onChatPressed(View view){
+	public void openFoodAssignmentActivity(){
 						
-			Intent foodAss=new Intent(this,ChatNotOwnerFoodActivity.class);
+			Intent foodAss=new Intent(this,FoodAssignmentActivity.class);
 			foodAss.putExtra(Constants.foodDetailSP, food);
 			startActivityForResult(foodAss, Constants.FOOD_DETAIL_REQUEST_CODE);
 	}	

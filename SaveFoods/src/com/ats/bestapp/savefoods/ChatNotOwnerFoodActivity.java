@@ -144,7 +144,7 @@ public class ChatNotOwnerFoodActivity extends Activity{
 	private void fillGrid(){
 		GridView gridView = (GridView) findViewById(R.id.gridviewComment);
 		if(commentTableAdapter==null){
-			commentTableAdapter=new CommentTableAdapter(this, food.getSavingFoodAssignment().getConversation());
+			//commentTableAdapter=new CommentTableAdapter(this, food.getSavingFoodAssignment().getConversation());
 		}
 		else{
 			commentTableAdapter.setComments(food.getSavingFoodAssignment().getConversation());

@@ -120,7 +120,7 @@ public class FoodProxy {
 			   che non abbiano come user l'utente stesso e che non siano scaduti.  
 			 */
 			//.whereNear("location", userLocation)
-			query
+			query.whereWithinKilometers(Constants.locationObject, userLocation, 2)
 			.whereNotEqualTo(Constants.foodOwnerPO, userObj)
 			.whereNotEqualTo(Constants.foodStatusPO, Constants.foodStatusScaduto).orderByAscending(Constants.foodDueDatePO);
 			
