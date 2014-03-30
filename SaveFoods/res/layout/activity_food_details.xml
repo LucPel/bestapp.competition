@@ -114,15 +114,6 @@
                     android:layout_toRightOf="@id/food_quantity_label"
                     android:entries="@array/foodStatus" />
 
-                <Button
-                  android:id="@+id/open_chat_button"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_above="@+id/food_scale_image"
-                  android:layout_alignLeft="@+id/food_status_spinner"
-                  android:onClick="onChatPressed"
-                  android:text="@string/openChat" />
-
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
