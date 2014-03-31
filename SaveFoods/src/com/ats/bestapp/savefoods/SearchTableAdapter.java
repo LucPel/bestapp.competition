@@ -11,6 +11,7 @@ import com.ats.bestapp.savefoods.utilities.MediaFile;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +24,15 @@ public class SearchTableAdapter extends BaseAdapter{
 
 	private Context context;
 	private ArrayList<Food> items;
+	private double currentLatitude;
+	private double currentLongitude;
 	private final String logTag="SearchTableAdapter";
  
-	public SearchTableAdapter(Context context,ArrayList<Food> items) {
+	public SearchTableAdapter(Context context,ArrayList<Food> items,double currLatitude,double currLongitude) {
 		this.context = context;
 		this.items = items;
+		this.currentLatitude=currLatitude;
+		this.currentLongitude=currLongitude;
 	}
  
 	@Override
@@ -104,8 +109,9 @@ public class SearchTableAdapter extends BaseAdapter{
 
 		TextView textDistanceView = (TextView) gridView
 				.findViewById(R.id.grid_item_distance);
-		
-		textDistanceView.setText("200km");
+		float[] results=new float[10];
+		Location.distanceBetween(item.getLatitude(), item.getLongitude(), currentLatitude, currentLongitude, results);
+		textDistanceView.setText(results[0]+"m");
 		
 		
 		// set image based on selected text
@@ -123,5 +129,21 @@ public class SearchTableAdapter extends BaseAdapter{
 		else{
 			imageView.setImageResource(R.drawable.food_no_image_icon);
 		}
+	}
+
+	public double getCurrentLatitude() {
+		return currentLatitude;
+	}
+
+	public void setCurrentLatitude(double currentLatitude) {
+		this.currentLatitude = currentLatitude;
+	}
+
+	public double getCurrentLongitude() {
+		return currentLongitude;
+	}
+
+	public void setCurrentLongitude(double currentLongitude) {
+		this.currentLongitude = currentLongitude;
 	}
 }

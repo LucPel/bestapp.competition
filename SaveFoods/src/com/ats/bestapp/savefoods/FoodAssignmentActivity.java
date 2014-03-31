@@ -98,13 +98,23 @@ public class FoodAssignmentActivity extends Activity{
 				imageView.setImageResource(R.drawable.food_no_image_icon);
 			}
 			
-		Spinner statusSpinner=(Spinner)findViewById(R.id.food_status_spinner);
-		ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.foodStatus, R.layout.assignment_spinner_item);
-		adapter.setDropDownViewResource(R.layout.assignment_spinner_dropdown_list);
-		statusSpinner.setAdapter(adapter);
-		statusSpinner.setSelection(statusSpinnerPosition(food.getStatus()));
-		Log.d(logTag, "Stato "+food.getStatus()+ "Position "+statusSpinnerPosition(food.getStatus()));
-		statusSpinner.setOnItemSelectedListener(new FoodStatusSpinnerOnItemClickListener(food));
+		
+			if(food.getOwner().getUsername().equalsIgnoreCase(settings.getString(Constants.userNameSP, null))){
+				findViewById(R.id.food_owner_image).setVisibility(View.INVISIBLE);
+				findViewById(R.id.food_owner_label).setVisibility(View.INVISIBLE);
+				Spinner statusSpinner=(Spinner)findViewById(R.id.food_status_spinner);
+				statusSpinner.setVisibility(View.VISIBLE);
+				ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.foodStatus, R.layout.assignment_spinner_item);
+				adapter.setDropDownViewResource(R.layout.assignment_spinner_dropdown_list);
+				statusSpinner.setAdapter(adapter);
+				statusSpinner.setSelection(statusSpinnerPosition(food.getStatus()));
+				Log.d(logTag, "Stato "+food.getStatus()+ "Position "+statusSpinnerPosition(food.getStatus()));
+				statusSpinner.setOnItemSelectedListener(new FoodStatusSpinnerOnItemClickListener(food));
+			}
+			else{
+				TextView owner_label=(TextView) findViewById(R.id.food_owner_label);
+				owner_label.setText(food.getOwner().getUsername().substring(0, food.getOwner().getUsername().indexOf("@")));
+			}
 	}
 	
 	private int statusSpinnerPosition(String status){

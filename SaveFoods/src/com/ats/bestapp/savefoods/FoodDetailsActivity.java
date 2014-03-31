@@ -47,6 +47,7 @@ public class FoodDetailsActivity extends Activity{
 	private UserProxy userProxy;
 	private FoodProxy foodProxy;
 	private CommentTableAdapter commentTableAdapter;
+
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -108,7 +109,6 @@ public class FoodDetailsActivity extends Activity{
 	private void init(){
 		userProxy=new UserProxy();
 		foodProxy=new FoodProxy();
-		Parse.initialize(this, Constants.parseAppId, Constants.parseClientKey);
 		ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 	    food=(Food) getIntent().getSerializableExtra(Constants.foodDetailSP);

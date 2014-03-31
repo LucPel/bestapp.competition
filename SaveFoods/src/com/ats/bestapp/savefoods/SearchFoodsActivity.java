@@ -79,7 +79,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 	private void fillGrid(){
 		GridView gridView = (GridView) findViewById(R.id.gridview);
 		if(searchTableAdapter==null){
-			searchTableAdapter=new SearchTableAdapter(this, foods);
+			searchTableAdapter=new SearchTableAdapter(this, foods,locListenerWrap.getLatitude(),locListenerWrap.getLongitude());
 		}
 		else{
 			searchTableAdapter.setFoods(foods);
