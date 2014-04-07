@@ -6,6 +6,7 @@ import java.util.List;
 import com.ats.bestapp.savefoods.data.Comment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.opengl.Visibility;
 import android.util.Log;
 import android.view.Gravity;
@@ -59,37 +60,16 @@ public class CommentTableAdapter extends BaseAdapter {
 		Log.d(logTag, "Posizione " + position);
 		if (convertView == null) {
 			Log.d(logTag, "PosizioneCW " + position);
-			Comment currComment = items.get(position);
 			//commentItemView = new View(context);
 			// get layout from mobile.xml
 			commentItemView = (RelativeLayout) inflater.inflate(R.layout.comment_table_item,
 					null);
-			TextView textView = (TextView) commentItemView
-					.findViewById(R.id.comment_grid_item_text);
-			textView.setText(currComment.getMessage());
-			if (!owner.equalsIgnoreCase(currComment.getUser().getUsername())) {
-				commentItemView.setGravity(Gravity.RIGHT);
-				TextView ownerTV = (TextView) commentItemView
-						.findViewById(R.id.comment_grid_item_username);
-				String userComment=currComment.getUser().getUsername();
-				ownerTV.setText(userComment.substring(0, currComment.getUser().getUsername().indexOf("@")));
-				ownerTV.setVisibility(View.VISIBLE);
-			}
+			setItemView(commentItemView, position);
 		} else {
 			Log.d(logTag, "PosizioneNCW " + position);
 			commentItemView = (RelativeLayout) convertView;
-			Comment currComment = items.get(position);
-			TextView textView = (TextView) commentItemView
-					.findViewById(R.id.comment_grid_item_text);
-			textView.setText(currComment.getMessage());
-			if (!owner.equalsIgnoreCase(currComment.getUser().getUsername())) {
-				commentItemView.setGravity(Gravity.RIGHT);
-				TextView ownerTV = (TextView) commentItemView
-						.findViewById(R.id.comment_grid_item_username);
-				String userComment=currComment.getUser().getUsername();
-				ownerTV.setText(userComment.substring(0, currComment.getUser().getUsername().indexOf("@")));
-				ownerTV.setVisibility(View.VISIBLE);
-			}
+			setItemView(commentItemView, position);
+			
 		}
 		return commentItemView;
 	}
@@ -106,4 +86,22 @@ public class CommentTableAdapter extends BaseAdapter {
 		this.owner = owner;
 	}
 
+	private void setItemView(RelativeLayout commentItemView, int position){
+		Comment currComment = items.get(position);
+		TextView textView = (TextView) commentItemView
+				.findViewById(R.id.comment_grid_item_text);
+		TextView textUserView = (TextView) commentItemView
+				.findViewById(R.id.comment_grid_item_text_user);
+		String userComment=currComment.getUser().getUsername();
+		textUserView.setText(userComment.substring(0, currComment.getUser().getUsername().indexOf("@")));
+		textView.setText(currComment.getMessage());
+		if (!owner.equalsIgnoreCase(currComment.getUser().getUsername())) {
+			commentItemView.setGravity(Gravity.RIGHT);
+			RelativeLayout chatBubbleView = (RelativeLayout) commentItemView
+					.findViewById(R.id.comment_grid_chat_bubble);
+			chatBubbleView.setBackgroundResource(R.drawable.chat_bubbles);
+			textView.setTextColor(Color.parseColor("#ffffff"));
+			textUserView.setTextColor(Color.parseColor("#ff0000"));
+		}
+	}
 }

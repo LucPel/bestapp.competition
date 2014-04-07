@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/main_gray"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -142,26 +142,27 @@
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="5dp"
-        android:background="@android:color/darker_gray" />
+        android:layout_height="2dp"
+        android:layout_marginTop="4dp"
+        android:background="@android:color/white" />
 
     <GridView
         android:id="@+id/gridviewComment"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="5dp"
         android:layout_weight="50"
         android:horizontalSpacing="5dp"
         android:numColumns="1"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="2dp" />
+        android:verticalSpacing="2dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/main_gray" />
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="5dp"
-        android:background="@android:color/darker_gray" />
+        android:layout_height="2dp"
+        android:layout_marginTop="2dp"
+        android:background="@android:color/white" />
 
     <LinearLayout
         android:id="@+id/ll_insert_comment"

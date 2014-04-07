@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@android:color/white"
+    android:background="@color/main_gray"
     tools:context=".AddFoodActivity" >
 
     
@@ -75,7 +75,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="10dp"
         android:padding="10dp"
-        android:background="@drawable/button"
+        android:background="@drawable/button_custom"
         android:onClick="saveFood"
         android:textSize="22sp"
         android:textColor="#FFFFFF"
@@ -101,8 +101,10 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/food_due_date"
         android:layout_below="@+id/food_due_date"
-        android:layout_marginTop="20dp"
-        android:textOff="No Share"
-        android:textOn="Share" />
+        android:background="@drawable/share_icon"
+        android:layout_marginTop="20dp"/>
+    
+          <!--  android:textOff="No Share"
+        android:textOn="Share" --> 
 
 </RelativeLayout>

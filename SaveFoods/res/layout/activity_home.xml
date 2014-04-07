@@ -11,5 +11,5 @@
     android:layout_marginRight="10dp"
     android:stretchMode="columnWidth"
     android:gravity="center"
-    android:background="#ececec"
+    android:background="@color/main_gray"
 />
