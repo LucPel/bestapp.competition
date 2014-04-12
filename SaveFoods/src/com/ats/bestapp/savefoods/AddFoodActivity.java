@@ -31,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -69,6 +70,7 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 	private UserTransformer userTrasformer;
 	private ArrayList<Uri> imegesUri;
 	private String logTag="AddFoodActivity";
+	private boolean shareable=false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -125,9 +127,8 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 			food=ftrasformer.trasformInFood(view.getRootView(), commonsData,imagesByte,user);
 			fproxy.addFood(food);
 			progressDialog.dismiss();
-			ToggleButton shareTB=(ToggleButton) findViewById(R.id.share_tb);
 			PushService.subscribe(this, Constants.foodSellerChannelPrefix+food.getString(Constants.foodChannelPO), FoodAssignmentActivity.class);
-			if(shareTB.isChecked()){
+			if(shareable){
 				shareOnGPlus();
 			}
 			else{
@@ -167,6 +168,18 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 	public void showDatePickerDialog(View view){
 		DialogFragment newFragment = new DatePickerDialogFragment((EditText)view);
 	    newFragment.show(getSupportFragmentManager(), "datePicker");
+	}
+	
+	public void isShareable(View view){
+		Button shareTB=(Button) findViewById(R.id.share_tb);
+		if(!shareable){
+			shareTB.setBackgroundResource(R.drawable.share_pressed_icon);
+			shareable=true;
+		}
+		else{
+			shareTB.setBackgroundResource(R.drawable.share_icon);
+			shareable=false;
+		}
 	}
 	
 	  @Override

@@ -100,6 +100,7 @@ public class CommentTableAdapter extends BaseAdapter {
 			RelativeLayout chatBubbleView = (RelativeLayout) commentItemView
 					.findViewById(R.id.comment_grid_chat_bubble);
 			chatBubbleView.setBackgroundResource(R.drawable.chat_bubbles);
+			chatBubbleView.setPadding(10, 5, 10, 5);
 			textView.setTextColor(Color.parseColor("#ffffff"));
 			textUserView.setTextColor(Color.parseColor("#ff0000"));
 		}
