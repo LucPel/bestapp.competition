@@ -22,5 +22,13 @@
       <item>Assegnato</item>
       <item>Scaduto</item>
    </string-array>
+   <string-array name="foodMeasurementUnit">
+      <item>Pz</item>
+      <item>g</item>
+      <item>Kg</item>
+      <item>m</item>
+      <item>cm</item>
+      <item>lt</item>
+   </string-array>
 
 </resources>

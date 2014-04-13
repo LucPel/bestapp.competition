@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.ats.bestapp.savefoods.Constants;
 import com.ats.bestapp.savefoods.R;
@@ -42,6 +44,8 @@ public class FoodTrasformer {
 				.findViewById(R.id.food_category_text);
 		EditText date = (EditText) view.findViewById(R.id.food_due_date);
 		EditText quantityET = (EditText) view.findViewById(R.id.food_quantity_text);
+		Spinner UMSpinner=(Spinner)view.findViewById(R.id.food_um_spinner);
+		TextView umTextView = (TextView)UMSpinner.getSelectedView();
 		String day=date.getText().subSequence(0, 2).toString();
 		String month=date.getText().subSequence(3, 5).toString();
 		String year=date.getText().subSequence(6, date.getText().length()).toString();
@@ -56,6 +60,7 @@ public class FoodTrasformer {
 		foodObj.put(Constants.foodDescritpionPO, description.getText().toString());
 		foodObj.put(Constants.foodDueDatePO, year+month+day);
 		foodObj.put(Constants.foodQuantityPO, quantityET.getText().toString());
+		foodObj.put(Constants.foodMeasurementUnitPO, umTextView.getText().toString());
 		foodObj.put(Constants.locationObject, new ParseGeoPoint((Double) commonsData.get(Constants.latitudeKey), (Double) commonsData.get(Constants.longitudeKey)));
 		foodObj.put(Constants.foodOwnerPO, user);
 		JSONArray jsonArrayImages=new JSONArray();
@@ -81,6 +86,7 @@ public class FoodTrasformer {
 		foodT.setDueDate(food.getString(Constants.foodDueDatePO));
 		foodT.setQuantity(food.getString(Constants.foodQuantityPO));
 		foodT.setChannel(food.getString(Constants.foodChannelPO));
+		foodT.setMeasurementunity(food.getString(Constants.foodMeasurementUnitPO));
 		ParseObject userObj = food.getParseObject(Constants.foodOwnerPO);
 		userObj.fetchIfNeeded();
 		userTrasformer = new UserTransformer();

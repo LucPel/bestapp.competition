@@ -25,6 +25,7 @@ public class Constants {
 	public static final String foodDueDatePO="dueDate";
 	public static final String foodImagesPO="images";
 	public static final String foodQuantityPO="quantity";
+	public static final String foodMeasurementUnitPO="measurementUnit";
 	public static final String appName="SaveFoods";
 	public static final String foodStatusDisponibile="Disponibile";
 	public static final String foodStatusInAssegnazione="In Assegnazione";

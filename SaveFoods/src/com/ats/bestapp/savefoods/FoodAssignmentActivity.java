@@ -60,9 +60,6 @@ public class FoodAssignmentActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_food_assigment);
 		init();
-		if(food==null){
-			//food=foodProxy.getFood(foodId)
-		}
 	    Log.d(logTag, JsonMapper.convertObject2String(food));
 	    setViewComponents();
 		fillGrid();
@@ -78,9 +75,13 @@ public class FoodAssignmentActivity extends Activity{
 	    category_food.setText("("+food.getType()+")");
 	    
 	    String quantity=food.getQuantity();
-		if(quantity==null) quantity="1";
+	    String um=food.getMeasurementunity();
+		if(quantity==null || um==null) {
+			quantity="1";
+			um="Pz";
+		}
 	    TextView quantity_food=(TextView) findViewById(R.id.food_quantity_label);
-	    quantity_food.setText(quantity);
+	    quantity_food.setText(quantity+" "+um);
 	    
 	    TextView id_food=(TextView) findViewById(R.id.food_id_label);
 	    id_food.setText(food.getFoodId());
