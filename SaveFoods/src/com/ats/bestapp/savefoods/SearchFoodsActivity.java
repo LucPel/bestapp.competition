@@ -24,12 +24,13 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.AdapterView.OnItemClickListener;
 
-//LUCPEL BranchLucPel
+//LUCPEL 
 public class SearchFoodsActivity extends FragmentActivity{
 
 	private String logTag="SearchFoodsActivity";
@@ -54,19 +55,34 @@ public class SearchFoodsActivity extends FragmentActivity{
 		if(findViewById(R.id.grid_item_label)==null){			
 				new GetUserFoodTask(userid,locListenerWrap).execute();
 		}
-
-
 	}
 
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		//getMenuInflater().inflate(R.menu.action_bar, menu);
-		return true;
+		getMenuInflater().inflate(R.menu.action_bar_food_search, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.action_foodQuery:
+			openQueryAssignmentActivity();
+			return true;    
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
+	public void openQueryAssignmentActivity(){
+		
+		Intent foodAss=new Intent(this,QueryAssignmentActivity.class);
+		//foodAss.putExtra(Constants.foodDetailSP, food);
+		startActivityForResult(foodAss, Constants.FOOD_DETAIL_REQUEST_CODE);
+	}	
+	
 
 	private void init(){
 		locListenerWrap=new LocationListenerWrapper(this);

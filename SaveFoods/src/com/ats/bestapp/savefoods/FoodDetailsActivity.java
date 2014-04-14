@@ -16,6 +16,13 @@ import com.ats.bestapp.savefoods.data.proxy.UserProxy;
 import com.ats.bestapp.savefoods.utilities.Commons;
 import com.ats.bestapp.savefoods.utilities.JsonMapper;
 import com.ats.bestapp.savefoods.utilities.MediaFile;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.MapFragment;
 import com.parse.Parse;
 import com.parse.ParseException;
 
@@ -39,6 +46,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
+
 public class FoodDetailsActivity extends Activity{
 	
 	private Food food;
@@ -47,7 +55,13 @@ public class FoodDetailsActivity extends Activity{
 	private UserProxy userProxy;
 	private FoodProxy foodProxy;
 	private CommentTableAdapter commentTableAdapter;
+	private GoogleMap map;
+	
+	
+	/*static final LatLng KIEL = new LatLng(53.551, 9.993);*/
 
+	
+	
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,7 +69,7 @@ public class FoodDetailsActivity extends Activity{
 		init();
 	    Log.d(logTag, JsonMapper.convertObject2String(food));
 	    setViewComponents();
-		
+	    showMap();
 		
 	}
 	
@@ -113,6 +127,17 @@ public class FoodDetailsActivity extends Activity{
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 	    food=(Food) getIntent().getSerializableExtra(Constants.foodDetailSP);
 	    settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
+	}
+	
+	private void showMap(){
+		LatLng food_point = new LatLng(food.getLatitude(), food.getLongitude());
+		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+		Marker marker = map.addMarker(new MarkerOptions().position(food_point).title(food.getName()));
+		// Move the camera instantly to hamburg with a zoom of 15.
+		
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(food_point, 15));
+		// Zoom in, animating the camera.
+		map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);	
 	}
 	
 	public void onPause(){

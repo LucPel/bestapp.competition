@@ -112,16 +112,16 @@ public class FoodProxy {
 			ArrayList<Food> foods=new ArrayList<Food>();		
 			ParseGeoPoint userLocation = new ParseGeoPoint(locListenerWrap.getLatitude(), locListenerWrap.getLongitude());
 			ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);	
-			//ParseQuery<ParseObject> queryUser=ParseQuery.getQuery(Constants.userObject);
-			//ParseObject userObj=queryUser.get(user);
+			ParseQuery<ParseObject> queryUser=ParseQuery.getQuery(Constants.userObject);
+			ParseObject userObj=queryUser.get(user);
 			
 			/* 
 			 * La query estrae i cinque foods vicino all'utente 
 			   che non abbiano come user l'utente stesso e che non siano scaduti.  
 			 */
 			//.whereNear("location", userLocation)
-			query.whereWithinKilometers(Constants.locationObject, userLocation, 2)
-			//.whereNotEqualTo(Constants.foodOwnerPO, userObj)
+			//.whereWithinKilometers(Constants.locationObject, userLocation, 2)
+			query.whereNotEqualTo(Constants.foodOwnerPO, userObj)
 			.whereNotEqualTo(Constants.foodStatusPO, Constants.foodStatusScaduto).orderByAscending(Constants.foodDueDatePO);
 			
 			
