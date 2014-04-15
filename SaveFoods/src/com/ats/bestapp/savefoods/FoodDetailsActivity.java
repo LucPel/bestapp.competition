@@ -16,6 +16,12 @@ import com.ats.bestapp.savefoods.data.proxy.UserProxy;
 import com.ats.bestapp.savefoods.utilities.Commons;
 import com.ats.bestapp.savefoods.utilities.JsonMapper;
 import com.ats.bestapp.savefoods.utilities.MediaFile;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.Parse;
 import com.parse.ParseException;
 
@@ -47,6 +53,7 @@ public class FoodDetailsActivity extends Activity{
 	private UserProxy userProxy;
 	private FoodProxy foodProxy;
 	private CommentTableAdapter commentTableAdapter;
+	private GoogleMap map;
 
 	
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +62,7 @@ public class FoodDetailsActivity extends Activity{
 		init();
 	    Log.d(logTag, JsonMapper.convertObject2String(food));
 	    setViewComponents();
-		
+	    showMap();
 		
 	}
 	
@@ -68,9 +75,13 @@ public class FoodDetailsActivity extends Activity{
 	    category_food.setText("("+food.getType()+")");
 	    
 	    String quantity=food.getQuantity();
-		if(quantity==null) quantity="1";
+	    String um=food.getMeasurementunity();
+		if(quantity==null || um==null) {
+			quantity="1";
+			um="Pz";
+		}
 	    TextView quantity_food=(TextView) findViewById(R.id.food_quantity_label);
-	    quantity_food.setText(quantity);
+	    quantity_food.setText(quantity+" "+um);
 	    
 	    TextView id_food=(TextView) findViewById(R.id.food_id_label);
 	    id_food.setText(food.getFoodId());
@@ -88,24 +99,12 @@ public class FoodDetailsActivity extends Activity{
 				imageView.setImageResource(R.drawable.food_no_image_icon);
 			}
 			
-		Spinner statusSpinner=(Spinner)findViewById(R.id.food_status_spinner);
-		ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.foodStatus, R.layout.assignment_spinner_item);
-		adapter.setDropDownViewResource(R.layout.assignment_spinner_dropdown_list);
-		statusSpinner.setAdapter(adapter);
-		statusSpinner.setSelection(statusSpinnerPosition(food.getStatus()));
-		Log.d(logTag, "Stato "+food.getStatus()+ "Position "+statusSpinnerPosition(food.getStatus()));
-		statusSpinner.setOnItemSelectedListener(new FoodStatusSpinnerOnItemClickListener(food));
+			TextView owner_tw=(TextView)findViewById(R.id.food_owner_label);
+			String userOwner=food.getOwner().getUsername();
+			owner_tw.setText(userOwner.substring(0, food.getOwner().getUsername().indexOf("@")));
 	}
 	
-	private int statusSpinnerPosition(String status){
-		int status_int=0;
-		if(status.equalsIgnoreCase(Constants.foodStatusDisponibile)) status_int=0;
-		else if(status.equalsIgnoreCase(Constants.foodStatusInAssegnazione))status_int=1;
-		else if(status.equalsIgnoreCase(Constants.foodStatusAssegnato))status_int=2;
-		else if(status.equalsIgnoreCase(Constants.foodStatusScaduto))status_int=3;
-		return status_int;
-	}
-	
+
 	private void init(){
 		userProxy=new UserProxy();
 		foodProxy=new FoodProxy();
@@ -175,6 +174,16 @@ public class FoodDetailsActivity extends Activity{
 		setResult(RESULT_OK, intent);
 		Log.d(logTag, "OnBackPressed: "+food.getStatus());
 	    finish();
+	}
+	
+	private void showMap(){
+		LatLng food_point = new LatLng(food.getLatitude(), food.getLongitude());
+		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+		map.addMarker(new MarkerOptions().position(food_point).title(food.getName()));
+		// Move the camera instantly to hamburg with a zoom of 15.
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(food_point, 15));
+		// Zoom in, animating the camera.
+		map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);	
 	}
 	
 }

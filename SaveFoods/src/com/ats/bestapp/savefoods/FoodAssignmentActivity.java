@@ -63,7 +63,6 @@ public class FoodAssignmentActivity extends Activity{
 	    Log.d(logTag, JsonMapper.convertObject2String(food));
 	    setViewComponents();
 		fillGrid();
-		
 	}
 	
 	private void setViewComponents(){
@@ -133,22 +132,35 @@ public class FoodAssignmentActivity extends Activity{
 		ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 	    food=(Food) getIntent().getSerializableExtra(Constants.foodDetailSP);
+	    settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
 	    IntentFilter filter = new IntentFilter(UpdateCommentsReceiver.UPDATE_COMMENTS);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
         updateCommentsReceiver = new UpdateCommentsReceiver();
         registerReceiver(updateCommentsReceiver, filter);
         registerChatChannel();
-	    settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
+	    
 	}
 	
 	private void registerChatChannel(){
 		PushService.subscribe(this, Constants.chatChannelPrefix+food.getChannel(), FoodAssignmentActivity.class);
-        PushService.unsubscribe(this, Constants.foodSellerChannelPrefix+food.getChannel());
+		if(food.getOwner().getUsername().equalsIgnoreCase(settings.getString(Constants.userNameSP, null))){
+			PushService.unsubscribe(this, Constants.foodSellerChannelPrefix+food.getChannel());
+		}
+		else{
+			PushService.unsubscribe(this, Constants.foodBuyerChannelPrefix+food.getChannel());
+		}
+		
 	}
 	
 	private void unregisterChatChannel(){
-		PushService.subscribe(this, Constants.foodSellerChannelPrefix+food.getChannel(), FoodAssignmentActivity.class);
-        PushService.unsubscribe(this, Constants.chatChannelPrefix+food.getChannel());
+		
+		if(food.getOwner().getUsername().equalsIgnoreCase(settings.getString(Constants.userNameSP, null))){
+			PushService.subscribe(this, Constants.foodSellerChannelPrefix+food.getChannel(), FoodAssignmentActivity.class);
+		}
+		else{
+			PushService.subscribe(this, Constants.foodBuyerChannelPrefix+food.getChannel(), FoodAssignmentActivity.class);
+		}
+		PushService.unsubscribe(this, Constants.chatChannelPrefix+food.getChannel());
 	}
 	
 	public void onPause(){
@@ -249,6 +261,7 @@ public class FoodAssignmentActivity extends Activity{
 	
 	private void sendPushNotification(Comment comment){
 		JSONObject dt=new JSONObject();
+		JSONObject dt_longer=new JSONObject();
 		try {
 			dt.put(Constants.action_pn, "com.ats.bestapp.savefoods.UPDATE_COMMENTS");
 			dt.put("foodId", food.getFoodId());
@@ -261,6 +274,8 @@ public class FoodAssignmentActivity extends Activity{
 			ParsePush pushLonger=new ParsePush();
 			pushLonger.setChannel(Constants.foodBuyerChannelPrefix+food.getChannel());
 			pushLonger.setMessage(comment.getMessage());
+			dt_longer.put("foodId", food.getFoodId());
+			pushLonger.setData(dt_longer);
 			pushLonger.sendInBackground();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

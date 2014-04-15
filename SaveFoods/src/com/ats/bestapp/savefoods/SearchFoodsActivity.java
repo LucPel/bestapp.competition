@@ -2,6 +2,7 @@ package com.ats.bestapp.savefoods;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
@@ -19,6 +20,7 @@ import com.parse.ParseException;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -40,6 +42,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 	private FoodProxy foodProxy;
 	private ArrayList<Food> foods;
 	private LocationListenerWrapper locListenerWrap;
+	private HashMap<String, Object> commonsData;
 	private SearchTableAdapter searchTableAdapter;
 	private ProgressDialog searchProgressDialog;
 
@@ -49,15 +52,24 @@ public class SearchFoodsActivity extends FragmentActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 		init();
-
-		String userid = settings.getString(Constants.userIdSP, null);
-		if(findViewById(R.id.grid_item_label)==null){			
-				new GetUserFoodTask(userid,locListenerWrap).execute();
+		String userid = settings.getString(Constants.userNameSP, null);
+		if(locListenerWrap.getLatitude()==0){
+			while(locListenerWrap.getLatitude()==0);
 		}
-
-
+		new GetUserFoodTask(userid,locListenerWrap.getLatitude(),locListenerWrap.getLongitude()).execute();
 	}
 
+	 @Override
+	  protected void onResume() {
+	    super.onResume();
+	    locListenerWrap.requestLocationUpdates();
+	  }
+	  
+	  @Override
+	  protected void onPause() {
+	    super.onPause();
+	    locListenerWrap.removeUpdates();
+	  }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,7 +82,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 
 	private void init(){
 		locListenerWrap=new LocationListenerWrapper(this);
-		Parse.initialize(this, Constants.parseAppId, Constants.parseClientKey);	
+		commonsData=new HashMap<String, Object>();
 		userProxy=new UserProxy();
 		foodProxy=new FoodProxy();
 		settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
@@ -110,17 +122,21 @@ public class SearchFoodsActivity extends FragmentActivity{
 			AsyncTask<Void, Integer, ArrayList<Food>> {
 
 		String user;
-		LocationListenerWrapper locListenerWrap;
+		double latitude;
+		double longitude;
 
-		public GetUserFoodTask(String user_,LocationListenerWrapper locListenerWrap_){
-			user=user_;
-			locListenerWrap=locListenerWrap_;			
+		public GetUserFoodTask(String user_i,double latitude_i,double longitude_i){
+			user=user_i;	
+			latitude=latitude_i;
+			longitude=longitude_i;
 		}
 
 		@Override
 		protected ArrayList<Food> doInBackground(Void... params) {
 			try {
-				foods = foodProxy.getFoods4Location(user,locListenerWrap);
+				Log.i(logTag, "Esecuzione query "+user);
+				Log.d(logTag, "Latitude:" +latitude);
+				foods = foodProxy.getFoods4Location(userProxy.getUserParseObject(user),latitude,longitude);
 			} catch (JsonParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

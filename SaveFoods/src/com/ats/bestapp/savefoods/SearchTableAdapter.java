@@ -1,5 +1,7 @@
 package com.ats.bestapp.savefoods;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -111,7 +113,9 @@ public class SearchTableAdapter extends BaseAdapter{
 				.findViewById(R.id.grid_item_distance);
 		float[] results=new float[10];
 		Location.distanceBetween(item.getLatitude(), item.getLongitude(), currentLatitude, currentLongitude, results);
-		textDistanceView.setText(results[0]+"m");
+		DecimalFormat df = new DecimalFormat("##.##");
+		df.setRoundingMode(RoundingMode.DOWN);
+		textDistanceView.setText(df.format(results[0])+"Km");
 		
 		
 		// set image based on selected text

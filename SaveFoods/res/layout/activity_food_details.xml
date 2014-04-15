@@ -67,34 +67,33 @@
                     android:layout_marginBottom="5dp"
                     android:layout_toRightOf="@id/food_due_date_calendar_image"
                     android:text="@+id/label"
-                    android:textStyle="bold"
-                    android:textSize="10sp" >
+                    android:textSize="10sp"
+                    android:textStyle="bold" >
                 </TextView>
 
-                
                 <ImageView
-        android:id="@+id/food_scale_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/mini_scale_icon"
-        android:layout_below="@id/food_image"
-        android:layout_toRightOf="@id/food_dueDate_label"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="10dp"/>
-   
-   <TextView
-        android:id="@+id/food_quantity_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        android:text="pippo"  
-        android:layout_alignBottom="@id/food_scale_image"
-        android:layout_toRightOf="@id/food_scale_image">
-    </TextView>
-                
+                    android:id="@+id/food_scale_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/food_image"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_toRightOf="@id/food_dueDate_label"
+                    android:src="@drawable/mini_scale_icon" />
+
+                <TextView
+                    android:id="@+id/food_quantity_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/food_scale_image"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/food_scale_image"
+                    android:text="pippo"
+                    android:textSize="12sp"
+                    android:textStyle="bold" >
+                </TextView>
+
                 <TextView
                     android:id="@+id/food_id_label"
                     android:layout_width="0dp"
@@ -104,25 +103,31 @@
                     android:visibility="invisible" >
                 </TextView>
 
-                <Spinner
-                    android:id="@+id/food_status_spinner"
+                <ImageView
+                    android:id="@+id/food_owner_image"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_alignBottom="@id/food_scale_image"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/food_image"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="22dp"
+                    android:layout_marginTop="30dp"
                     android:layout_toRightOf="@id/food_quantity_label"
-                    android:entries="@array/foodStatus" />
+                    android:src="@drawable/mini_people_icon" />
 
+                <TextView
+                    android:id="@+id/food_owner_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/food_owner_image"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/food_owner_image"
+                    android:text="pippo"
+                    android:textSize="12sp"
+                    android:textStyle="bold" >
+                </TextView>
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="5dp"
-        android:background="@android:color/darker_gray" />
 
     <LinearLayout
         android:id="@+id/ll_insert_comment"
@@ -133,5 +138,11 @@
         android:orientation="horizontal"
         android:paddingTop="5dp" >
     </LinearLayout>
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

@@ -106,25 +106,21 @@ public class FoodProxy {
 	}
 	
 	//LUCPEL
-	public ArrayList<Food> getFoods4Location(String user,LocationListenerWrapper locListenerWrap) 
+	public ArrayList<Food> getFoods4Location(ParseObject user,Double latitude,Double longitude) 
 				throws ParseException, JsonParseException, JsonMappingException, JsonGenerationException, IOException, JSONException{
 			
 			ArrayList<Food> foods=new ArrayList<Food>();		
-			ParseGeoPoint userLocation = new ParseGeoPoint(locListenerWrap.getLatitude(), locListenerWrap.getLongitude());
+			ParseGeoPoint userLocation = new ParseGeoPoint(latitude, longitude);
 			ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);	
-			//ParseQuery<ParseObject> queryUser=ParseQuery.getQuery(Constants.userObject);
-			//ParseObject userObj=queryUser.get(user);
 			
 			/* 
 			 * La query estrae i cinque foods vicino all'utente 
 			   che non abbiano come user l'utente stesso e che non siano scaduti.  
 			 */
 			//.whereNear("location", userLocation)
-			query.whereWithinKilometers(Constants.locationObject, userLocation, 2)
-			//.whereNotEqualTo(Constants.foodOwnerPO, userObj)
+			query.whereWithinKilometers(Constants.locationObject, userLocation, 3)
+			//.whereNotEqualTo(Constants.foodOwnerPO, user)
 			.whereNotEqualTo(Constants.foodStatusPO, Constants.foodStatusScaduto).orderByAscending(Constants.foodDueDatePO);
-			
-			
 		
 			query.setLimit(5);
 			ArrayList<ParseObject> parseFoods=(ArrayList<ParseObject>) query.find();
