@@ -102,8 +102,12 @@ public class SearchTableAdapter extends BaseAdapter{
 				.findViewById(R.id.grid_item_quantity);
 		
 		String quantity=item.getQuantity();
-		if(quantity==null) quantity="1";
-		textQuantityView.setText(quantity);
+	    String um=item.getMeasurementunity();
+		if(quantity==null || um==null) {
+			quantity="1";
+			um="Pz";
+		}
+		textQuantityView.setText(quantity+" "+um );
 		
 		TextView idItemText = (TextView) gridView
 				.findViewById(R.id.grid_item_id);

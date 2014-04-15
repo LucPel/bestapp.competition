@@ -2,6 +2,7 @@ package com.ats.bestapp.savefoods.data.proxy;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -59,7 +60,8 @@ public class FoodProxy {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);
 		ParseQuery<ParseObject> queryUser=ParseQuery.getQuery(Constants.userObject);
 		ParseObject userObj=queryUser.get(user);
-		query.whereEqualTo(Constants.foodOwnerPO, userObj).whereNotEqualTo(Constants.foodStatusPO, Constants.foodStatusScaduto).orderByAscending(Constants.foodDueDatePO).setLimit(maxFoods);
+		String[] statusList = {Constants.foodStatusScaduto, Constants.foodStatusAssegnato};
+		query.whereEqualTo(Constants.foodOwnerPO, userObj).whereNotContainedIn(Constants.foodStatusPO, Arrays.asList(statusList)).orderByAscending(Constants.foodDueDatePO).setLimit(maxFoods);
 		query.setSkip(skippableItems);
 		long start=System.currentTimeMillis();
 		ArrayList<ParseObject> parseFoods=(ArrayList<ParseObject>) query.find();
@@ -112,17 +114,16 @@ public class FoodProxy {
 			ArrayList<Food> foods=new ArrayList<Food>();		
 			ParseGeoPoint userLocation = new ParseGeoPoint(latitude, longitude);
 			ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);	
-			
+			String[] statusList = {Constants.foodStatusScaduto, Constants.foodStatusAssegnato};
 			/* 
 			 * La query estrae i cinque foods vicino all'utente 
 			   che non abbiano come user l'utente stesso e che non siano scaduti.  
 			 */
 			//.whereNear("location", userLocation)
 			query.whereWithinKilometers(Constants.locationObject, userLocation, 3)
-			//.whereNotEqualTo(Constants.foodOwnerPO, user)
-			.whereNotEqualTo(Constants.foodStatusPO, Constants.foodStatusScaduto).orderByAscending(Constants.foodDueDatePO);
-		
-			query.setLimit(5);
+			.whereNotEqualTo(Constants.foodOwnerPO, user)
+			.whereNotContainedIn(Constants.foodStatusPO, Arrays.asList(statusList)).orderByAscending(Constants.foodDueDatePO);
+			query.setLimit(maxFoods);
 			ArrayList<ParseObject> parseFoods=(ArrayList<ParseObject>) query.find();
 			Log.d(logTag, String.valueOf(parseFoods.size()));
 			ObjectMapper mapper=new ObjectMapper();
