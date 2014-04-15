@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <CheckBox
+        android:id="@+id/checkQuery1"
+        android:layout_width="263dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.18"
+        android:text="CheckQuery1" />
+
+    <CheckBox
+        android:id="@+id/checkQuery2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.18"
+        android:text="CheckQuery2" />
+
+    <CheckBox
+        android:id="@+id/checkQuery3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.18"
+        android:text="CheckQuery3" />
+
+</LinearLayout>
