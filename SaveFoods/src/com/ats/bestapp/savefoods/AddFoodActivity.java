@@ -111,14 +111,8 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 		try {
 			commonsData.put(Constants.latitudeKey, locListenerWrap.getLatitude());
 			commonsData.put(Constants.longitudeKey, locListenerWrap.getLongitude());
-			String userd=(String)commonsData.get(Constants.userIdSP);
 			ParseObject user=null;
-			if(userd!=null && !userd.isEmpty()){
-				user=userProxy.getUserParseObject((String)commonsData.get(Constants.userNameSP));
-			}
-			else{
-				user=userTrasformer.createParseObjectUser((String) commonsData.get(Constants.userNameSP));
-			}
+			user=userProxy.getUserParseObject((String)commonsData.get(Constants.userNameSP));
 			ArrayList<byte[]> imagesByte=new ArrayList<byte[]>();
 			for(Uri currentUri : imegesUri){
 				imagesByte.add(MediaFile.bitmapResized2Bytes(currentUri, 256, 256));		

@@ -16,6 +16,7 @@ import com.ats.bestapp.savefoods.data.proxy.UserProxy;
 import com.ats.bestapp.savefoods.utilities.JsonMapper;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -54,7 +55,6 @@ public class SearchFoodsActivity extends FragmentActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 		init();
-		String userid = settings.getString(Constants.userNameSP, null);
 		long start=System.currentTimeMillis();
 		boolean timeout=false;
 		if(locListenerWrap.getLatitude()==0){
@@ -66,7 +66,8 @@ public class SearchFoodsActivity extends FragmentActivity{
 		}
 		currLatitude=locListenerWrap.getLatitude();
 		currLongitude=locListenerWrap.getLongitude();
-		new GetUserFoodTask(userid,currLatitude,currLongitude).execute();
+		SFApplication app=(SFApplication) getApplicationContext();
+		new GetUserFoodTask(app.getUserLoggedIn(),currLatitude,currLongitude).execute();
 	}
 
 	 @Override
@@ -133,12 +134,12 @@ public class SearchFoodsActivity extends FragmentActivity{
 	private class GetUserFoodTask extends
 			AsyncTask<Void, Integer, ArrayList<Food>> {
 
-		String user;
+		ParseObject userPO;
 		double latitude;
 		double longitude;
 
-		public GetUserFoodTask(String user_i,double latitude_i,double longitude_i){
-			user=user_i;	
+		public GetUserFoodTask(ParseObject userPO_i,double latitude_i,double longitude_i){
+			userPO=userPO_i;	
 			latitude=latitude_i;
 			longitude=longitude_i;
 		}
@@ -146,9 +147,9 @@ public class SearchFoodsActivity extends FragmentActivity{
 		@Override
 		protected ArrayList<Food> doInBackground(Void... params) {
 			try {
-				Log.i(logTag, "Esecuzione query "+user);
+				Log.i(logTag, "Esecuzione query "+userPO);
 				Log.d(logTag, "Latitude:" +latitude);
-				foods = foodProxy.getFoods4Location(userProxy.getUserParseObject(user),latitude,longitude);
+				foods = foodProxy.getFoods4Location(userPO,latitude,longitude);
 			} catch (JsonParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

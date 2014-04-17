@@ -33,6 +33,11 @@ public class UserProxy {
 		return userObj;
 	}
 	
+	public void saveNewUser(String username) throws ParseException{
+		ParseObject userPO=userTasformer.createParseObjectUser(username);
+		userPO.save();
+	}
+	
 	private void init(){
 		userTasformer=new UserTransformer();
 	}

@@ -76,7 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/food_image"
-                    android:layout_marginLeft="12dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_toRightOf="@id/food_dueDate_label"
                     android:src="@drawable/mini_people_icon" />
 

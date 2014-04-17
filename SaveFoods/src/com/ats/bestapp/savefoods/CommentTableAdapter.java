@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ats.bestapp.savefoods.data.Comment;
+import com.ats.bestapp.savefoods.utilities.Commons;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -92,8 +93,7 @@ public class CommentTableAdapter extends BaseAdapter {
 				.findViewById(R.id.comment_grid_item_text);
 		TextView textUserView = (TextView) commentItemView
 				.findViewById(R.id.comment_grid_item_text_user);
-		String userComment=currComment.getUser().getUsername();
-		textUserView.setText(userComment.substring(0, currComment.getUser().getUsername().indexOf("@")));
+		textUserView.setText(Commons.getUsernameShow(currComment.getUser().getUsername()));
 		textView.setText(currComment.getMessage());
 		if (!owner.equalsIgnoreCase(currComment.getUser().getUsername())) {
 			commentItemView.setGravity(Gravity.RIGHT);
@@ -103,6 +103,16 @@ public class CommentTableAdapter extends BaseAdapter {
 			chatBubbleView.setPadding(10, 5, 10, 5);
 			textView.setTextColor(Color.parseColor("#ffffff"));
 			textUserView.setTextColor(Color.parseColor("#ff0000"));
+		}
+		else{
+			commentItemView.setGravity(Gravity.LEFT);
+			RelativeLayout chatBubbleView = (RelativeLayout) commentItemView
+					.findViewById(R.id.comment_grid_chat_bubble);
+			chatBubbleView.setBackgroundResource(R.drawable.chat_bubbles_owner);
+			chatBubbleView.setPadding(10, 5, 10, 5);
+			textView.setTextColor(Color.parseColor("#000000"));
+			textUserView.setTextColor(Color.parseColor("#00ff00"));
+			textView.setText(currComment.getMessage());
 		}
 	}
 }

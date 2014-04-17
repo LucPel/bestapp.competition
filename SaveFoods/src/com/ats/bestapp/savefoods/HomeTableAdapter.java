@@ -15,6 +15,7 @@ import com.ats.bestapp.savefoods.data.proxy.FoodProxy;
 import com.ats.bestapp.savefoods.utilities.Commons;
 import com.ats.bestapp.savefoods.utilities.MediaFile;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -146,7 +147,8 @@ public class HomeTableAdapter extends BaseAdapter implements OnScrollListener{
 			if(totalItemCount>=5){
 				if(++firstVisibleItem+visibleItemCount>totalItemCount && !allItemsViewed){
 					HashMap<String, Object> paramsTask=new HashMap<String, Object>();
-					paramsTask.put("userid", items.get(0).getOwner().getUserId());
+					SFApplication app=(SFApplication)view.getContext().getApplicationContext();
+					paramsTask.put("user", app.getUserLoggedIn());
 					paramsTask.put("skipItems", totalItemCount);
 					new GetUserFoodTask().execute(paramsTask);
 				}
@@ -171,7 +173,7 @@ public class HomeTableAdapter extends BaseAdapter implements OnScrollListener{
 				ArrayList<Food> foods=null;
 				try {
 					FoodProxy foodProxy=new FoodProxy();
-					foods=foodProxy.getFoods4User((String)params[0].get("userid"),(Integer)params[0].get("skipItems"));
+					foods=foodProxy.getFoods4User((ParseObject)params[0].get("user"),(Integer)params[0].get("skipItems"));
 					
 				} catch (JsonParseException e) {
 					// TODO Auto-generated catch block

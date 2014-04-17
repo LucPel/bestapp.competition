@@ -18,6 +18,7 @@ import com.ats.bestapp.savefoods.utilities.JsonMapper;
 import com.google.android.gms.plus.PlusClient;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -53,34 +54,31 @@ public class HomeActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		init();
+		defineUserLoggedIn();
+	}
+	
+	private void defineUserLoggedIn(){
 		commonsData = new HashMap<String, Object>();
 		commonsData.put(Constants.userNameSP,
 				settings.getString(Constants.userNameSP, null));
-		String userid = settings.getString(Constants.userIdSP, null);
-		if (userid != null && !userid.isEmpty()) {
-			commonsData.put(Constants.userIdSP, userid);
-			if (findViewById(R.id.grid_item_label) == null) {
-				new GetUserFoodTask().execute(userid);
+		try {
+			ParseObject userPO=userProxy.getUserParseObject((String)commonsData.get(Constants.userNameSP));
+			if(userPO!=null){
+				SFApplication app=(SFApplication)getApplicationContext();
+				app.setUserLoggedIn(userPO);
+				new GetUserFoodTask().execute(userPO);
 			}
+			else{
+				userProxy.saveNewUser((String) commonsData.get(Constants.userNameSP));
+				userPO=userProxy.getUserParseObject((String)commonsData.get(Constants.userNameSP));
+				SFApplication app=(SFApplication)getApplicationContext();
+				app.setUserLoggedIn(userPO);
+				new GetUserFoodTask().execute(userPO);
+			}
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		else{
-			User user=null;
-			try {
-				user = userProxy.getUser(
-						settings.getString(Constants.userNameSP, null),
-						this);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if (user != null && !user.getUserId().isEmpty()) {
-				settings.edit()
-						.putString(Constants.userIdSP, user.getUserId())
-						.commit();
-				new GetUserFoodTask().execute(user.getUserId());
-			}
-		}
-
 	}
 
 	@Override
@@ -183,18 +181,8 @@ public class HomeActivity extends Activity {
 				&& responseCode == Constants.ADD_FOOD_RESPONSE_CODE) {
 
 			try {
-				if (foods == null || foods.isEmpty()) {
-					User user = userProxy.getUser(
-							settings.getString(Constants.userNameSP, null),
-							this);
-					if (user != null && !user.getUserId().isEmpty()) {
-						settings.edit()
-								.putString(Constants.userIdSP, user.getUserId())
-								.commit();
-					}
-				}
-				foods = foodProxy.getFoods4User(settings.getString(
-						Constants.userIdSP, null),0);
+				SFApplication app=(SFApplication)getApplicationContext();
+				foods = foodProxy.getFoods4User(app.getUserLoggedIn(),0);
 				if (homeTableAdapter == null) {
 					homeTableAdapter = new HomeTableAdapter(this, foods);
 				} else {
@@ -234,10 +222,10 @@ public class HomeActivity extends Activity {
 
 	// ASYNC TASKS
 	private class GetUserFoodTask extends
-			AsyncTask<String, Integer, ArrayList<Food>> {
+			AsyncTask<ParseObject, Integer, ArrayList<Food>> {
 
 		@Override
-		protected ArrayList<Food> doInBackground(String... params) {
+		protected ArrayList<Food> doInBackground(ParseObject... params) {
 			try {
 				foods = foodProxy.getFoods4User(params[0],0);
 			} catch (JsonParseException e) {
