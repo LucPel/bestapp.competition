@@ -113,13 +113,26 @@ public class SearchTableAdapter extends BaseAdapter{
 				.findViewById(R.id.grid_item_id);
 		idItemText.setText(item.getFoodId());
 
+
+		TextView ownerItemText = (TextView) gridView
+				.findViewById(R.id.grid_owner_label);
+		ownerItemText.setText(Commons.getUsernameShow(item.getOwner().getUsername()));
+		
 		TextView textDistanceView = (TextView) gridView
 				.findViewById(R.id.grid_item_distance);
 		float[] results=new float[10];
+		double distance=0;
 		Location.distanceBetween(item.getLatitude(), item.getLongitude(), currentLatitude, currentLongitude, results);
+		distance=results[0];
+		distance=distance*0.001;
 		DecimalFormat df = new DecimalFormat("##.##");
 		df.setRoundingMode(RoundingMode.DOWN);
-		textDistanceView.setText(df.format(results[0])+"Km");
+		if(distance>0){
+			textDistanceView.setText(df.format(distance)+"Km");
+		}
+		else{
+			textDistanceView.setText("0Km");
+		}
 		
 		
 		// set image based on selected text

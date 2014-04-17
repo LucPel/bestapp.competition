@@ -1,6 +1,8 @@
 package com.ats.bestapp.savefoods;
 
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -30,6 +32,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -54,6 +57,8 @@ public class FoodDetailsActivity extends Activity{
 	private FoodProxy foodProxy;
 	private CommentTableAdapter commentTableAdapter;
 	private GoogleMap map;
+	private double currLatitude;
+	private double currLongitude;
 
 	
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +105,22 @@ public class FoodDetailsActivity extends Activity{
 			}
 			
 			TextView owner_tw=(TextView)findViewById(R.id.food_owner_label);
-			String userOwner=food.getOwner().getUsername();
-			owner_tw.setText(userOwner.substring(0, food.getOwner().getUsername().indexOf("@")));
+			owner_tw.setText(Commons.getUsernameShow(food.getOwner().getUsername()));
+			
+			TextView textDistanceView = (TextView)findViewById(R.id.food_distance_label);
+			float[] results=new float[10];
+			double distance=0;
+			Location.distanceBetween(food.getLatitude(), food.getLongitude(), currLatitude, currLongitude, results);
+			distance=results[0];
+			distance=distance*0.001;
+			DecimalFormat df = new DecimalFormat("##.##");
+			df.setRoundingMode(RoundingMode.DOWN);
+			if(distance>0){
+				textDistanceView.setText(df.format(distance)+"Km");
+			}
+			else{
+				textDistanceView.setText("0Km");
+			}
 	}
 	
 
@@ -111,6 +130,8 @@ public class FoodDetailsActivity extends Activity{
 		ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 	    food=(Food) getIntent().getSerializableExtra(Constants.foodDetailSP);
+	    currLatitude=getIntent().getDoubleExtra(Constants.latitudeKey, 0);
+	    currLongitude=getIntent().getDoubleExtra(Constants.longitudeKey, 0);
 	    settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
 	}
 	

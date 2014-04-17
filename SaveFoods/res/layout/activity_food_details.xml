@@ -15,13 +15,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
-            <RelativeLayout
+           <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/main_gray">
+                android:background="@color/main_gray" >
 
                 <ImageView
                     android:id="@+id/food_image"
@@ -34,7 +34,7 @@
                     android:id="@+id/food_name_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@id/food_image"
                     android:text="@+id/label"
                     android:textSize="22sp" >
@@ -58,7 +58,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/food_image"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginTop="30dp"
                     android:layout_toRightOf="@id/food_image"
                     android:src="@drawable/mini_calendar_icon" />
 
@@ -70,50 +69,15 @@
                     android:layout_marginBottom="5dp"
                     android:layout_toRightOf="@id/food_due_date_calendar_image"
                     android:text="@+id/label"
-                    android:textSize="10sp"
-                    android:textStyle="bold" >
-                </TextView>
-
-                <ImageView
-                    android:id="@+id/food_scale_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/food_image"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_toRightOf="@id/food_dueDate_label"
-                    android:src="@drawable/mini_scale_icon" />
-
-                <TextView
-                    android:id="@+id/food_quantity_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/food_scale_image"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@id/food_scale_image"
-                    android:text="pippo"
-                    android:textSize="12sp"
-                    android:textStyle="bold" >
-                </TextView>
-
-                <TextView
-                    android:id="@+id/food_id_label"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginLeft="5dp"
-                    android:text="@+id/label"
-                    android:visibility="invisible" >
-                </TextView>
+                    android:textSize="10sp" />
 
                 <ImageView
                     android:id="@+id/food_owner_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/food_image"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_toRightOf="@id/food_quantity_label"
+                    android:layout_marginLeft="12dp"
+                    android:layout_toRightOf="@id/food_dueDate_label"
                     android:src="@drawable/mini_people_icon" />
 
                 <TextView
@@ -125,27 +89,74 @@
                     android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@id/food_owner_image"
                     android:text="pippo"
-                    android:textSize="12sp"
-                    android:textStyle="bold" >
-                </TextView>
+                    android:textSize="10sp" />
+
+                <ImageView
+                    android:id="@+id/food_scale_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/food_due_date_calendar_image"
+                    android:layout_below="@id/food_due_date_calendar_image"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/mini_scale_icon" />
+
+                <TextView
+                    android:id="@+id/food_quantity_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/food_scale_image"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/food_scale_image"
+                    android:text="pippo"
+                    android:textSize="10sp" />
+
+                <ImageView
+                    android:id="@+id/food_distance_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/food_quantity_label"
+                    android:layout_alignBottom="@id/food_scale_image"
+                    android:layout_alignLeft="@id/food_owner_image"
+                    android:src="@drawable/mini_scale_icon" />
+
+                <TextView
+                    android:id="@+id/food_distance_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/food_distance_image"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/food_distance_image"
+                    android:text="dist"
+                    android:textSize="10sp"/>
+
+
+                <TextView
+                    android:id="@+id/food_id_label"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="@+id/label"
+                    android:visibility="invisible" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout 
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
-        
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp" >
+
         <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.MapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
-    
 
 </LinearLayout>

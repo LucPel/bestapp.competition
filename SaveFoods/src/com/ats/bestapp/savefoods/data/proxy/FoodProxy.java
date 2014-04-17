@@ -120,9 +120,15 @@ public class FoodProxy {
 			   che non abbiano come user l'utente stesso e che non siano scaduti.  
 			 */
 			//.whereNear("location", userLocation)
-			query.whereWithinKilometers(Constants.locationObject, userLocation, 3)
-			.whereNotEqualTo(Constants.foodOwnerPO, user)
-			.whereNotContainedIn(Constants.foodStatusPO, Arrays.asList(statusList)).orderByAscending(Constants.foodDueDatePO);
+			if(latitude==0 || longitude==0){
+				query.whereNotEqualTo(Constants.foodOwnerPO, user)
+				.whereNotContainedIn(Constants.foodStatusPO, Arrays.asList(statusList)).orderByAscending(Constants.foodDueDatePO);
+			}
+			else{
+				query.whereWithinKilometers(Constants.locationObject, userLocation, 3)
+				.whereNotEqualTo(Constants.foodOwnerPO, user)
+				.whereNotContainedIn(Constants.foodStatusPO, Arrays.asList(statusList)).orderByAscending(Constants.foodDueDatePO);
+			}
 			query.setLimit(maxFoods);
 			ArrayList<ParseObject> parseFoods=(ArrayList<ParseObject>) query.find();
 			Log.d(logTag, String.valueOf(parseFoods.size()));

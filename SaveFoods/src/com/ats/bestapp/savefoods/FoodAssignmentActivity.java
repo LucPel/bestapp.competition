@@ -252,6 +252,7 @@ public class FoodAssignmentActivity extends Activity{
 			commentTableAdapter.setComments(food.getSavingFoodAssignment().getConversation());
 			commentTableAdapter.notifyDataSetChanged();
 			comment_text.setText("");
+			comment_text.clearFocus();
 			sendPushNotification(comment);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -320,8 +321,7 @@ public class FoodAssignmentActivity extends Activity{
 				food=foodProxy.getFood(food.getFoodId());
 				commentTableAdapter.setComments(food.getSavingFoodAssignment().getConversation());
 				commentTableAdapter.notifyDataSetChanged();
-				Toast.makeText(context.getApplicationContext(), food.getName() + " is connected.", Toast.LENGTH_LONG)
-				.show();
+				//Toast.makeText(context.getApplicationContext(), food.getName() + " is connected.", Toast.LENGTH_LONG).show();
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

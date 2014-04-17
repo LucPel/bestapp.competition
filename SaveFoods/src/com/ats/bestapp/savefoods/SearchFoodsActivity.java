@@ -45,6 +45,8 @@ public class SearchFoodsActivity extends FragmentActivity{
 	private HashMap<String, Object> commonsData;
 	private SearchTableAdapter searchTableAdapter;
 	private ProgressDialog searchProgressDialog;
+	private double currLatitude;
+	private double currLongitude;
 
 
 	@Override
@@ -53,10 +55,18 @@ public class SearchFoodsActivity extends FragmentActivity{
 		setContentView(R.layout.activity_search);
 		init();
 		String userid = settings.getString(Constants.userNameSP, null);
+		long start=System.currentTimeMillis();
+		boolean timeout=false;
 		if(locListenerWrap.getLatitude()==0){
-			while(locListenerWrap.getLatitude()==0);
+			while(locListenerWrap.getLatitude()==0 && !timeout){
+				long diff_timeout=System.currentTimeMillis()-start;
+				Log.i(logTag, "Timeout "+diff_timeout);
+				if(diff_timeout>3000) timeout=true;
+			}
 		}
-		new GetUserFoodTask(userid,locListenerWrap.getLatitude(),locListenerWrap.getLongitude()).execute();
+		currLatitude=locListenerWrap.getLatitude();
+		currLongitude=locListenerWrap.getLongitude();
+		new GetUserFoodTask(userid,currLatitude,currLongitude).execute();
 	}
 
 	 @Override
@@ -103,6 +113,8 @@ public class SearchFoodsActivity extends FragmentActivity{
 				Food foodSelected=(Food) searchTableAdapter.getItem(position);
 				Intent foodAss=new Intent(parent.getContext(),FoodDetailsActivity.class);
 				foodAss.putExtra(Constants.foodDetailSP, foodSelected);
+				foodAss.putExtra(Constants.latitudeKey, currLatitude);
+				foodAss.putExtra(Constants.longitudeKey, currLongitude);
 				Log.d(logTag, JsonMapper.convertObject2String(foodSelected));
 				startActivityForResult(foodAss, Constants.FOOD_DETAIL_REQUEST_CODE);
 			}
