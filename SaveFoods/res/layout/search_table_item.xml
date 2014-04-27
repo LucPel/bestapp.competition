@@ -8,7 +8,7 @@
     android:paddingTop="10dp" >
 
     <ImageView
-        android:id="@+id/grid_item_image"
+        android:id="@+id/grid_item_category_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/food_no_image_icon" />
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/grid_item_image"
+        android:layout_toRightOf="@id/grid_item_category_image"
         android:textSize="22sp" >
     </TextView>
 
@@ -35,13 +35,23 @@
         android:textSize="12sp" >
     </TextView>
 
+
+    <ImageView
+        android:id="@+id/grid_item_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/grid_item_label"
+        android:layout_alignLeft="@id/grid_item_label"
+        android:layout_marginTop="5dp"
+        android:visibility="invisible" />
+    
     <ImageView
         android:id="@+id/grid_due_date_calendar_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/grid_item_image"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@id/grid_item_image"
         android:src="@drawable/mini_calendar_icon" />
 
     <TextView
@@ -61,7 +71,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/grid_item_image"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:layout_toRightOf="@id/grid_item_due_date"
         android:src="@drawable/mini_people_icon" />
 
@@ -80,9 +91,10 @@
         android:id="@+id/grid_scale_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/grid_due_date_calendar_image"
-        android:layout_alignLeft="@id/grid_due_date_calendar_image"
-        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/grid_owner_label"
+        android:layout_below="@id/grid_item_image"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         android:src="@drawable/mini_scale_icon" />
 
     <TextView
@@ -101,10 +113,11 @@
         android:id="@+id/grid_distance_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/grid_scale_image"
         android:layout_toRightOf="@+id/grid_item_quantity"
-        android:layout_alignLeft="@id/grid_owner_image"
-        android:src="@drawable/mini_scale_icon" />
+        android:layout_below="@id/grid_item_image"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/mini_gps_icon" />
 
     <TextView
         android:id="@+id/grid_item_distance"

@@ -118,7 +118,7 @@
         android:layout_alignLeft="@+id/food_due_date"
         android:layout_below="@+id/food_due_date"
         android:layout_marginTop="20dp"
-        android:background="@drawable/share_icon"
+        android:background="@drawable/google_plus"
         android:onClick="isShareable" />
 
 </RelativeLayout>

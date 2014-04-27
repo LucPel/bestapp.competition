@@ -128,7 +128,8 @@ public class HomeTableAdapter extends BaseAdapter implements OnScrollListener{
 		if(item.getImages()!=null && item.getImages().size()!=0){
 			Bitmap image=MediaFile.bitmapFromBytesImage(item.getImages().get(0).getImage());
 			if(image!=null){
-				imageView.setImageBitmap(Bitmap.createScaledBitmap(image, Constants.standard_image_size, Constants.standard_image_size, false));
+				imageView.setVisibility(View.VISIBLE);
+				imageView.setImageBitmap(Bitmap.createScaledBitmap(image, Constants.standard_image_x_size, Constants.standard_image_y_size, false));
 			}
 			else{
 				imageView.setImageResource(R.drawable.food_no_image_icon);

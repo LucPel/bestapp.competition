@@ -119,7 +119,7 @@
                     android:layout_toRightOf="@+id/food_quantity_label"
                     android:layout_alignBottom="@id/food_scale_image"
                     android:layout_alignLeft="@id/food_owner_image"
-                    android:src="@drawable/mini_scale_icon" />
+                    android:src="@drawable/mini_gps_icon" />
 
                 <TextView
                     android:id="@+id/food_distance_label"

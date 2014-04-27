@@ -1,99 +1,106 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
-    android:background="@color/main_gray">
- 
-     <TextView
+    android:background="@color/main_gray"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp" >
+
+    <ImageView
+        android:id="@+id/grid_item_category_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/food_no_image_icon" >
+    </ImageView>
+
+    <TextView
         android:id="@+id/grid_item_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="5dp"
-        android:textSize="22sp" 
-        android:layout_toRightOf="@+id/grid_item_image">
+        android:layout_toRightOf="@+id/grid_item_category_image"
+        android:textSize="22sp" >
     </TextView>
-    
-     <TextView
+
+    <TextView
         android:id="@+id/grid_item_category_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/grid_item_label"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="5dp"
         android:layout_marginBottom="5dp"
-        android:textSize="12sp" 
+        android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/grid_item_label"
-        android:layout_alignBottom="@id/grid_item_label">
+        android:textSize="12sp" >
     </TextView>
-     
-   
-     <ImageView
-        android:id="@+id/grid_due_date_calendar_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/mini_calendar_icon"
-        android:layout_below="@id/grid_item_label"
-        android:layout_toRightOf="@id/grid_item_image" 
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="5dp"/>
- 
-     
-   <TextView
-        android:id="@+id/grid_item_due_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="5dp"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        android:text="pippo" 
-        android:layout_alignBottom="@id/grid_due_date_calendar_image"
-        android:layout_toRightOf="@id/grid_due_date_calendar_image">
-    </TextView>
+
     
-   
-   <ImageView
-        android:id="@+id/grid_scale_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/mini_scale_icon"
-        android:layout_below="@id/grid_item_label"
-        android:layout_toRightOf="@id/grid_item_due_date"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="10dp"/>
-   
-   <TextView
-        android:id="@+id/grid_item_quantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        android:text="pippo"  
-        android:layout_alignBottom="@id/grid_scale_image"
-        android:layout_toRightOf="@id/grid_scale_image">
-    </TextView>
-     
     <ImageView
         android:id="@+id/grid_item_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/food_no_image_icon" 
-        >
+        android:layout_below="@id/grid_item_label"
+        android:layout_alignLeft="@id/grid_item_label"
+        android:layout_marginTop="5dp"
+        android:visibility="invisible">
     </ImageView>
- 
+    
+    <ImageView
+        android:id="@+id/grid_due_date_calendar_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/grid_item_image"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_alignLeft="@id/grid_item_image"
+        android:src="@drawable/mini_calendar_icon" />
+
+    <TextView
+        android:id="@+id/grid_item_due_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/grid_due_date_calendar_image"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/grid_due_date_calendar_image"
+        android:text="pippo"
+        android:textSize="12sp"
+        android:textStyle="bold" >
+    </TextView>
+
+    <ImageView
+        android:id="@+id/grid_scale_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/grid_item_image"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/grid_item_due_date"
+        android:src="@drawable/mini_scale_icon" />
+
+    <TextView
+        android:id="@+id/grid_item_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/grid_scale_image"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/grid_scale_image"
+        android:text="pippo"
+        android:textSize="12sp"
+        android:textStyle="bold" >
+    </TextView>
+
     <TextView
         android:id="@+id/grid_item_id"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="@id/label"
         android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@id/grid_item_image"
-        android:visibility="invisible">
+        android:layout_toRightOf="@id/grid_item_category_image"
+        android:text="@id/label"
+        android:visibility="invisible" >
     </TextView>
-    
+
 </RelativeLayout>

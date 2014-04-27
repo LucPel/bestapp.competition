@@ -42,6 +42,7 @@ import com.ats.bestapp.savefoods.data.proxy.FoodProxy;
 import com.ats.bestapp.savefoods.data.proxy.UserProxy;
 import com.ats.bestapp.savefoods.trasformer.FoodTrasformer;
 import com.ats.bestapp.savefoods.trasformer.UserTransformer;
+import com.ats.bestapp.savefoods.utilities.Commons;
 import com.ats.bestapp.savefoods.utilities.JsonMapper;
 import com.ats.bestapp.savefoods.utilities.MediaFile;
 import com.google.android.gms.common.ConnectionResult;
@@ -167,11 +168,11 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 	public void isShareable(View view){
 		Button shareTB=(Button) findViewById(R.id.share_tb);
 		if(!shareable){
-			shareTB.setBackgroundResource(R.drawable.share_pressed_icon);
+			shareTB.setBackgroundResource(R.drawable.google_plus_press);
 			shareable=true;
 		}
 		else{
-			shareTB.setBackgroundResource(R.drawable.share_icon);
+			shareTB.setBackgroundResource(R.drawable.google_plus);
 			shareable=false;
 		}
 	}
@@ -223,7 +224,7 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 	              // Image captured and saved to fileUri specified in the Intent
 	              Toast.makeText(this, "Image saved to:\n" +
 	                       imegesUri.get(imegesUri.size()-1).getPath(), Toast.LENGTH_LONG).show();
-	              Bitmap ThumbImage = MediaFile.bitmapResized(imegesUri.get(imegesUri.size()-1),Constants.standard_image_size, Constants.standard_image_size);
+	              Bitmap ThumbImage = MediaFile.bitmapResized(imegesUri.get(imegesUri.size()-1),Constants.standard_image_x_size, Constants.standard_image_y_size);
 	              ImageView foodImage = (ImageView) findViewById(R.id.imageFood);
 	              foodImage.setImageBitmap(ThumbImage);
 	          } else if (resultCode == RESULT_CANCELED) {
@@ -265,7 +266,7 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 		public void onConnected(Bundle arg0) {
 			 Intent shareIntent = new PlusShare.Builder(this)
 	          .setType("text/plain")
-	          .setText("Salva il mio alimento "+food.getString(Constants.foodNamePO)+" che scade il "+food.getString(Constants.foodDueDatePO))
+	          .setText("Salva il mio alimento "+food.getString(Constants.foodNamePO)+" che scade il "+Commons.convertToDate(food.getString(Constants.foodDueDatePO)))
 	          .setContentUrl(Uri.parse("https://developers.google.com/+/"))
 	          .getIntent();
 
