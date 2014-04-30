@@ -84,11 +84,11 @@ public class FoodAssignmentActivity extends Activity{
 	    
 	    TextView id_food=(TextView) findViewById(R.id.food_id_label);
 	    id_food.setText(food.getFoodId());
-		ImageView imageView = (ImageView) findViewById(R.id.food_image);
+		ImageView imageView = (ImageView) findViewById(R.id.food_category_image);
 			if(food.getImages()!=null && food.getImages().size()!=0){
 				Bitmap image=MediaFile.bitmapFromBytesImage(food.getImages().get(0).getImage());
 				if(image!=null){
-					imageView.setImageBitmap(Bitmap.createScaledBitmap(image, Constants.standard_image_x_size, Constants.standard_image_y_size, false));
+					//imageView.setImageBitmap(Bitmap.createScaledBitmap(image, Constants.standard_image_x_size, Constants.standard_image_y_size, false));
 				}
 				else{
 					imageView.setImageResource(R.drawable.food_no_image_icon);
@@ -132,6 +132,19 @@ public class FoodAssignmentActivity extends Activity{
 		ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 	    food=(Food) getIntent().getSerializableExtra(Constants.foodDetailSP);
+	    if(food==null){
+			try {
+				JSONObject json = new JSONObject(getIntent().getExtras().getString("com.parse.Data"));
+				String foodId=json.getString(Constants.food_pn);
+				food=foodProxy.getFood(foodId);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	    settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
 	    IntentFilter filter = new IntentFilter(UpdateCommentsReceiver.UPDATE_COMMENTS);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
@@ -265,7 +278,7 @@ public class FoodAssignmentActivity extends Activity{
 		JSONObject dt_longer=new JSONObject();
 		try {
 			dt.put(Constants.action_pn, "com.ats.bestapp.savefoods.UPDATE_COMMENTS");
-			dt.put("foodId", food.getFoodId());
+			dt.put(Constants.food_pn, food.getFoodId());
 			ParsePush push = new ParsePush();
 			push.setChannel(Constants.chatChannelPrefix+food.getChannel());
 			//push.setMessage(comment.getMessage());
@@ -275,7 +288,9 @@ public class FoodAssignmentActivity extends Activity{
 			ParsePush pushLonger=new ParsePush();
 			pushLonger.setChannel(Constants.foodBuyerChannelPrefix+food.getChannel());
 			//pushLonger.setMessage(comment.getMessage());
-			dt_longer.put("foodId", food.getFoodId());
+			dt_longer.put(Constants.food_pn, food.getFoodId());
+			dt_longer.put(Constants.alert_pn, comment.getMessage());
+			dt_longer.put(Constants.title_pn, comment.getMessage());
 			pushLonger.setData(dt_longer);
 			pushLonger.sendInBackground();
 		} catch (JSONException e) {

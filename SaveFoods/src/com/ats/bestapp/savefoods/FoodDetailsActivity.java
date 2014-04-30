@@ -90,11 +90,11 @@ public class FoodDetailsActivity extends Activity{
 	    
 	    TextView id_food=(TextView) findViewById(R.id.food_id_label);
 	    id_food.setText(food.getFoodId());
-		ImageView imageView = (ImageView) findViewById(R.id.food_image);
+		ImageView imageView = (ImageView) findViewById(R.id.food_category_image);
 			if(food.getImages()!=null && food.getImages().size()!=0){
 				Bitmap image=MediaFile.bitmapFromBytesImage(food.getImages().get(0).getImage());
 				if(image!=null){
-					imageView.setImageBitmap(Bitmap.createScaledBitmap(image, Constants.standard_image_x_size, Constants.standard_image_y_size, false));
+					//imageView.setImageBitmap(Bitmap.createScaledBitmap(image, Constants.standard_image_x_size, Constants.standard_image_y_size, false));
 				}
 				else{
 					imageView.setImageResource(R.drawable.food_no_image_icon);

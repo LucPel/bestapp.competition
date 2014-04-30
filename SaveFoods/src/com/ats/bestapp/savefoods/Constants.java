@@ -37,6 +37,7 @@ public class Constants {
 	public static final String alert_pn="alert";
 	public static final String action_pn="action";
 	public static final String title_pn="title";
+	public static final String food_pn="foodId";
 	public static final String foodSellerChannelPrefix="S";
 	public static final String foodBuyerChannelPrefix="B";
 	public static final String chatChannelPrefix="C";
