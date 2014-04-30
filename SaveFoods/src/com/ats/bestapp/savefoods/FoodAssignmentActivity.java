@@ -268,13 +268,13 @@ public class FoodAssignmentActivity extends Activity{
 			dt.put("foodId", food.getFoodId());
 			ParsePush push = new ParsePush();
 			push.setChannel(Constants.chatChannelPrefix+food.getChannel());
-			push.setMessage(comment.getMessage());
+			//push.setMessage(comment.getMessage());
 			push.setData(dt);
 			push.setExpirationTimeInterval(60);
 			push.sendInBackground();
 			ParsePush pushLonger=new ParsePush();
 			pushLonger.setChannel(Constants.foodBuyerChannelPrefix+food.getChannel());
-			pushLonger.setMessage(comment.getMessage());
+			//pushLonger.setMessage(comment.getMessage());
 			dt_longer.put("foodId", food.getFoodId());
 			pushLonger.setData(dt_longer);
 			pushLonger.sendInBackground();
