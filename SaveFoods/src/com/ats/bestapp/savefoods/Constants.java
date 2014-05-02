@@ -49,6 +49,16 @@ public class Constants {
 	public static final int standard_image_y_size = 375;
 	public static final String parseAppId="PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla";
 	public static final String parseClientKey="lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp";
-	
+	public static final String cat_bibita="Bibite";
+	public static final String cat_frutta="Frutta";
+	public static final String cat_carne="Carne";
+	public static final String cat_latticini="Latticini";
+	public static final String cat_verdura="Verdura";
+	public static final String cat_pesce="Pesce";
+	public static final String cat_crostaceo="Crostaceo";
+	public static final String cat_cereali="Cereali";
+	public static final String cat_legumi="Legumi";
+	public static final String cat_farinaceo="Farinaceo";
+
 	
 }

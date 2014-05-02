@@ -108,6 +108,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 			searchTableAdapter.setFoods(foods);
 		}
 		gridView.setAdapter(searchTableAdapter);
+		gridView.setOnScrollListener(searchTableAdapter);
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {

@@ -30,5 +30,17 @@
       <item>cm</item>
       <item>lt</item>
    </string-array>
+   <string-array name="foodCategories">
+      <item>Frutta</item>
+      <item>Carne</item>
+      <item>Latticini</item>
+      <item>Verdura</item>
+      <item>Pesce</item>
+      <item>Crostaceo</item>
+      <item>Cereali</item>
+      <item>Legumi</item>
+      <item>Bibite</item>
+      <item>Farinaceo</item>
+   </string-array>
 
 </resources>

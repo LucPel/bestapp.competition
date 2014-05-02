@@ -40,8 +40,9 @@ public class FoodTrasformer {
 		EditText name = (EditText) view.findViewById(R.id.food_name_text);
 		EditText description = (EditText) view
 				.findViewById(R.id.food_description_text);
-		EditText category = (EditText) view
-				.findViewById(R.id.food_category_text);
+		Spinner categorySpinner = (Spinner) view
+				.findViewById(R.id.food_category_spinner);
+		TextView catTextView = (TextView)categorySpinner.getSelectedView();
 		EditText date = (EditText) view.findViewById(R.id.food_due_date);
 		EditText quantityET = (EditText) view.findViewById(R.id.food_quantity_text);
 		Spinner UMSpinner=(Spinner)view.findViewById(R.id.food_um_spinner);
@@ -56,7 +57,7 @@ public class FoodTrasformer {
 		foodObj.put(Constants.foodAssigmentCommentPO, assigment);
 		foodObj.put(Constants.foodNamePO, name.getText().toString());
 		foodObj.put(Constants.foodStatusPO, Constants.foodStatusDisponibile);
-		foodObj.put(Constants.foodCategoryPO, category.getText().toString());
+		foodObj.put(Constants.foodCategoryPO, catTextView.getText().toString());
 		foodObj.put(Constants.foodDescritpionPO, description.getText().toString());
 		foodObj.put(Constants.foodDueDatePO, year+month+day);
 		foodObj.put(Constants.foodQuantityPO, quantityET.getText().toString());

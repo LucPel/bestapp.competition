@@ -41,15 +41,13 @@
         android:inputType="text"
         android:textColor="@color/black" />
 
-    <AutoCompleteTextView
-        android:id="@+id/food_category_text"
-        android:layout_width="wrap_content"
+        <Spinner
+        android:id="@+id/food_category_spinner"
+        android:layout_width="125dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/food_description_text"
         android:layout_marginTop="20dp"
-        android:hint="@string/categoryAutoComplete"
-        android:inputType="textAutoComplete"
-        android:textColor="@color/black" />
+        android:entries="@array/foodCategories" />
 
     <EditText
         android:id="@+id/food_quantity_text"
@@ -57,14 +55,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/food_description_text"
         android:layout_marginTop="20dp"
-        android:layout_toRightOf="@id/food_category_text"
+        android:layout_toRightOf="@id/food_category_spinner"
         android:hint="@string/foodQuantityHint"
         android:inputType="text|number"
         android:textColor="@color/black" />
 
     <Spinner
         android:id="@+id/food_um_spinner"
-        android:layout_width="wrap_content"
+        android:layout_width="125dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/food_description_text"
         android:layout_marginTop="20dp"
@@ -102,7 +100,7 @@
         android:id="@+id/food_due_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/food_category_text"
+        android:layout_below="@id/food_category_spinner"
         android:layout_marginTop="20dp"
         android:focusable="false"
         android:inputType="date"

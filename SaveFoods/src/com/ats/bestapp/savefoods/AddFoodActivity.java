@@ -78,7 +78,6 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_food);
 		init();
-	    initCategoryAutoComplete();
 		Calendar cal = Calendar.getInstance();
 		EditText dueDate=(EditText)findViewById(R.id.food_due_date);
 		dueDate.clearComposingText();
@@ -150,15 +149,6 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 		}
 	}
 	
-	private void initCategoryAutoComplete(){
-		AutoCompleteTextView autocomplete = (AutoCompleteTextView) findViewById(R.id.food_category_text);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-        		this,
-        		android.R.layout.simple_dropdown_item_1line, 
-        		new String[] {"Frutta","Carne","Latticini","Verdura","Pesce","Crostaceo","Cereali","Legumi","Bibite","Farinaceo"}
-        	);
-        autocomplete.setAdapter(adapter);
-	}
 	
 	public void showDatePickerDialog(View view){
 		DialogFragment newFragment = new DatePickerDialogFragment((EditText)view);

@@ -122,6 +122,38 @@ public class HomeTableAdapter extends BaseAdapter implements OnScrollListener{
 				.findViewById(R.id.grid_item_id);
 		idItemText.setText(item.getFoodId());
 
+		ImageView catImageView = (ImageView) gridView
+				.findViewById(R.id.grid_item_category_image);
+		if(item.getType().equalsIgnoreCase(Constants.cat_bibita)){
+			catImageView.setImageResource(R.drawable.cat_bibite_icon);
+		}
+		else if(item.getType().equalsIgnoreCase(Constants.cat_carne)){
+			catImageView.setImageResource(R.drawable.cat_carne_icon);
+		}
+		else if(item.getType().equalsIgnoreCase(Constants.cat_cereali)){
+			catImageView.setImageResource(R.drawable.cat_cereali_icon);
+		}
+		else if(item.getType().equalsIgnoreCase(Constants.cat_crostaceo)){
+			catImageView.setImageResource(R.drawable.cat_crostacei_icon);
+		}
+		else if(item.getType().equalsIgnoreCase(Constants.cat_farinaceo)){
+			catImageView.setImageResource(R.drawable.cat_farinacei_icon);
+		}
+		else if(item.getType().equalsIgnoreCase(Constants.cat_frutta)){
+			catImageView.setImageResource(R.drawable.cat_frutta_icon);
+		}
+		else if(item.getType().equalsIgnoreCase(Constants.cat_latticini)){
+			catImageView.setImageResource(R.drawable.cat_latticini_icon);
+		}
+		else if(item.getType().equalsIgnoreCase(Constants.cat_legumi)){
+			catImageView.setImageResource(R.drawable.cat_legumi_icon);
+		}
+		else if(item.getType().equalsIgnoreCase(Constants.cat_pesce)){
+			catImageView.setImageResource(R.drawable.cat_pesce_icon);
+		}
+		else if(item.getType().equalsIgnoreCase(Constants.cat_verdura)){
+			catImageView.setImageResource(R.drawable.cat_verdura_icon);
+		}
 		// set image based on selected text
 		ImageView imageView = (ImageView) gridView
 			.findViewById(R.id.grid_item_image);
@@ -132,11 +164,7 @@ public class HomeTableAdapter extends BaseAdapter implements OnScrollListener{
 				imageView.setImageBitmap(Bitmap.createScaledBitmap(image, Constants.standard_image_x_size, Constants.standard_image_y_size, false));
 			}
 			else{
-				imageView.setImageResource(R.drawable.food_no_image_icon);
 			}
-		}
-		else{
-			imageView.setImageResource(R.drawable.food_no_image_icon);
 		}
 	}
 
