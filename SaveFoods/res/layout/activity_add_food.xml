@@ -10,7 +10,7 @@
     tools:context=".AddFoodActivity" >
 
     <ImageView
-        android:id="@+id/imageFood"
+        android:id="@+id/imageCategoryFood"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -23,7 +23,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
-        android:layout_toRightOf="@id/imageFood"
+        android:layout_toRightOf="@id/imageCategoryFood"
         android:hint="@string/foodNameHint"
         android:inputType="text"
         android:textColor="@color/black" >
@@ -35,7 +35,7 @@
         android:id="@+id/food_description_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imageFood"
+        android:layout_below="@id/imageCategoryFood"
         android:layout_marginTop="20dp"
         android:hint="@string/foodDescriptionHint"
         android:inputType="text"
@@ -80,21 +80,7 @@
         android:text="@string/addFoodImageButtonLabel" />
     -->
 
-    <Button
-        android:id="@+id/add_food_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/button_custom"
-        android:gravity="center"
-        android:onClick="saveFood"
-        android:padding="10dp"
-        android:text="@string/saveFoodButtonLabel"
-        android:textColor="#FFFFFF"
-        android:textSize="22sp"
-        android:textStyle="bold|italic" />
+    
 
     <EditText
         android:id="@+id/food_due_date"
@@ -115,8 +101,31 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/food_due_date"
         android:layout_below="@+id/food_due_date"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/google_plus"
         android:onClick="isShareable" />
 
+    <Button
+        android:id="@+id/add_food_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/share_tb"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/button_custom"
+        android:gravity="center"
+        android:onClick="saveFood"
+        android:padding="10dp"
+        android:text="@string/saveFoodButtonLabel"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold|italic" />
+    
+    <ImageView
+        android:id="@+id/imageFood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_food_button"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/food_no_image_icon" />
+    
 </RelativeLayout>

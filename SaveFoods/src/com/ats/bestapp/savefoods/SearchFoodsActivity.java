@@ -14,6 +14,11 @@ import com.ats.bestapp.savefoods.data.User;
 import com.ats.bestapp.savefoods.data.proxy.FoodProxy;
 import com.ats.bestapp.savefoods.data.proxy.UserProxy;
 import com.ats.bestapp.savefoods.utilities.JsonMapper;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -46,6 +51,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 	private HashMap<String, Object> commonsData;
 	private SearchTableAdapter searchTableAdapter;
 	private ProgressDialog searchProgressDialog;
+	private GoogleMap map;
 	private double currLatitude;
 	private double currLongitude;
 
@@ -113,7 +119,8 @@ public class SearchFoodsActivity extends FragmentActivity{
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 				Food foodSelected=(Food) searchTableAdapter.getItem(position);
-				Intent foodAss=new Intent(parent.getContext(),FoodDetailsActivity.class);
+				//Intent foodAss=new Intent(parent.getContext(),FoodDetailsActivity.class);
+				Intent foodAss=new Intent(parent.getContext(),FoodAssignmentActivity.class);
 				foodAss.putExtra(Constants.foodDetailSP, foodSelected);
 				foodAss.putExtra(Constants.latitudeKey, currLatitude);
 				foodAss.putExtra(Constants.longitudeKey, currLongitude);
@@ -177,6 +184,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 		protected void onPostExecute(ArrayList<Food> foods_out) {
 			searchProgressDialog.dismiss();
 			fillGrid();
+			showMap();
 		}
 
 		protected void onPreExecute() {
@@ -185,6 +193,19 @@ public class SearchFoodsActivity extends FragmentActivity{
 
 	}
 
+	private void showMap(){
+		
+		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+		for(Food food: foods){
+			LatLng food_point = new LatLng(food.getLatitude(), food.getLongitude());
+			map.addMarker(new MarkerOptions().position(food_point).title(food.getName()+"("+food.getType()+")"));
+			// Move the camera instantly to hamburg with a zoom of 15.
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(food_point, 15));
+			// Zoom in, animating the camera.
+			map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);	
+		}
+		
+	}
 
 
 }

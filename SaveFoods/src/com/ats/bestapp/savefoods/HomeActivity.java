@@ -99,10 +99,12 @@ public class HomeActivity extends Activity {
 			openSearchFoodsActivity();
 			return true;
 		case R.id.action_addFoodRequest:
-			// composeMessage();
+			Toast.makeText(this, getString(R.string.toastWorkInProgress), Toast.LENGTH_SHORT)
+			.show();
 			return true;
 		case R.id.action_settings:
-			// composeMessage();
+			Toast.makeText(this, getString(R.string.toastWorkInProgress), Toast.LENGTH_SHORT)
+			.show();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

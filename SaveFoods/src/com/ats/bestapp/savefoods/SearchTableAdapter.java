@@ -31,6 +31,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.AbsListView.OnScrollListener;
 
@@ -54,7 +56,6 @@ public class SearchTableAdapter extends BaseAdapter implements OnScrollListener{
  
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
- 
 		LayoutInflater inflater = (LayoutInflater) context
 			.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
  
@@ -152,36 +153,8 @@ public class SearchTableAdapter extends BaseAdapter implements OnScrollListener{
 		
 		ImageView catImageView = (ImageView) gridView
 				.findViewById(R.id.grid_item_category_image);
-		if(item.getType().equalsIgnoreCase(Constants.cat_bibita)){
-			catImageView.setImageResource(R.drawable.cat_bibite_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_carne)){
-			catImageView.setImageResource(R.drawable.cat_carne_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_cereali)){
-			catImageView.setImageResource(R.drawable.cat_cereali_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_crostaceo)){
-			catImageView.setImageResource(R.drawable.cat_crostacei_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_farinaceo)){
-			catImageView.setImageResource(R.drawable.cat_farinacei_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_frutta)){
-			catImageView.setImageResource(R.drawable.cat_frutta_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_latticini)){
-			catImageView.setImageResource(R.drawable.cat_latticini_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_legumi)){
-			catImageView.setImageResource(R.drawable.cat_legumi_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_pesce)){
-			catImageView.setImageResource(R.drawable.cat_pesce_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_verdura)){
-			catImageView.setImageResource(R.drawable.cat_verdura_icon);
-		}
+		SFApplication sfa=(SFApplication) context.getApplicationContext();
+		catImageView.setImageResource(sfa.getCategoryIcon(item.getType()));
 		
 		// set image based on selected text
 		ImageView imageView = (ImageView) gridView
@@ -191,6 +164,41 @@ public class SearchTableAdapter extends BaseAdapter implements OnScrollListener{
 			if(image!=null){
 				imageView.setVisibility(View.VISIBLE);
 				imageView.setImageBitmap(Bitmap.createScaledBitmap(image, Constants.standard_image_x_size, Constants.standard_image_y_size, false));
+				ImageView dueDateCalendarIcon = (ImageView) gridView
+						.findViewById(R.id.grid_due_date_calendar_image);
+				ImageView ownerIcon = (ImageView) gridView
+						.findViewById(R.id.grid_owner_image);
+				ImageView scaleIcon = (ImageView) gridView
+						.findViewById(R.id.grid_scale_image);
+				ImageView distanceIcon = (ImageView) gridView
+						.findViewById(R.id.grid_distance_image);
+				
+				RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+				        ViewGroup.LayoutParams.WRAP_CONTENT);
+				p.addRule(RelativeLayout.BELOW, R.id.grid_item_image);
+				p.setMargins(5, 20, 0, 0);
+				dueDateCalendarIcon.setLayoutParams(p);
+				
+				RelativeLayout.LayoutParams pOwnerIcon = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+				        ViewGroup.LayoutParams.WRAP_CONTENT);
+				pOwnerIcon.addRule(RelativeLayout.BELOW, R.id.grid_item_image);
+				pOwnerIcon.addRule(RelativeLayout.RIGHT_OF, R.id.grid_item_due_date);
+				pOwnerIcon.setMargins(10, 20, 0, 0);
+				ownerIcon.setLayoutParams(pOwnerIcon);
+				
+				RelativeLayout.LayoutParams pScaleIcon = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+				        ViewGroup.LayoutParams.WRAP_CONTENT);
+				pScaleIcon.addRule(RelativeLayout.BELOW, R.id.grid_item_image);
+				pScaleIcon.addRule(RelativeLayout.RIGHT_OF, R.id.grid_owner_label);
+				pScaleIcon.setMargins(10, 20, 0, 0);
+				scaleIcon.setLayoutParams(pScaleIcon);
+				
+				RelativeLayout.LayoutParams pDistanceIcon = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+				        ViewGroup.LayoutParams.WRAP_CONTENT);
+				pDistanceIcon.addRule(RelativeLayout.BELOW, R.id.grid_item_image);
+				pDistanceIcon.addRule(RelativeLayout.RIGHT_OF, R.id.grid_item_quantity);
+				pDistanceIcon.setMargins(10, 20, 0, 0);
+				distanceIcon.setLayoutParams(pDistanceIcon);
 			}
 		}
 	}

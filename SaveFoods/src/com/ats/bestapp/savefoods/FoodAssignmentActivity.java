@@ -85,19 +85,21 @@ public class FoodAssignmentActivity extends Activity{
 	    TextView id_food=(TextView) findViewById(R.id.food_id_label);
 	    id_food.setText(food.getFoodId());
 		ImageView imageView = (ImageView) findViewById(R.id.food_category_image);
-			if(food.getImages()!=null && food.getImages().size()!=0){
-				Bitmap image=MediaFile.bitmapFromBytesImage(food.getImages().get(0).getImage());
-				if(image!=null){
-					//imageView.setImageBitmap(Bitmap.createScaledBitmap(image, Constants.standard_image_x_size, Constants.standard_image_y_size, false));
-				}
-				else{
-					imageView.setImageResource(R.drawable.food_no_image_icon);
-				}
-			}
-			else{
-				imageView.setImageResource(R.drawable.food_no_image_icon);
-			}
-			
+		SFApplication sfa=(SFApplication) getApplication();
+		imageView.setImageResource(sfa.getCategoryIcon(food.getType()));
+//			if(food.getImages()!=null && food.getImages().size()!=0){
+//				Bitmap image=MediaFile.bitmapFromBytesImage(food.getImages().get(0).getImage());
+//				if(image!=null){
+//					//imageView.setImageBitmap(Bitmap.createScaledBitmap(image, Constants.standard_image_x_size, Constants.standard_image_y_size, false));
+//				}
+//				else{
+//					imageView.setImageResource(R.drawable.food_no_image_icon);
+//				}
+//			}
+//			else{
+//				imageView.setImageResource(R.drawable.food_no_image_icon);
+//			}
+//			
 		
 			if(food.getOwner().getUsername().equalsIgnoreCase(settings.getString(Constants.userNameSP, null))){
 				findViewById(R.id.food_owner_image).setVisibility(View.INVISIBLE);
@@ -115,6 +117,8 @@ public class FoodAssignmentActivity extends Activity{
 				TextView owner_label=(TextView) findViewById(R.id.food_owner_label);
 				owner_label.setText(food.getOwner().getUsername().substring(0, food.getOwner().getUsername().indexOf("@")));
 			}
+			EditText comment_text=(EditText) findViewById(R.id.comment_text);
+			comment_text.clearFocus();
 	}
 	
 	private int statusSpinnerPosition(String status){

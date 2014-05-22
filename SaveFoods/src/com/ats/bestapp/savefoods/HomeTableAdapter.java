@@ -124,36 +124,8 @@ public class HomeTableAdapter extends BaseAdapter implements OnScrollListener{
 
 		ImageView catImageView = (ImageView) gridView
 				.findViewById(R.id.grid_item_category_image);
-		if(item.getType().equalsIgnoreCase(Constants.cat_bibita)){
-			catImageView.setImageResource(R.drawable.cat_bibite_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_carne)){
-			catImageView.setImageResource(R.drawable.cat_carne_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_cereali)){
-			catImageView.setImageResource(R.drawable.cat_cereali_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_crostaceo)){
-			catImageView.setImageResource(R.drawable.cat_crostacei_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_farinaceo)){
-			catImageView.setImageResource(R.drawable.cat_farinacei_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_frutta)){
-			catImageView.setImageResource(R.drawable.cat_frutta_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_latticini)){
-			catImageView.setImageResource(R.drawable.cat_latticini_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_legumi)){
-			catImageView.setImageResource(R.drawable.cat_legumi_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_pesce)){
-			catImageView.setImageResource(R.drawable.cat_pesce_icon);
-		}
-		else if(item.getType().equalsIgnoreCase(Constants.cat_verdura)){
-			catImageView.setImageResource(R.drawable.cat_verdura_icon);
-		}
+		SFApplication sfa=(SFApplication) context.getApplicationContext();
+		catImageView.setImageResource(sfa.getCategoryIcon(item.getType()));
 		// set image based on selected text
 		ImageView imageView = (ImageView) gridView
 			.findViewById(R.id.grid_item_image);

@@ -29,13 +29,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.ats.bestapp.savefoods.data.Food;
 import com.ats.bestapp.savefoods.data.proxy.FoodProxy;
@@ -58,7 +61,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.PushService;
 
-public class AddFoodActivity extends FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener{
+public class AddFoodActivity extends FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener,OnItemSelectedListener{
 
 	private HashMap<String, Object> commonsData;
 	private LocationListenerWrapper locListenerWrap;
@@ -191,6 +194,8 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 		commonsData=new HashMap<String, Object>();
 		commonsData.put(Constants.userNameSP, settings.getString(Constants.userNameSP, null));
 		commonsData.put(Constants.userIdSP, settings.getString(Constants.userIdSP, null));
+		Spinner categorySpinner=(Spinner)findViewById(R.id.food_category_spinner);
+		categorySpinner.setOnItemSelectedListener(this);
 	  }
 	  
 	  public void addImage(){
@@ -214,7 +219,7 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 	              // Image captured and saved to fileUri specified in the Intent
 	              Toast.makeText(this, "Image saved to:\n" +
 	                       imegesUri.get(imegesUri.size()-1).getPath(), Toast.LENGTH_LONG).show();
-	              Bitmap ThumbImage = MediaFile.bitmapResized(imegesUri.get(imegesUri.size()-1),Constants.standard_image_x_size, Constants.standard_image_y_size);
+	              Bitmap ThumbImage = MediaFile.bitmapResized(imegesUri.get(imegesUri.size()-1),Constants.insert_image_x_size, Constants.insert_image_y_size);
 	              ImageView foodImage = (ImageView) findViewById(R.id.imageFood);
 	              foodImage.setImageBitmap(ThumbImage);
 	          } else if (resultCode == RESULT_CANCELED) {
@@ -270,6 +275,21 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 
 		@Override
 		public void onDisconnected() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onItemSelected(AdapterView<?> aview, View view, int position,
+				long id) {
+			String cat_value=aview.getItemAtPosition(position).toString();
+			ImageView catImageView = (ImageView) findViewById(R.id.imageCategoryFood);
+			SFApplication sfa=(SFApplication) getApplication();
+			catImageView.setImageResource(sfa.getCategoryIcon(cat_value));	
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> arg0) {
 			// TODO Auto-generated method stub
 			
 		}

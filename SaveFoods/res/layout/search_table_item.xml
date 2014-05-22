@@ -50,8 +50,8 @@
         android:id="@+id/grid_due_date_calendar_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/grid_item_image"
-        android:layout_marginTop="10dp"
+        android:layout_below="@id/grid_item_category_image"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="5dp"
         android:src="@drawable/mini_calendar_icon" />
 
@@ -71,9 +71,9 @@
         android:id="@+id/grid_owner_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/grid_item_image"
+        android:layout_below="@id/grid_item_category_image"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_toRightOf="@id/grid_item_due_date"
         android:src="@drawable/mini_people_icon" />
 
@@ -93,8 +93,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/grid_owner_label"
-        android:layout_below="@id/grid_item_image"
-        android:layout_marginTop="10dp"
+        android:layout_below="@id/grid_item_category_image"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:src="@drawable/mini_scale_icon" />
 
@@ -115,8 +115,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/grid_item_quantity"
-        android:layout_below="@id/grid_item_image"
-        android:layout_marginTop="10dp"
+        android:layout_below="@id/grid_item_category_image"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:src="@drawable/mini_gps_icon" />
 
