@@ -21,7 +21,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/grid_item_category_image"
-        android:textSize="22sp" >
+        android:textSize="22sp"
+        android:onClick="openAssignment" 
+        android:clickable="true" >
     </TextView>
 
     <TextView
@@ -33,7 +35,9 @@
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/grid_item_label"
-        android:textSize="12sp" >
+        android:textSize="12sp"
+        android:onClick="openAssignment" 
+        android:clickable="true" >"
     </TextView>
 
 
@@ -44,7 +48,8 @@
         android:layout_below="@id/grid_item_label"
         android:layout_alignLeft="@id/grid_item_label"
         android:layout_marginTop="5dp"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:onClick="openAssignment" />
     
     <ImageView
         android:id="@+id/grid_due_date_calendar_image"
@@ -134,6 +139,15 @@
 
     <TextView
         android:id="@+id/grid_item_id"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/grid_item_image"
+        android:text="@id/label"
+        android:visibility="invisible"/>
+    
+        <TextView
+        android:id="@+id/grid_item_position"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="5dp"

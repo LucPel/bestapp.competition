@@ -36,6 +36,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 
 //LUCPEL BranchLucPel
 public class SearchFoodsActivity extends FragmentActivity{
@@ -115,7 +116,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 		}
 		gridView.setAdapter(searchTableAdapter);
 		gridView.setOnScrollListener(searchTableAdapter);
-		gridView.setOnItemClickListener(new OnItemClickListener() {
+/*		gridView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 				Food foodSelected=(Food) searchTableAdapter.getItem(position);
@@ -127,7 +128,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 				Log.d(logTag, JsonMapper.convertObject2String(foodSelected));
 				startActivityForResult(foodAss, Constants.FOOD_DETAIL_REQUEST_CODE);
 			}
-		});
+		});*/
 	}
 
 	private void startDialogLoading() {
@@ -207,5 +208,22 @@ public class SearchFoodsActivity extends FragmentActivity{
 		
 	}
 
+	public void openAssignment(View view){
+		View parent=(View) view.getParent();
+		TextView id_text=(TextView) parent.findViewById(R.id.grid_item_id);
+		TextView position_text=(TextView) parent.findViewById(R.id.grid_item_position);
+		Log.d(logTag, "ID FOOD: "+id_text.getText().toString());
+		Log.d(logTag, "ID FOOD POSITION: "+position_text.getText().toString());
+		Food foodSelected=(Food) searchTableAdapter.getItem(Integer.parseInt(position_text.getText().toString()));
+		//Intent foodAss=new Intent(parent.getContext(),FoodDetailsActivity.class);
+		Intent foodAss=new Intent(parent.getContext(),FoodAssignmentActivity.class);
+		foodAss.putExtra(Constants.foodDetailSP, foodSelected);
+		foodAss.putExtra(Constants.latitudeKey, currLatitude);
+		foodAss.putExtra(Constants.longitudeKey, currLongitude);
+		Log.d(logTag, JsonMapper.convertObject2String(foodSelected));
+		startActivityForResult(foodAss, Constants.FOOD_DETAIL_REQUEST_CODE);
+	}
+	
+	
 
 }
