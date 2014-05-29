@@ -176,7 +176,7 @@ public class SearchTableAdapter extends BaseAdapter implements OnScrollListener{
 				RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
 				        ViewGroup.LayoutParams.WRAP_CONTENT);
 				p.addRule(RelativeLayout.BELOW, R.id.grid_item_image);
-				p.setMargins(5, 20, 0, 0);
+				p.setMargins(10, 20, 0, 0);
 				dueDateCalendarIcon.setLayoutParams(p);
 				
 				RelativeLayout.LayoutParams pOwnerIcon = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,

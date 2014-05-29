@@ -102,8 +102,8 @@ public class FoodAssignmentActivity extends Activity{
 //			
 		
 			if(food.getOwner().getUsername().equalsIgnoreCase(settings.getString(Constants.userNameSP, null))){
-				findViewById(R.id.food_owner_image).setVisibility(View.INVISIBLE);
-				findViewById(R.id.food_owner_label).setVisibility(View.INVISIBLE);
+				TextView ownerLabel=(TextView) findViewById(R.id.food_owner_label);
+				ownerLabel.setText(getText(R.string.mySelfOwnerLabel));
 				Spinner statusSpinner=(Spinner)findViewById(R.id.food_status_spinner);
 				statusSpinner.setVisibility(View.VISIBLE);
 				ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.foodStatus, R.layout.assignment_spinner_item);

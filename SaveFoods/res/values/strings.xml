@@ -17,6 +17,7 @@
     <string name="foodDueDateLabel">Scadenza:</string>
     <string name="foodQuantityHint">Quantità</string>
     <string name="toastWorkInProgress">Funzionalità in rilascio</string>
+    <string name="mySelfOwnerLabel">Io</string>
     <string-array name="foodStatus">
       <item>Disponibile</item>
       <item>In Assegnazione</item>

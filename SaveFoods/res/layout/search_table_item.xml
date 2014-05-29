@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/grid_item_category_image"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="10dp"
         android:src="@drawable/mini_calendar_icon" />
 
     <TextView
