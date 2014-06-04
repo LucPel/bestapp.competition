@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -60,6 +61,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.PushService;
+import com.parse.entity.mime.MIME;
 
 public class AddFoodActivity extends FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener,OnItemSelectedListener{
 

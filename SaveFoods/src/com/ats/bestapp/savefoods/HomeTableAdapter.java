@@ -57,6 +57,7 @@ public class HomeTableAdapter extends BaseAdapter implements OnScrollListener{
 			Log.d(logTag, "Posizione In "+position );
 			gridView = new View(context);
 			// get layout from mobile.xml
+			
 			gridView = inflater.inflate(R.layout.home_table_item, null);
 			setGridItemUI(gridView, position);
 			

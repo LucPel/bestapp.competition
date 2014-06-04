@@ -3,6 +3,7 @@ package com.ats.bestapp.savefoods;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.zip.Inflater;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
@@ -23,12 +24,14 @@ import com.parse.ParseObject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +39,8 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class HomeActivity extends Activity {
@@ -172,12 +177,24 @@ public class HomeActivity extends Activity {
 				for (int i = 0; i < foods.size(); i++) {
 					c_food = foods.get(i);
 					if (c_food.getFoodId().equalsIgnoreCase(food.getFoodId())) {
-						foods.set(i, food);
+						if(food.getStatus().equalsIgnoreCase(Constants.foodStatusScaduto)){
+							Log.d(logTag, "Alimento Scaduto " + food.getStatus());
+							foods.remove(i);
+						}
+						else{
+							foods.set(i, food);
+						}
+						
 					}
 				}
-				homeTableAdapter.setFoods(foods);
+				//homeTableAdapter.setFoods(foods);
 				homeTableAdapter.notifyDataSetChanged();
+				GridView gridView = (GridView) findViewById(R.id.gridview);
+				gridView.setAdapter(homeTableAdapter);
 				Log.d(logTag, "onActivityResult " + food.getStatus());
+				if(foods.size()==0){
+					addEmptyGrid();
+				}
 			}
 		} else if (requestCode == Constants.ADD_FOOD_REQUEST_CODE
 				&& responseCode == Constants.ADD_FOOD_RESPONSE_CODE) {
@@ -188,9 +205,18 @@ public class HomeActivity extends Activity {
 				if (homeTableAdapter == null) {
 					homeTableAdapter = new HomeTableAdapter(this, foods);
 				} else {
-					homeTableAdapter.setFoods(foods);
+					//homeTableAdapter.setFoods(foods);
 				}
-				homeTableAdapter.notifyDataSetChanged();
+				GridView gridView = (GridView) findViewById(R.id.gridview);
+				if(gridView.getVisibility()==View.INVISIBLE){
+					gridView.setVisibility(View.VISIBLE);
+					RelativeLayout parent_lay=(RelativeLayout)findViewById(R.id.home_main_lay);
+					RelativeLayout to_remove=(RelativeLayout)findViewById(R.id.grid_item_empty_lay);
+					parent_lay.removeView(to_remove);
+				}
+				//homeTableAdapter.notifyDataSetChanged();
+				//gridView.setAdapter(homeTableAdapter);
+				fillGrid();
 			} catch (JsonParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -222,6 +248,14 @@ public class HomeActivity extends Activity {
 		homeProgressDialog.show();
 	}
 
+	private void addEmptyGrid(){
+		findViewById(R.id.gridview).setVisibility(View.INVISIBLE);
+		RelativeLayout parent_lay=(RelativeLayout)findViewById(R.id.home_main_lay);
+		LayoutInflater inflater =getLayoutInflater();
+		View view=inflater.inflate(R.layout.home_empty_table_item,parent_lay,false );
+		TextView def=(TextView) view.findViewById(R.id.grid_item_empty_label);
+		parent_lay.addView(view);
+	}
 	// ASYNC TASKS
 	private class GetUserFoodTask extends
 			AsyncTask<ParseObject, Integer, ArrayList<Food>> {
@@ -254,7 +288,14 @@ public class HomeActivity extends Activity {
 
 		protected void onPostExecute(ArrayList<Food> foods_out) {
 			homeProgressDialog.dismiss();
-			fillGrid();
+			if(foods.size()==0){
+				Log.d(logTag, "No Food for Owner");
+				addEmptyGrid();
+			}
+			else{
+				fillGrid();
+			}
+			
 		}
 
 		protected void onPreExecute() {
