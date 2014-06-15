@@ -32,9 +32,11 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
@@ -55,6 +57,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 	private GoogleMap map;
 	private double currLatitude;
 	private double currLongitude;
+	private Double distanceToSearch=(double) 3;
 
 
 	@Override
@@ -89,12 +92,27 @@ public class SearchFoodsActivity extends FragmentActivity{
 	    locListenerWrap.removeUpdates();
 	  }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		//getMenuInflater().inflate(R.menu.action_bar, menu);
-		return true;
-	}
+	  @Override
+		public boolean onCreateOptionsMenu(Menu menu) {
+			// Inflate the menu; this adds items to the action bar if it is present.
+			getMenuInflater().inflate(R.menu.action_bar_search_food, menu);
+			return super.onCreateOptionsMenu(menu);
+		}
+
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			// Handle presses on the action bar items
+			switch (item.getItemId()) {
+			case R.id.action_minusZoom:
+				minusZoomSearch();
+				return true;
+			case R.id.action_plusZoom:
+				plusZoomSearch();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+			}
+		}
 
 
 
@@ -109,7 +127,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 	private void fillGrid(){
 		GridView gridView = (GridView) findViewById(R.id.gridview);
 		if(searchTableAdapter==null){
-			searchTableAdapter=new SearchTableAdapter(this, foods,locListenerWrap.getLatitude(),locListenerWrap.getLongitude());
+			searchTableAdapter=new SearchTableAdapter(this, foods,locListenerWrap.getLatitude(),locListenerWrap.getLongitude(),distanceToSearch);
 		}
 		else{
 			searchTableAdapter.setFoods(foods);
@@ -158,7 +176,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 			try {
 				Log.i(logTag, "Esecuzione query "+userPO);
 				Log.d(logTag, "Latitude:" +latitude);
-				foods = foodProxy.getFoods4Location(userPO,latitude,longitude);
+				foods = foodProxy.getFoods4Location(userPO,latitude,longitude,distanceToSearch);
 			} catch (JsonParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -223,7 +241,19 @@ public class SearchFoodsActivity extends FragmentActivity{
 		Log.d(logTag, JsonMapper.convertObject2String(foodSelected));
 		startActivityForResult(foodAss, Constants.FOOD_DETAIL_REQUEST_CODE);
 	}
+
+	private void minusZoomSearch(){
+		SFApplication app=(SFApplication) getApplicationContext();
+		distanceToSearch=Double.valueOf(distanceToSearch/2);
+		Log.d(logTag, "Minus Zoom "+distanceToSearch);
+		new GetUserFoodTask(app.getUserLoggedIn(),currLatitude,currLongitude).execute();
+	}
 	
-	
+	private void plusZoomSearch(){
+		SFApplication app=(SFApplication) getApplicationContext();
+		distanceToSearch=Double.valueOf(distanceToSearch*2);
+		Log.d(logTag, "Plus Zoom "+distanceToSearch);
+		new GetUserFoodTask(app.getUserLoggedIn(),currLatitude,currLongitude).execute();
+	}
 
 }

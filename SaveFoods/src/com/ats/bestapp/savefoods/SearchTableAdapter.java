@@ -53,13 +53,15 @@ public class SearchTableAdapter extends BaseAdapter implements OnScrollListener 
 	private ProgressDialog searchProgressDialog;
 	private final String logTag = "SearchTableAdapter";
 	private GoogleMap map;
+	private Double distanceToSearch=(double) 3;
 
 	public SearchTableAdapter(FragmentActivity context, ArrayList<Food> items,
-			double currLatitude, double currLongitude) {
+			double currLatitude, double currLongitude,Double distance) {
 		this.context = context;
 		this.items = items;
 		this.currentLatitude = currLatitude;
 		this.currentLongitude = currLongitude;
+		this.distanceToSearch=distance;
 	}
 
 	@Override
@@ -276,7 +278,7 @@ public class SearchTableAdapter extends BaseAdapter implements OnScrollListener 
 				Log.d(logTag, "Latitude:" + latitude);
 				FoodProxy foodProxy = new FoodProxy();
 				foods = foodProxy
-						.getFoods4Location(userPO, latitude, longitude);
+						.getFoods4Location(userPO, latitude, longitude,distanceToSearch);
 			} catch (JsonParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -356,5 +358,13 @@ public class SearchTableAdapter extends BaseAdapter implements OnScrollListener 
 			// Zoom in, animating the camera.
 			map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
 		}
+	}
+
+	public Double getDistanceToSearch() {
+		return distanceToSearch;
+	}
+
+	public void setDistanceToSearch(Double distanceToSearch) {
+		this.distanceToSearch = distanceToSearch;
 	}
 }

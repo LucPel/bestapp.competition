@@ -3,6 +3,8 @@ package com.ats.bestapp.savefoods.data.proxy;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -59,7 +62,10 @@ public class FoodProxy {
 		ArrayList<Food> foods=new ArrayList<Food>();
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);
 		String[] statusList = {Constants.foodStatusScaduto, Constants.foodStatusAssegnato};
-		query.whereEqualTo(Constants.foodOwnerPO, user).whereNotContainedIn(Constants.foodStatusPO, Arrays.asList(statusList)).orderByAscending(Constants.foodDueDatePO).setLimit(maxFoods);
+		Calendar cal = Calendar.getInstance();
+		String dueDatedFoods=(String) DateFormat.format("yyyyMMdd", new GregorianCalendar(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)));
+		Log.d(logTag, "Filtro scaduti "+dueDatedFoods);
+		query.whereEqualTo(Constants.foodOwnerPO, user).whereNotContainedIn(Constants.foodStatusPO, Arrays.asList(statusList)).whereGreaterThan(Constants.foodDueDatePO, dueDatedFoods).orderByAscending(Constants.foodDueDatePO).setLimit(maxFoods);
 		query.setSkip(skippableItems);
 		long start=System.currentTimeMillis();
 		ArrayList<ParseObject> parseFoods=(ArrayList<ParseObject>) query.find();
@@ -106,13 +112,16 @@ public class FoodProxy {
 	}
 	
 	//LUCPEL
-	public ArrayList<Food> getFoods4Location(ParseObject user,Double latitude,Double longitude) 
+	public ArrayList<Food> getFoods4Location(ParseObject user,Double latitude,Double longitude,Double distance) 
 				throws ParseException, JsonParseException, JsonMappingException, JsonGenerationException, IOException, JSONException{
 			
 			ArrayList<Food> foods=new ArrayList<Food>();		
 			ParseGeoPoint userLocation = new ParseGeoPoint(latitude, longitude);
 			ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.foodObject);	
 			String[] statusList = {Constants.foodStatusScaduto, Constants.foodStatusAssegnato};
+			Calendar cal = Calendar.getInstance();
+			String dueDatedFoods=(String) DateFormat.format("yyyyMMdd", new GregorianCalendar(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)));
+			Log.d(logTag, "Filtro scaduti "+dueDatedFoods);
 			/* 
 			 * La query estrae i cinque foods vicino all'utente 
 			   che non abbiano come user l'utente stesso e che non siano scaduti.  
@@ -120,12 +129,12 @@ public class FoodProxy {
 			//.whereNear("location", userLocation)
 			if(latitude==0 || longitude==0){
 				query.whereNotEqualTo(Constants.foodOwnerPO, user)
-				.whereNotContainedIn(Constants.foodStatusPO, Arrays.asList(statusList)).orderByAscending(Constants.foodDueDatePO);
+				.whereNotContainedIn(Constants.foodStatusPO, Arrays.asList(statusList)).whereGreaterThan(Constants.foodDueDatePO, dueDatedFoods).orderByAscending(Constants.foodDueDatePO);
 			}
 			else{
-				query.whereWithinKilometers(Constants.locationObject, userLocation, 3)
+				query.whereWithinKilometers(Constants.locationObject, userLocation, distance)
 				.whereNotEqualTo(Constants.foodOwnerPO, user)
-				.whereNotContainedIn(Constants.foodStatusPO, Arrays.asList(statusList)).orderByAscending(Constants.foodDueDatePO);
+				.whereNotContainedIn(Constants.foodStatusPO, Arrays.asList(statusList)).whereGreaterThan(Constants.foodDueDatePO, dueDatedFoods).orderByAscending(Constants.foodDueDatePO);
 			}
 			query.setLimit(maxFoods);
 			ArrayList<ParseObject> parseFoods=(ArrayList<ParseObject>) query.find();

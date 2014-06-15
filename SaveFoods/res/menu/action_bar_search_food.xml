@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <item
+        android:id="@+id/action_minusZoom"
+        android:orderInCategory="1"
+        android:icon="@drawable/add_food_icon"
+        android:showAsAction="always"
+        android:title="@string/addFoodAB"/>
+    <item
+        android:id="@+id/action_plusZoom"
+        android:orderInCategory="2"
+        android:icon="@drawable/search_food_icon"
+        android:showAsAction="always"
+        android:title="@string/searchFoodAB"/>
+
+</menu>
