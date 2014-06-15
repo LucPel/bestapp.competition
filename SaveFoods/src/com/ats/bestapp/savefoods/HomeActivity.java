@@ -72,17 +72,36 @@ public class HomeActivity extends Activity {
 				SFApplication app=(SFApplication)getApplicationContext();
 				app.setUserLoggedIn(userPO);
 				new GetUserFoodTask().execute(userPO);
+				Log.d(logTag, "utenza esiistente"+userPO.toString());
 			}
 			else{
 				userProxy.saveNewUser((String) commonsData.get(Constants.userNameSP));
 				userPO=userProxy.getUserParseObject((String)commonsData.get(Constants.userNameSP));
 				SFApplication app=(SFApplication)getApplicationContext();
 				app.setUserLoggedIn(userPO);
+				Log.d(logTag, "inserito nuova utenza");
 				new GetUserFoodTask().execute(userPO);
 			}
 		} catch (ParseException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			if(e1.getMessage().equalsIgnoreCase("no results found for query")){
+				try {
+					userProxy.saveNewUser((String) commonsData.get(Constants.userNameSP));
+					ParseObject userPO=userProxy.getUserParseObject((String)commonsData.get(Constants.userNameSP));
+					SFApplication app=(SFApplication)getApplicationContext();
+					app.setUserLoggedIn(userPO);
+					Log.d(logTag, "inserito nuova utenza");
+					new GetUserFoodTask().execute(userPO);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			else{
+				e1.printStackTrace();
+				Log.d(logTag, e1.getMessage());
+			}
+			
 		}
 	}
 
