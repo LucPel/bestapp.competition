@@ -49,6 +49,8 @@ public class Constants {
 	public static final int standard_image_y_size = 375;
 	public static final int insert_image_x_size = 1000;
 	public static final int insert_image_y_size = 500;
+	public static final int minDistanceRange = 3;
+	public static final int maxDistanceRange = 81;
 	public static final String parseAppId="PlzFknCRYpaxv8Gec6I1aaIUs0BduoFn67fbOOla";
 	public static final String parseClientKey="lmYnJlEaVLHNHLfcdQSqGivcXLVqlKGcgT9XEqTp";
 	public static final String cat_bibita="Bibite";

@@ -58,6 +58,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 	private double currLatitude;
 	private double currLongitude;
 	private Double distanceToSearch=(double) 3;
+	private int distanceFactors=3;
 
 
 	@Override
@@ -244,16 +245,30 @@ public class SearchFoodsActivity extends FragmentActivity{
 
 	private void minusZoomSearch(){
 		SFApplication app=(SFApplication) getApplicationContext();
-		distanceToSearch=Double.valueOf(distanceToSearch/2);
-		Log.d(logTag, "Minus Zoom "+distanceToSearch);
-		new GetUserFoodTask(app.getUserLoggedIn(),currLatitude,currLongitude).execute();
+		if(distanceToSearch.intValue()>Constants.minDistanceRange){
+			distanceToSearch=Double.valueOf(distanceToSearch/distanceFactors);
+			Log.d(logTag, "Minus Zoom "+distanceToSearch);
+			searchTableAdapter.setDistanceToSearch(distanceToSearch);
+			new GetUserFoodTask(app.getUserLoggedIn(),currLatitude,currLongitude).execute();
+		}
+		else{
+			Toast.makeText(this, getResources().getString(R.string.minDistanceMessage), Toast.LENGTH_LONG)
+			.show();
+		}
 	}
 	
 	private void plusZoomSearch(){
 		SFApplication app=(SFApplication) getApplicationContext();
-		distanceToSearch=Double.valueOf(distanceToSearch*2);
-		Log.d(logTag, "Plus Zoom "+distanceToSearch);
-		new GetUserFoodTask(app.getUserLoggedIn(),currLatitude,currLongitude).execute();
+		if(distanceToSearch.intValue()<Constants.maxDistanceRange){
+			distanceToSearch=Double.valueOf(distanceToSearch*distanceFactors);
+			searchTableAdapter.setDistanceToSearch(distanceToSearch);
+			Log.d(logTag, "Plus Zoom "+distanceToSearch);
+			new GetUserFoodTask(app.getUserLoggedIn(),currLatitude,currLongitude).execute();
+		}
+		else{
+			Toast.makeText(this, getResources().getString(R.string.maxDistanceMessage), Toast.LENGTH_LONG)
+			.show();
+		}
 	}
 
 }

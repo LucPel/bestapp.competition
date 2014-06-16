@@ -291,10 +291,18 @@ public class FoodAssignmentActivity extends Activity{
 			push.sendInBackground();
 			ParsePush pushLonger=new ParsePush();
 			pushLonger.setChannel(Constants.foodBuyerChannelPrefix+food.getChannel());
-			//pushLonger.setMessage(comment.getMessage());
 			dt_longer.put(Constants.food_pn, food.getFoodId());
 			dt_longer.put(Constants.alert_pn, comment.getMessage());
 			dt_longer.put(Constants.title_pn, comment.getMessage());
+			if(food.getOwner().getUsername().equalsIgnoreCase(settings.getString(Constants.userNameSP, null))){
+				
+			}
+			else{
+				ParsePush pushLongerSeller=new ParsePush();
+				pushLongerSeller.setChannel(Constants.foodSellerChannelPrefix+food.getChannel());
+				pushLongerSeller.setData(dt_longer);
+				pushLongerSeller.sendInBackground();
+			}
 			pushLonger.setData(dt_longer);
 			pushLonger.sendInBackground();
 		} catch (JSONException e) {

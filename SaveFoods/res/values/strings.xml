@@ -19,6 +19,8 @@
     <string name="foodQuantityHint">Quantità</string>
     <string name="toastWorkInProgress">Funzionalità in rilascio</string>
     <string name="mySelfOwnerLabel">Io</string>
+    <string name="minDistanceMessage">Raggio di ricerca minimo 3Km</string>
+    <string name="maxDistanceMessage">Raggio di ricerca massimo 81Km</string>
     <string-array name="foodStatus">
       <item>Disponibile</item>
       <item>In Assegnazione</item>
