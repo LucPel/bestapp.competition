@@ -177,7 +177,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 			try {
 				Log.i(logTag, "Esecuzione query "+userPO);
 				Log.d(logTag, "Latitude:" +latitude);
-				foods = foodProxy.getFoods4Location(userPO,latitude,longitude,distanceToSearch);
+				foods = foodProxy.getFoods4Location(userPO,latitude,longitude,distanceToSearch,0);
 			} catch (JsonParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

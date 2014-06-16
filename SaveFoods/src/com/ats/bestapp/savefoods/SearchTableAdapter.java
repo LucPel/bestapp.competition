@@ -242,7 +242,7 @@ public class SearchTableAdapter extends BaseAdapter implements OnScrollListener 
 							.getApplicationContext();
 					GetUserFoodTask gust = new GetUserFoodTask(
 							app.getUserLoggedIn(), currentLatitude,
-							currentLongitude);
+							currentLongitude,totalItemCount);
 					gust.execute();
 				}
 			}
@@ -262,12 +262,14 @@ public class SearchTableAdapter extends BaseAdapter implements OnScrollListener 
 		ParseObject userPO;
 		double latitude;
 		double longitude;
+		int skipItems;
 
 		public GetUserFoodTask(ParseObject userPO_i, double latitude_i,
-				double longitude_i) {
+				double longitude_i,int skipItems_i) {
 			userPO = userPO_i;
 			latitude = latitude_i;
 			longitude = longitude_i;
+			skipItems=skipItems_i;
 		}
 
 		@Override
@@ -278,7 +280,7 @@ public class SearchTableAdapter extends BaseAdapter implements OnScrollListener 
 				Log.d(logTag, "Latitude:" + latitude);
 				FoodProxy foodProxy = new FoodProxy();
 				foods = foodProxy
-						.getFoods4Location(userPO, latitude, longitude,distanceToSearch);
+						.getFoods4Location(userPO, latitude, longitude,distanceToSearch,skipItems);
 			} catch (JsonParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -112,7 +112,7 @@ public class FoodProxy {
 	}
 	
 	//LUCPEL
-	public ArrayList<Food> getFoods4Location(ParseObject user,Double latitude,Double longitude,Double distance) 
+	public ArrayList<Food> getFoods4Location(ParseObject user,Double latitude,Double longitude,Double distance,int skippableItems) 
 				throws ParseException, JsonParseException, JsonMappingException, JsonGenerationException, IOException, JSONException{
 			
 			ArrayList<Food> foods=new ArrayList<Food>();		
@@ -137,6 +137,7 @@ public class FoodProxy {
 				.whereNotContainedIn(Constants.foodStatusPO, Arrays.asList(statusList)).whereGreaterThan(Constants.foodDueDatePO, dueDatedFoods).orderByAscending(Constants.foodDueDatePO);
 			}
 			query.setLimit(maxFoods);
+			query.setSkip(skippableItems);
 			ArrayList<ParseObject> parseFoods=(ArrayList<ParseObject>) query.find();
 			Log.d(logTag, String.valueOf(parseFoods.size()));
 			ObjectMapper mapper=new ObjectMapper();

@@ -4,13 +4,13 @@
     <item
         android:id="@+id/action_minusZoom"
         android:orderInCategory="1"
-        android:icon="@drawable/add_food_icon"
+        android:icon="@drawable/zoom_out_icon"
         android:showAsAction="always"
         android:title="@string/addFoodAB"/>
     <item
         android:id="@+id/action_plusZoom"
         android:orderInCategory="2"
-        android:icon="@drawable/search_food_icon"
+        android:icon="@drawable/zoom_in_icon"
         android:showAsAction="always"
         android:title="@string/searchFoodAB"/>
 
