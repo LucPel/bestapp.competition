@@ -105,6 +105,7 @@ public class FoodProxy {
 			JSONObject jsonComment=new JSONObject();
 			jsonComment.put(Constants.foodAssigmentCommentTextPO, currComment.getMessage());
 			jsonComment.put(Constants.foodAssigmentCommentUserPO, currComment.getUser().getUsername());
+			jsonComment.put(Constants.foodAssigmentCommentTimestampPO, currComment.getMessageTime());
 			commentArray.put(jsonComment);
 		}
 		foodPO.put(Constants.foodAssigmentCommentPO, commentArray);

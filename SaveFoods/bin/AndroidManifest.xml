@@ -6,7 +6,11 @@
 
     <uses-sdk
         android:minSdkVersion="11"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
+    
+     <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true"/>
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
@@ -20,6 +24,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
 
     <!--
   IMPORTANT: Change "com.parse.tutorials.pushnotifications.permission.C2D_MESSAGE" in the lines below
@@ -41,6 +46,7 @@
         <activity
             android:name="com.ats.bestapp.savefoods.LoginActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,13 +58,19 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <meta-data
+    		android:name="com.google.android.maps.v2.API_KEY"
+    		android:value="AIzaSyCM9HUHe3Ue7VpWazwWf0LZ5G8ni2Cr7x8"/>
 
         <activity
             android:name="HomeActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Savefoodab" >
         </activity>
         <activity
             android:name="AddFoodActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:parentActivityName="com.ats.bestapp.savefoods.HomeActivity"
             android:theme="@style/Theme.Savefoodab" >
              >
@@ -69,6 +81,7 @@
         </activity>
         <activity
             android:name="FoodAssignmentActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName="com.ats.bestapp.savefoods.HomeActivity"
             android:theme="@style/Theme.Savefoodab" >
             <meta-data
@@ -77,14 +90,16 @@
         </activity>
         <activity
             android:name="SearchFoodsActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName="com.ats.bestapp.savefoods.HomeActivity"
             android:theme="@style/Theme.Savefoodab" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ats.bestapp.savefoods.HomeActivity" />
         </activity>
-<activity android:name="FoodDetailsActivity"
+		<activity android:name="FoodDetailsActivity"
             android:theme="@style/Theme.Savefoodab"
+            android:screenOrientation="portrait"
             android:parentActivityName="com.ats.bestapp.savefoods.SearchFoodsActivity">
             <meta-data
             android:name="android.support.PARENT_ACTIVITY"
@@ -92,6 +107,7 @@
         </activity>
          <activity android:name="ChatNotOwnerFoodActivity"
             android:theme="@style/Theme.Savefoodab"
+            android:screenOrientation="portrait"
             android:parentActivityName="com.ats.bestapp.savefoods.FoodDetailsActivity">
             <meta-data
             android:name="android.support.PARENT_ACTIVITY"

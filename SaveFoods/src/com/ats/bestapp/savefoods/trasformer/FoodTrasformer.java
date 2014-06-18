@@ -122,6 +122,8 @@ public class FoodTrasformer {
 				usercomment.setUsername(currentComment
 						.getString(Constants.foodAssigmentCommentUserPO));
 				comment.setUser(usercomment);
+				comment.setMessageTime(currentComment
+						.getString(Constants.foodAssigmentCommentTimestampPO));
 				foodT.getSavingFoodAssignment().addComment(comment);
 			}
 		}

@@ -11,6 +11,7 @@ public class Constants {
 	public static final String foodAssigmentCommentPO="comment";
 	public static final String foodAssigmentCommentUserPO="user";
 	public static final String foodAssigmentCommentTextPO="commentText";
+	public static final String foodAssigmentCommentTimestampPO="commentTimestamp";
 	public static final String locationObject="location";
 	public static final String latitudeKey="Latitude";
 	public static final String longitudeKey="Longitude";

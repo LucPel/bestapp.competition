@@ -1,6 +1,9 @@
 package com.ats.bestapp.savefoods;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.ats.bestapp.savefoods.data.Comment;
@@ -9,6 +12,7 @@ import com.ats.bestapp.savefoods.utilities.Commons;
 import android.content.Context;
 import android.graphics.Color;
 import android.opengl.Visibility;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -95,13 +99,16 @@ public class CommentTableAdapter extends BaseAdapter {
 				.findViewById(R.id.comment_grid_item_text_user);
 		textUserView.setText(Commons.getUsernameShow(currComment.getUser().getUsername()));
 		textView.setText(currComment.getMessage());
+		TextView timestampText = (TextView) commentItemView
+				.findViewById(R.id.comment_grid_timestamp_text);
+		timestampText.setText(currComment.getMessageTime());
 		if (!owner.equalsIgnoreCase(currComment.getUser().getUsername())) {
 			commentItemView.setGravity(Gravity.RIGHT);
 			RelativeLayout chatBubbleView = (RelativeLayout) commentItemView
 					.findViewById(R.id.comment_grid_chat_bubble);
 			chatBubbleView.setBackgroundResource(R.drawable.chat_bubbles);
 			chatBubbleView.setPadding(15, 5, 15, 5);
-			textView.setTextColor(Color.parseColor("#ffffff"));
+			textView.setTextColor(Color.parseColor("#000000"));
 			textUserView.setTextColor(Color.parseColor("#ff0000"));
 		}
 		else{
@@ -111,7 +118,7 @@ public class CommentTableAdapter extends BaseAdapter {
 			chatBubbleView.setBackgroundResource(R.drawable.chat_bubbles_owner);
 			chatBubbleView.setPadding(15, 5, 15, 5);
 			textView.setTextColor(Color.parseColor("#000000"));
-			textUserView.setTextColor(Color.parseColor("#00ff00"));
+			textUserView.setTextColor(Color.parseColor("#ff9900"));
 			textView.setText(currComment.getMessage());
 		}
 	}

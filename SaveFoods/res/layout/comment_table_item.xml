@@ -33,12 +33,19 @@
             android:text="@+id/label"
             android:textColor="@android:color/black"
             android:textSize="15sp"/>
-
         
-         
+        <TextView
+            android:id="@+id/comment_grid_timestamp_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/comment_grid_item_text"
+            android:gravity="right"
+            android:layout_marginTop="5dp"
+            android:text="@+id/label"
+            android:textColor="@android:color/black"
+            android:textSize="10sp"/>
+
 
     </RelativeLayout>
         
-
-
 </RelativeLayout>

@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.math.RoundingMode;
 import java.security.acl.Owner;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -35,6 +38,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -287,7 +291,10 @@ public class FoodAssignmentActivity extends Activity{
 		if(comment_text.getText().toString().trim().length()!=0){
 			Comment comment=new Comment();
 			comment.setMessage(comment_text.getText().toString());
-			
+			SimpleDateFormat sdf=new SimpleDateFormat("dd/MM HH:mm");
+			String nowDateString=(String) sdf.format(new Date());
+			Log.d(logTag, "Filtro scaduti "+nowDateString);
+			comment.setMessageTime(nowDateString);
 			if(food.getOwner().getUsername().equalsIgnoreCase(settings.getString(Constants.userNameSP, null))){
 				comment.setUser(food.getOwner());
 			}
