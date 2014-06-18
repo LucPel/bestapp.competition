@@ -50,7 +50,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 	private UserProxy userProxy;
 	private FoodProxy foodProxy;
 	private ArrayList<Food> foods;
-	private LocationListenerWrapper locListenerWrap;
+	//private LocationListenerWrapper locListenerWrap;
 	private HashMap<String, Object> commonsData;
 	private SearchTableAdapter searchTableAdapter;
 	private ProgressDialog searchProgressDialog;
@@ -59,7 +59,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 	private double currLongitude;
 	private Double distanceToSearch=(double) 3;
 	private int distanceFactors=3;
-
+	private SFApplication  sfapp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,15 +68,16 @@ public class SearchFoodsActivity extends FragmentActivity{
 		init();
 		long start=System.currentTimeMillis();
 		boolean timeout=false;
-		if(locListenerWrap.getLatitude()==0){
-			while(locListenerWrap.getLatitude()==0 && !timeout){
+		
+		if(sfapp.getCurrentLatitude()==0){
+			while(sfapp.getCurrentLatitude()==0 && !timeout){
 				long diff_timeout=System.currentTimeMillis()-start;
 				Log.i(logTag, "Timeout "+diff_timeout);
 				if(diff_timeout>3000) timeout=true;
 			}
 		}
-		currLatitude=locListenerWrap.getLatitude();
-		currLongitude=locListenerWrap.getLongitude();
+		currLatitude=sfapp.getCurrentLatitude();
+		currLongitude=sfapp.getCurrentLongitude();
 		initMap();
 		SFApplication app=(SFApplication) getApplicationContext();
 		new GetUserFoodTask(app.getUserLoggedIn(),currLatitude,currLongitude).execute();
@@ -85,13 +86,13 @@ public class SearchFoodsActivity extends FragmentActivity{
 	 @Override
 	  protected void onResume() {
 	    super.onResume();
-	    locListenerWrap.requestLocationUpdates();
+	    //locListenerWrap.requestLocationUpdates();
 	  }
 	  
 	  @Override
 	  protected void onPause() {
 	    super.onPause();
-	    locListenerWrap.removeUpdates();
+	    //locListenerWrap.removeUpdates();
 	  }
 
 	  @Override
@@ -119,18 +120,19 @@ public class SearchFoodsActivity extends FragmentActivity{
 
 
 	private void init(){
-		locListenerWrap=new LocationListenerWrapper(this);
+		//locListenerWrap=new LocationListenerWrapper(this);
 		commonsData=new HashMap<String, Object>();
 		userProxy=new UserProxy();
 		foodProxy=new FoodProxy();
 		settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
-
+		sfapp=(SFApplication) getApplication();
 	}
 
 	private void fillGrid(){
 		GridView gridView = (GridView) findViewById(R.id.gridview);
 		if(searchTableAdapter==null){
-			searchTableAdapter=new SearchTableAdapter(this, foods,locListenerWrap.getLatitude(),locListenerWrap.getLongitude(),distanceToSearch);
+			
+			searchTableAdapter=new SearchTableAdapter(this, foods,sfapp.getCurrentLatitude(),sfapp.getCurrentLongitude(),distanceToSearch);
 		}
 		else{
 			searchTableAdapter.setFoods(foods);

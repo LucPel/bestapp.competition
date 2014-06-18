@@ -1,6 +1,7 @@
 package com.ats.bestapp.savefoods;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
@@ -23,6 +24,24 @@ public class LocationListenerWrapper implements LocationListener{
 	public LocationListenerWrapper(Activity activity){
 		linkedActivity=activity;
 		locationManager = (LocationManager) linkedActivity.getSystemService(Context.LOCATION_SERVICE);
+	    // Define the criteria how to select the locatioin provider -> use
+	    // default
+	    Criteria criteria = new Criteria();
+	    provider = locationManager.getBestProvider(criteria, false);
+	    Location location = locationManager.getLastKnownLocation(provider);
+
+	    // Initialize the location fields
+	    if (location != null) {
+	      Log.i(LogTag, "Provider " + provider + " has been selected.");
+	      onLocationChanged(location);
+	    }
+	    else{
+	    	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+	    }
+	}
+	
+	public LocationListenerWrapper(Application application){
+		locationManager = (LocationManager) application.getSystemService(Context.LOCATION_SERVICE);
 	    // Define the criteria how to select the locatioin provider -> use
 	    // default
 	    Criteria criteria = new Criteria();

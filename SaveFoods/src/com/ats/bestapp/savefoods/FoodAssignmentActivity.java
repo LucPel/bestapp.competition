@@ -1,6 +1,9 @@
 package com.ats.bestapp.savefoods;
 
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.security.acl.Owner;
+import java.text.DecimalFormat;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -30,6 +33,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -40,6 +44,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -102,6 +107,10 @@ public class FoodAssignmentActivity extends Activity{
 //			
 		
 			if(food.getOwner().getUsername().equalsIgnoreCase(settings.getString(Constants.userNameSP, null))){
+				ImageView distanceImg=(ImageView) findViewById(R.id.food_distance_image);
+				distanceImg.setVisibility(View.INVISIBLE);
+				TextView distanceLabel=(TextView) findViewById(R.id.food_distance_label);
+				distanceLabel.setVisibility(View.INVISIBLE);
 				TextView ownerLabel=(TextView) findViewById(R.id.food_owner_label);
 				ownerLabel.setText(getText(R.string.mySelfOwnerLabel));
 				Spinner statusSpinner=(Spinner)findViewById(R.id.food_status_spinner);
@@ -116,6 +125,23 @@ public class FoodAssignmentActivity extends Activity{
 			else{
 				TextView owner_label=(TextView) findViewById(R.id.food_owner_label);
 				owner_label.setText(food.getOwner().getUsername().substring(0, food.getOwner().getUsername().indexOf("@")));
+				RelativeLayout parent=(RelativeLayout) owner_label.getParent();
+				Spinner statusSpinner=(Spinner)findViewById(R.id.food_status_spinner);
+				parent.removeView(statusSpinner);
+				TextView distanceLabel=(TextView) findViewById(R.id.food_distance_label);
+				float[] results = new float[10];
+				double distance = 0;
+				Location.distanceBetween(food.getLatitude(), food.getLongitude(),
+						sfa.getCurrentLatitude(), sfa.getCurrentLongitude(), results);
+				distance = results[0];
+				distance = distance * 0.001;
+				DecimalFormat df = new DecimalFormat("##.##");
+				df.setRoundingMode(RoundingMode.DOWN);
+				if (distance > 0) {
+					distanceLabel.setText(df.format(distance) + "Km");
+				} else {
+					distanceLabel.setText("0Km");
+				}
 			}
 			EditText comment_text=(EditText) findViewById(R.id.comment_text);
 			comment_text.clearFocus();
@@ -151,6 +177,17 @@ public class FoodAssignmentActivity extends Activity{
 				e.printStackTrace();
 			}
 		}
+	    else{
+	    	try {
+				food=foodProxy.getFood(food.getFoodId());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    }
 	    settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
 	    IntentFilter filter = new IntentFilter(UpdateCommentsReceiver.UPDATE_COMMENTS);
         filter.addCategory(Intent.CATEGORY_DEFAULT);

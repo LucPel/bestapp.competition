@@ -13,12 +13,14 @@ public class SFApplication extends Application{
 
 	private ParseObject userLoggedIn;
 	private HashMap<String, Integer> categoriesIcon;
+	private LocationListenerWrapper llw;
 	
 	public void onCreate(){
 		Parse.initialize(this, Constants.parseAppId, Constants.parseClientKey);
 		PushService.setDefaultPushCallback(this, FoodAssignmentActivity.class);
 		// Save the current Installation to Parse.
 		ParseInstallation.getCurrentInstallation().saveInBackground();
+		llw=new LocationListenerWrapper(this);
 		setCategoriesIcon();
 	}
 
@@ -48,4 +50,13 @@ public class SFApplication extends Application{
 	public int getCategoryIcon(String catName){
 		return categoriesIcon.get(catName);
 	}
+	
+	public double getCurrentLatitude(){
+		return llw.getLatitude();
+	}
+	
+	public double getCurrentLongitude(){
+		return llw.getLongitude();
+	}
+	
 }

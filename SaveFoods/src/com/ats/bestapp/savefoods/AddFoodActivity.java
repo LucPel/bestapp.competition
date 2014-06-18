@@ -67,7 +67,7 @@ import com.parse.entity.mime.MIME;
 public class AddFoodActivity extends FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener,OnItemSelectedListener{
 
 	private HashMap<String, Object> commonsData;
-	private LocationListenerWrapper locListenerWrap;
+	//private LocationListenerWrapper locListenerWrap;
 	private FoodProxy fproxy;
 	private ProgressDialog progressDialog;
 	private FoodTrasformer ftrasformer;
@@ -88,7 +88,7 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 		EditText dueDate=(EditText)findViewById(R.id.food_due_date);
 		dueDate.clearComposingText();
 		dueDate.setText(DateFormat.format("dd-MM-yyyy", new GregorianCalendar(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))));
-		locListenerWrap=new LocationListenerWrapper(this);
+		//locListenerWrap=new LocationListenerWrapper(this);
 	}
 
 	@Override
@@ -114,9 +114,10 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 	
 	public void saveFood(View view){
 		startDialogLoading();
+		SFApplication sfapp=(SFApplication) getApplication();
 		try {
-			commonsData.put(Constants.latitudeKey, locListenerWrap.getLatitude());
-			commonsData.put(Constants.longitudeKey, locListenerWrap.getLongitude());
+			commonsData.put(Constants.latitudeKey, sfapp.getCurrentLatitude());
+			commonsData.put(Constants.longitudeKey, sfapp.getCurrentLongitude());
 			ParseObject user=null;
 			user=userProxy.getUserParseObject((String)commonsData.get(Constants.userNameSP));
 			ArrayList<byte[]> imagesByte=new ArrayList<byte[]>();
@@ -176,13 +177,13 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 	  @Override
 	  protected void onResume() {
 	    super.onResume();
-	    locListenerWrap.requestLocationUpdates();
+	    //locListenerWrap.requestLocationUpdates();
 	  }
 	  
 	  @Override
 	  protected void onPause() {
 	    super.onPause();
-	    locListenerWrap.removeUpdates();
+	    //locListenerWrap.removeUpdates();
 	  }
 	  
 	  private void init(){

@@ -138,6 +138,26 @@
                     android:layout_toRightOf="@id/food_quantity_label"
                     android:entries="@array/foodStatus"
                     android:visibility="invisible" />
+                
+                <ImageView
+        android:id="@+id/food_distance_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/food_quantity_label"
+        android:layout_alignBottom="@id/food_due_date_calendar_image"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/mini_gps_icon" />
+
+    <TextView
+        android:id="@+id/food_distance_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/food_distance_image"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/food_distance_image"
+        android:text="dist"
+        android:textSize="10sp"/>
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
