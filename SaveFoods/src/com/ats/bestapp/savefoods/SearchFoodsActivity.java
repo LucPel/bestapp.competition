@@ -77,6 +77,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 		}
 		currLatitude=locListenerWrap.getLatitude();
 		currLongitude=locListenerWrap.getLongitude();
+		initMap();
 		SFApplication app=(SFApplication) getApplicationContext();
 		new GetUserFoodTask(app.getUserLoggedIn(),currLatitude,currLongitude).execute();
 	}
@@ -123,6 +124,7 @@ public class SearchFoodsActivity extends FragmentActivity{
 		userProxy=new UserProxy();
 		foodProxy=new FoodProxy();
 		settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
+
 	}
 
 	private void fillGrid(){
@@ -213,6 +215,14 @@ public class SearchFoodsActivity extends FragmentActivity{
 
 	}
 
+	private void initMap(){
+		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+		LatLng food_point = new LatLng(currLatitude, currLongitude);
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(food_point, 15));
+		// Zoom in, animating the camera.
+		map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);	
+	}
+	
 	private void showMap(){
 		
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();

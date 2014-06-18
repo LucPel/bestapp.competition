@@ -46,6 +46,7 @@
         <activity
             android:name="com.ats.bestapp.savefoods.LoginActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,10 +64,13 @@
 
         <activity
             android:name="HomeActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Savefoodab" >
         </activity>
         <activity
             android:name="AddFoodActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:parentActivityName="com.ats.bestapp.savefoods.HomeActivity"
             android:theme="@style/Theme.Savefoodab" >
              >
@@ -77,6 +81,7 @@
         </activity>
         <activity
             android:name="FoodAssignmentActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName="com.ats.bestapp.savefoods.HomeActivity"
             android:theme="@style/Theme.Savefoodab" >
             <meta-data
@@ -85,14 +90,16 @@
         </activity>
         <activity
             android:name="SearchFoodsActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName="com.ats.bestapp.savefoods.HomeActivity"
             android:theme="@style/Theme.Savefoodab" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ats.bestapp.savefoods.HomeActivity" />
         </activity>
-<activity android:name="FoodDetailsActivity"
+		<activity android:name="FoodDetailsActivity"
             android:theme="@style/Theme.Savefoodab"
+            android:screenOrientation="portrait"
             android:parentActivityName="com.ats.bestapp.savefoods.SearchFoodsActivity">
             <meta-data
             android:name="android.support.PARENT_ACTIVITY"
@@ -100,6 +107,7 @@
         </activity>
          <activity android:name="ChatNotOwnerFoodActivity"
             android:theme="@style/Theme.Savefoodab"
+            android:screenOrientation="portrait"
             android:parentActivityName="com.ats.bestapp.savefoods.FoodDetailsActivity">
             <meta-data
             android:name="android.support.PARENT_ACTIVITY"

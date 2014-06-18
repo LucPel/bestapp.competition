@@ -16,6 +16,7 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
@@ -296,4 +297,15 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 			
 		}
 		
+		 @Override
+		    public void onConfigurationChanged(Configuration newConfig) {
+		        super.onConfigurationChanged(newConfig);
+		 
+		        // Checks the orientation of the screen for landscape and portrait
+		        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+		            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+		        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+		            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+		        }
+		    }
 }

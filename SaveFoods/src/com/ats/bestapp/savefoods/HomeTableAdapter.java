@@ -135,6 +135,7 @@ public class HomeTableAdapter extends BaseAdapter implements OnScrollListener{
 			if(image!=null){
 				imageView.setVisibility(View.VISIBLE);
 				imageView.setImageBitmap(Bitmap.createScaledBitmap(image, Constants.standard_image_x_size, Constants.standard_image_y_size, false));
+				
 			}
 			else{
 			}

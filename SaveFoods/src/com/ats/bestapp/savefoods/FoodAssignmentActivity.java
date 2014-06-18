@@ -60,7 +60,7 @@ public class FoodAssignmentActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_food_assigment);
 		init();
-	    Log.d(logTag, JsonMapper.convertObject2String(food));
+	    //Log.d(logTag, JsonMapper.convertObject2String(food));
 	    setViewComponents();
 		fillGrid();
 	}
@@ -135,6 +135,8 @@ public class FoodAssignmentActivity extends Activity{
 		foodProxy=new FoodProxy();
 		ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
+	    actionBar.setDisplayShowTitleEnabled(true);
+	    actionBar.setTitle(R.string.foodAssignmentABTitle);
 	    food=(Food) getIntent().getSerializableExtra(Constants.foodDetailSP);
 	    if(food==null){
 			try {
@@ -245,36 +247,39 @@ public class FoodAssignmentActivity extends Activity{
 	
 	public void sendComment(View view){
 		EditText comment_text=(EditText) findViewById(R.id.comment_text);
-		Comment comment=new Comment();
-		comment.setMessage(comment_text.getText().toString());
-		
-		if(food.getOwner().getUsername().equalsIgnoreCase(settings.getString(Constants.userNameSP, null))){
-			comment.setUser(food.getOwner());
-		}
-		else{
+		if(comment_text.getText().toString().trim().length()!=0){
+			Comment comment=new Comment();
+			comment.setMessage(comment_text.getText().toString());
+			
+			if(food.getOwner().getUsername().equalsIgnoreCase(settings.getString(Constants.userNameSP, null))){
+				comment.setUser(food.getOwner());
+			}
+			else{
+				try {
+					User user=userProxy.getUser(settings.getString(Constants.userNameSP, null), this);
+					comment.setUser(user);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(food.getSavingFoodAssignment()==null){
+				food.setSavingFoodAssignment(new SavingFoodAssignment());
+			}
+			food.getSavingFoodAssignment().addComment(comment);
 			try {
-				User user=userProxy.getUser(settings.getString(Constants.userNameSP, null), this);
-				comment.setUser(user);
-			} catch (ParseException e) {
+				foodProxy.addCommentToAssigment(food);
+				commentTableAdapter.setComments(food.getSavingFoodAssignment().getConversation());
+				commentTableAdapter.notifyDataSetChanged();
+				comment_text.setText("");
+				comment_text.clearFocus();
+				sendPushNotification(comment);
+			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		if(food.getSavingFoodAssignment()==null){
-			food.setSavingFoodAssignment(new SavingFoodAssignment());
-		}
-		food.getSavingFoodAssignment().addComment(comment);
-		try {
-			foodProxy.addCommentToAssigment(food);
-			commentTableAdapter.setComments(food.getSavingFoodAssignment().getConversation());
-			commentTableAdapter.notifyDataSetChanged();
-			comment_text.setText("");
-			comment_text.clearFocus();
-			sendPushNotification(comment);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 	
 	private void sendPushNotification(Comment comment){
