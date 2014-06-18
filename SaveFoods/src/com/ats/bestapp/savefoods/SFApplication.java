@@ -42,6 +42,7 @@ public class SFApplication extends Application{
 		categoriesIcon.put(Constants.cat_legumi, R.drawable.cat_legumi_icon);
 		categoriesIcon.put(Constants.cat_pesce, R.drawable.cat_pesce_icon);
 		categoriesIcon.put(Constants.cat_verdura, R.drawable.cat_verdura_icon);
+		categoriesIcon.put(Constants.cat_dolce, R.drawable.cat_dolci_icon);
 	}
 	
 	public int getCategoryIcon(String catName){

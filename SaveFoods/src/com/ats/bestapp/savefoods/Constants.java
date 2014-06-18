@@ -63,6 +63,7 @@ public class Constants {
 	public static final String cat_cereali="Cereali";
 	public static final String cat_legumi="Legumi";
 	public static final String cat_farinaceo="Farinaceo";
+	public static final String cat_dolce="Dolce";
 
 	
 }
