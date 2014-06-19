@@ -23,6 +23,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -106,6 +107,9 @@ public class SearchFoodsActivity extends FragmentActivity{
 		public boolean onOptionsItemSelected(MenuItem item) {
 			// Handle presses on the action bar items
 			switch (item.getItemId()) {
+			 case android.R.id.home:
+		        	onBackPressed();
+		            return true;
 			case R.id.action_minusZoom:
 				minusZoomSearch();
 				return true;
@@ -126,6 +130,8 @@ public class SearchFoodsActivity extends FragmentActivity{
 		foodProxy=new FoodProxy();
 		settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
 		sfapp=(SFApplication) getApplication();
+		ActionBar actionBar = getActionBar();
+	    actionBar.setDisplayHomeAsUpEnabled(true);
 	}
 
 	private void fillGrid(){

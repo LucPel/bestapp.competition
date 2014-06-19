@@ -40,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/comment_grid_item_text"
             android:gravity="right"
+            android:textAlignment="gravity"
             android:layout_marginTop="5dp"
             android:text="@+id/label"
             android:textColor="@android:color/black"
