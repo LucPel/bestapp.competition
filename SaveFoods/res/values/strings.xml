@@ -22,6 +22,8 @@
     <string name="foodAssignmentABTitle">Assegnazione Alimento</string>
     <string name="minDistanceMessage">Raggio di ricerca minimo 3Km</string>
     <string name="maxDistanceMessage">Raggio di ricerca massimo 81Km</string>
+    <string name="startSavingFoodMessage">Inizio Salvataggio Alimento</string>
+    <string name="endSavingFoodMessage">Salvataggio avvenuto con successo</string>
     <string-array name="foodStatus">
       <item>Disponibile</item>
       <item>In Assegnazione</item>

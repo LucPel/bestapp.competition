@@ -218,44 +218,25 @@ public class HomeActivity extends Activity {
 		} else if (requestCode == Constants.ADD_FOOD_REQUEST_CODE
 				&& responseCode == Constants.ADD_FOOD_RESPONSE_CODE) {
 
-			try {
+	
 				SFApplication app=(SFApplication)getApplicationContext();
-				foods = foodProxy.getFoods4User(app.getUserLoggedIn(),0);
-				if (homeTableAdapter == null) {
+				new GetUserFoodTask().execute(app.getUserLoggedIn());
+				//foods = foodProxy.getFoods4User(app.getUserLoggedIn(),0);
+				/*if (homeTableAdapter == null) {
 					homeTableAdapter = new HomeTableAdapter(this, foods);
 				} else {
 					//homeTableAdapter.setFoods(foods);
-				}
-				GridView gridView = (GridView) findViewById(R.id.gridview);
+				}*/
+				/*GridView gridView = (GridView) findViewById(R.id.gridview);
 				if(gridView.getVisibility()==View.INVISIBLE){
 					gridView.setVisibility(View.VISIBLE);
 					RelativeLayout parent_lay=(RelativeLayout)findViewById(R.id.home_main_lay);
 					RelativeLayout to_remove=(RelativeLayout)findViewById(R.id.grid_item_empty_lay);
 					parent_lay.removeView(to_remove);
-				}
+				}*/
 				//homeTableAdapter.notifyDataSetChanged();
 				//gridView.setAdapter(homeTableAdapter);
-				fillGrid();
-			} catch (JsonParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonGenerationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+				//fillGrid();
 		}
 	}
 
@@ -312,6 +293,13 @@ public class HomeActivity extends Activity {
 				addEmptyGrid();
 			}
 			else{
+				GridView gridView = (GridView) findViewById(R.id.gridview);
+				if(gridView.getVisibility()==View.INVISIBLE){
+					gridView.setVisibility(View.VISIBLE);
+					RelativeLayout parent_lay=(RelativeLayout)findViewById(R.id.home_main_lay);
+					RelativeLayout to_remove=(RelativeLayout)findViewById(R.id.grid_item_empty_lay);
+					parent_lay.removeView(to_remove);
+				}
 				fillGrid();
 			}
 			

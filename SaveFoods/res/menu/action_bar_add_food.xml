@@ -7,4 +7,11 @@
         android:showAsAction="always"
         android:title="@string/addFoodAB"/>
     
+    <item
+        android:id="@+id/action_saveFoodItem"
+        android:orderInCategory="2"
+        android:icon="@drawable/save_food_ab_icon"
+        android:showAsAction="always"
+        android:title="@string/addFoodAB"/>
+    
  </menu>

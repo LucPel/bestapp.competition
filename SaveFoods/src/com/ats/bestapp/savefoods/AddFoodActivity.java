@@ -107,13 +107,18 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 	            return true;
 	        case R.id.action_addFoodPhoto :
 	        	addImage();
+	        	return true;
+	        case R.id.action_saveFoodItem :
+	        	saveFood(getWindow().getDecorView());
+	        	return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
 	
 	public void saveFood(View view){
-		startDialogLoading();
+		Toast.makeText(this, getResources().getString(R.string.startSavingFoodMessage), Toast.LENGTH_LONG)
+		.show();
 		SFApplication sfapp=(SFApplication) getApplication();
 		try {
 			commonsData.put(Constants.latitudeKey, sfapp.getCurrentLatitude());
@@ -129,13 +134,13 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 			fproxy.addFood(food);
 			PushService.subscribe(this, Constants.foodSellerChannelPrefix+food.getString(Constants.foodChannelPO), FoodAssignmentActivity.class);
 			if(shareable){
-				progressDialog.dismiss();
 				shareOnGPlus();
 			}
 			else{
 				Intent intent_back = new Intent();
 				setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent_back);
-				progressDialog.dismiss();
+				Toast.makeText(this, getResources().getString(R.string.endSavingFoodMessage), Toast.LENGTH_LONG)
+				.show();
 				finish();
 			}
 			
@@ -226,6 +231,7 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 	                       imegesUri.get(imegesUri.size()-1).getPath(), Toast.LENGTH_LONG).show();
 	              Bitmap ThumbImage = MediaFile.bitmapResized(imegesUri.get(imegesUri.size()-1),Constants.insert_image_x_size, Constants.insert_image_y_size);
 	              ImageView foodImage = (ImageView) findViewById(R.id.imageFood);
+	              foodImage.setVisibility(View.VISIBLE);
 	              foodImage.setImageBitmap(ThumbImage);
 	          } else if (resultCode == RESULT_CANCELED) {
 	        	  
@@ -235,14 +241,7 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 	      }
 	  }
 	  
-		private void startDialogLoading() {
-			progressDialog = new ProgressDialog(this);
-			progressDialog.setMessage("Loading");
-			progressDialog.setProgressStyle(ProgressDialog.THEME_HOLO_LIGHT);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
-		}
-		
+
 		private void shareOnGPlus(){
 			
 		mPlusClient = new PlusClient.Builder(this, this, this).setActions(
@@ -274,6 +273,8 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 			
 		Intent intent_back = new Intent();
 		setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent_back);
+		Toast.makeText(this, getResources().getString(R.string.endSavingFoodMessage), Toast.LENGTH_LONG)
+		.show();
 		finish();
 			
 		}

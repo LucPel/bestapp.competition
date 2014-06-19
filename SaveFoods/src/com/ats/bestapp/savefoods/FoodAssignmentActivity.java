@@ -225,28 +225,28 @@ public class FoodAssignmentActivity extends Activity{
 	
 	public void onPause(){
 		Log.d(logTag, "Pause: ");
-		unregisterChatChannel();
+		//unregisterChatChannel();
 		super.onPause();
 		
 	}
 	
 	public void onResume(){
 		Log.d(logTag, "Resume: ");
-		registerChatChannel();
+		//registerChatChannel();
 		super.onResume();
 		
 	}
 	
 	public void onRestart(){
 		Log.d(logTag, "Restart	: ");
-		registerChatChannel();
+		//registerChatChannel();
 		super.onRestart();
 		
 	}
 	
 	public void onStop(){
 		Log.d(logTag, "Stop: ");
-		unregisterChatChannel();
+		//unregisterChatChannel();
 		super.onStop();
 		
 	}
@@ -362,6 +362,8 @@ public class FoodAssignmentActivity extends Activity{
 
 	}
 	
+
+	
 	private void fillGrid(){
 		GridView gridView = (GridView) findViewById(R.id.gridviewComment);
 		if(commentTableAdapter==null){
@@ -379,6 +381,7 @@ public class FoodAssignmentActivity extends Activity{
 		Intent intent = new Intent();
 		intent.putExtra(Constants.foodDetailSP, food);
 		setResult(RESULT_OK, intent);
+		unregisterChatChannel();
 		Log.d(logTag, "OnBackPressed: "+food.getStatus());
 	    finish();
 	}
