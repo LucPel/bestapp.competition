@@ -127,14 +127,15 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 			Log.d(logTag, JsonMapper.convertObject2String(imagesByte));
 			food=ftrasformer.trasformInFood(view.getRootView(), commonsData,imagesByte,user);
 			fproxy.addFood(food);
-			progressDialog.dismiss();
 			PushService.subscribe(this, Constants.foodSellerChannelPrefix+food.getString(Constants.foodChannelPO), FoodAssignmentActivity.class);
 			if(shareable){
+				progressDialog.dismiss();
 				shareOnGPlus();
 			}
 			else{
 				Intent intent_back = new Intent();
 				setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent_back);
+				progressDialog.dismiss();
 				finish();
 			}
 			
