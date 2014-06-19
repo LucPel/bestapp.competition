@@ -317,6 +317,8 @@ public class FoodAssignmentActivity extends Activity{
 				commentTableAdapter.notifyDataSetChanged();
 				comment_text.setText("");
 				comment_text.clearFocus();
+				GridView gridView = (GridView) findViewById(R.id.gridviewComment);
+				gridView.setSelection(commentTableAdapter.getCount()-1);
 				sendPushNotification(comment);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -336,7 +338,6 @@ public class FoodAssignmentActivity extends Activity{
 			push.setChannel(Constants.chatChannelPrefix+food.getChannel());
 			//push.setMessage(comment.getMessage());
 			push.setData(dt);
-			push.setExpirationTimeInterval(60);
 			push.sendInBackground();
 			ParsePush pushLonger=new ParsePush();
 			pushLonger.setChannel(Constants.foodBuyerChannelPrefix+food.getChannel());
@@ -370,6 +371,7 @@ public class FoodAssignmentActivity extends Activity{
 			commentTableAdapter.setComments(food.getSavingFoodAssignment().getConversation());
 		}
 		gridView.setAdapter(commentTableAdapter);
+		gridView.setSelection(commentTableAdapter.getCount()-1);
 	}
 	
 	@Override
