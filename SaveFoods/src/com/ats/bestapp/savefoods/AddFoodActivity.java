@@ -14,6 +14,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -64,10 +65,11 @@ import com.parse.ParseObject;
 import com.parse.PushService;
 import com.parse.entity.mime.MIME;
 
-public class AddFoodActivity extends FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener,OnItemSelectedListener{
+public class AddFoodActivity extends FragmentActivity implements
+		ConnectionCallbacks, OnConnectionFailedListener, OnItemSelectedListener {
 
 	private HashMap<String, Object> commonsData;
-	//private LocationListenerWrapper locListenerWrap;
+	// private LocationListenerWrapper locListenerWrap;
 	private FoodProxy fproxy;
 	private ProgressDialog progressDialog;
 	private FoodTrasformer ftrasformer;
@@ -76,19 +78,22 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 	private PlusClient mPlusClient;
 	private UserTransformer userTrasformer;
 	private ArrayList<Uri> imegesUri;
-	private String logTag="AddFoodActivity";
-	private boolean shareable=false;
-	
+	private String logTag = "AddFoodActivity";
+	private boolean shareable = false;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_food);
 		init();
 		Calendar cal = Calendar.getInstance();
-		EditText dueDate=(EditText)findViewById(R.id.food_due_date);
+		EditText dueDate = (EditText) findViewById(R.id.food_due_date);
 		dueDate.clearComposingText();
-		dueDate.setText(DateFormat.format("dd-MM-yyyy", new GregorianCalendar(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))));
-		//locListenerWrap=new LocationListenerWrapper(this);
+		dueDate.setText(DateFormat.format(
+				"dd-MM-yyyy",
+				new GregorianCalendar(cal.get(Calendar.YEAR), cal
+						.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))));
+		// locListenerWrap=new LocationListenerWrapper(this);
 	}
 
 	@Override
@@ -97,53 +102,61 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 		getMenuInflater().inflate(R.menu.action_bar_add_food, menu);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle presses on the action bar items
-	    switch (item.getItemId()) {
-	        case android.R.id.home:
-	        	onBackPressed();
-	            return true;
-	        case R.id.action_addFoodPhoto :
-	        	addImage();
-	        	return true;
-	        case R.id.action_saveFoodItem :
-	        	saveFood(getWindow().getDecorView());
-	        	return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			onBackPressed();
+			return true;
+		case R.id.action_addFoodPhoto:
+			addImage();
+			return true;
+		case R.id.action_saveFoodItem:
+			saveFood(getWindow().getDecorView());
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
-	
-	public void saveFood(View view){
-		Toast.makeText(this, getResources().getString(R.string.startSavingFoodMessage), Toast.LENGTH_LONG)
-		.show();
-		SFApplication sfapp=(SFApplication) getApplication();
+
+	public void saveFood(View view) {
+		Toast.makeText(this,
+				getResources().getString(R.string.startSavingFoodMessage),
+				Toast.LENGTH_LONG).show();
+		SFApplication sfapp = (SFApplication) getApplication();
 		try {
 			commonsData.put(Constants.latitudeKey, sfapp.getCurrentLatitude());
-			commonsData.put(Constants.longitudeKey, sfapp.getCurrentLongitude());
-			ParseObject user=null;
-			user=userProxy.getUserParseObject((String)commonsData.get(Constants.userNameSP));
-			ArrayList<byte[]> imagesByte=new ArrayList<byte[]>();
-			for(Uri currentUri : imegesUri){
-				imagesByte.add(MediaFile.bitmapResized2Bytes(currentUri, 256, 256));		
+			commonsData
+					.put(Constants.longitudeKey, sfapp.getCurrentLongitude());
+			ParseObject user = null;
+			user = userProxy.getUserParseObject((String) commonsData
+					.get(Constants.userNameSP));
+			ArrayList<byte[]> imagesByte = new ArrayList<byte[]>();
+			for (Uri currentUri : imegesUri) {
+				imagesByte.add(MediaFile.bitmapResized2Bytes(currentUri, 256,
+						256));
 			}
 			Log.d(logTag, JsonMapper.convertObject2String(imagesByte));
-			food=ftrasformer.trasformInFood(view.getRootView(), commonsData,imagesByte,user);
+			food = ftrasformer.trasformInFood(view.getRootView(), commonsData,
+					imagesByte, user);
 			fproxy.addFood(food);
-			PushService.subscribe(this, Constants.foodSellerChannelPrefix+food.getString(Constants.foodChannelPO), FoodAssignmentActivity.class);
-			if(shareable){
+			PushService.subscribe(this, Constants.foodSellerChannelPrefix
+					+ food.getString(Constants.foodChannelPO),
+					FoodAssignmentActivity.class);
+			if (shareable) {
 				shareOnGPlus();
-			}
-			else{
+			} else {
 				Intent intent_back = new Intent();
 				setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent_back);
-				Toast.makeText(this, getResources().getString(R.string.endSavingFoodMessage), Toast.LENGTH_LONG)
-				.show();
+				Toast.makeText(
+						this,
+						getResources().getString(R.string.endSavingFoodMessage),
+						Toast.LENGTH_LONG).show();
 				finish();
 			}
-			
+
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -161,89 +174,104 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 			e.printStackTrace();
 		}
 	}
-	
-	
-	public void showDatePickerDialog(View view){
-		DialogFragment newFragment = new DatePickerDialogFragment((EditText)view);
-	    newFragment.show(getSupportFragmentManager(), "datePicker");
-	}
-	
-	public void isShareable(View view){
-		Button shareTB=(Button) findViewById(R.id.share_tb);
-		if(!shareable){
-			shareTB.setBackgroundResource(R.drawable.google_plus_press);
-			shareable=true;
-		}
-		else{
-			shareTB.setBackgroundResource(R.drawable.google_plus);
-			shareable=false;
-		}
-	}
-	
-	  @Override
-	  protected void onResume() {
-	    super.onResume();
-	    //locListenerWrap.requestLocationUpdates();
-	  }
-	  
-	  @Override
-	  protected void onPause() {
-	    super.onPause();
-	    //locListenerWrap.removeUpdates();
-	  }
-	  
-	  private void init(){
-		fproxy=new FoodProxy();
-		ftrasformer=new FoodTrasformer();
-		userTrasformer=new UserTransformer();
-		userProxy=new UserProxy();
-		imegesUri=new ArrayList<Uri>();
-		ActionBar actionBar = getActionBar();
-	    actionBar.setDisplayHomeAsUpEnabled(true);
-	    SharedPreferences settings = getSharedPreferences(Constants.sharedPreferencesName, 0);
-		commonsData=new HashMap<String, Object>();
-		commonsData.put(Constants.userNameSP, settings.getString(Constants.userNameSP, null));
-		commonsData.put(Constants.userIdSP, settings.getString(Constants.userIdSP, null));
-		Spinner categorySpinner=(Spinner)findViewById(R.id.food_category_spinner);
-		categorySpinner.setOnItemSelectedListener(this);
-	  }
-	  
-	  public void addImage(){
-		  Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		  Uri fileUri = MediaFile.getOutputMediaFileUri(MediaFile.MEDIA_TYPE_IMAGE); // create a file to save the image
-		  Log.d(logTag, "URI gen "+fileUri.getPath());
-		  if(fileUri!=null){
-			  imegesUri.add(fileUri);
-			  Log.d(logTag, "URI gen "+fileUri.getPath());
-			  intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-			    // start the image capture Intent
-			  startActivityForResult(intent, Constants.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-		  }
-		 
-	  }
-	  
-	  @Override
-	  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	      if (requestCode == Constants.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-	          if (resultCode == RESULT_OK) {
-	              // Image captured and saved to fileUri specified in the Intent
-	              Toast.makeText(this, "Image saved to:\n" +
-	                       imegesUri.get(imegesUri.size()-1).getPath(), Toast.LENGTH_LONG).show();
-	              Bitmap ThumbImage = MediaFile.bitmapResized(imegesUri.get(imegesUri.size()-1),Constants.insert_image_x_size, Constants.insert_image_y_size);
-	              ImageView foodImage = (ImageView) findViewById(R.id.imageFood);
-	              foodImage.setVisibility(View.VISIBLE);
-	              foodImage.setImageBitmap(ThumbImage);
-	          } else if (resultCode == RESULT_CANCELED) {
-	        	  
-	          } else {
-	        	  Toast.makeText(this, "Error during image saving", Toast.LENGTH_LONG).show();
-	          }
-	      }
-	  }
-	  
 
-		private void shareOnGPlus(){
-			
+	public void showDatePickerDialog(View view) {
+		DialogFragment newFragment = new DatePickerDialogFragment(
+				(EditText) view);
+		newFragment.show(getSupportFragmentManager(), "datePicker");
+	}
+
+	public void isShareable(View view) {
+		Button shareTB = (Button) findViewById(R.id.share_tb);
+		if (!shareable) {
+			shareTB.setBackgroundResource(R.drawable.google_plus_press);
+			shareable = true;
+		} else {
+			shareTB.setBackgroundResource(R.drawable.google_plus);
+			shareable = false;
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		// locListenerWrap.requestLocationUpdates();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		// locListenerWrap.removeUpdates();
+	}
+
+	private void init() {
+		fproxy = new FoodProxy();
+		ftrasformer = new FoodTrasformer();
+		userTrasformer = new UserTransformer();
+		userProxy = new UserProxy();
+		imegesUri = new ArrayList<Uri>();
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		SharedPreferences settings = getSharedPreferences(
+				Constants.sharedPreferencesName, 0);
+		commonsData = new HashMap<String, Object>();
+		commonsData.put(Constants.userNameSP,
+				settings.getString(Constants.userNameSP, null));
+		commonsData.put(Constants.userIdSP,
+				settings.getString(Constants.userIdSP, null));
+		Spinner categorySpinner = (Spinner) findViewById(R.id.food_category_spinner);
+		categorySpinner.setOnItemSelectedListener(this);
+	}
+
+	public void addImage() {
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		Uri fileUri = MediaFile
+				.getOutputMediaFileUri(MediaFile.MEDIA_TYPE_IMAGE); // create a
+																	// file to
+																	// save the
+																	// image
+		Log.d(logTag, "URI gen " + fileUri.getPath());
+		if (fileUri != null) {
+			imegesUri.add(fileUri);
+			Log.d(logTag, "URI gen " + fileUri.getPath());
+			intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image
+																// file name
+			// start the image capture Intent
+			startActivityForResult(intent,
+					Constants.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+		}
+
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		 super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == Constants.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+			if (resultCode == RESULT_OK) {
+				// Image captured and saved to fileUri specified in the Intent
+				Toast.makeText(
+						this,
+						"Image saved to:\n"
+								+ imegesUri.get(imegesUri.size() - 1).getPath(),
+						Toast.LENGTH_LONG).show();
+				Bitmap ThumbImage = MediaFile.bitmapResized(
+						imegesUri.get(imegesUri.size() - 1),
+						Constants.insert_image_x_size,
+						Constants.insert_image_y_size);
+				ImageView foodImage = (ImageView) findViewById(R.id.imageFood);
+				foodImage.setVisibility(View.VISIBLE);
+				foodImage.setImageBitmap(ThumbImage);
+			} else if (resultCode == RESULT_CANCELED) {
+
+			} else {
+				Toast.makeText(this, "Error during image saving",
+						Toast.LENGTH_LONG).show();
+			}
+		}
+	}
+
+	private void shareOnGPlus() {
+
 		mPlusClient = new PlusClient.Builder(this, this, this).setActions(
 				"http://schemas.google.com/AddActivity",
 				"http://schemas.google.com/BuyActivity")
@@ -252,63 +280,105 @@ public class AddFoodActivity extends FragmentActivity implements ConnectionCallb
 		// .setScopes("profile") // alternative basic login scope
 				.build();
 		mPlusClient.connect();
-				
-	    }
 
-		@Override
-		public void onConnectionFailed(ConnectionResult arg0) {
-			// TODO Auto-generated method stub
-			
+	}
+
+	@Override
+	public void onConnectionFailed(ConnectionResult arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onConnected(Bundle arg0) {
+
+		Uri imageFood = imegesUri.get(0);
+		if (imageFood == null) {
+			shareGPlusWithoutImage();
 		}
-
-		@Override
-		public void onConnected(Bundle arg0) {
-			 Intent shareIntent = new PlusShare.Builder(this)
-	          .setType("text/plain")
-	          .setText("Salva il mio alimento "+food.getString(Constants.foodNamePO)+" che scade il "+Commons.convertToDate(food.getString(Constants.foodDueDatePO)))
-	          .setContentUrl(Uri.parse("https://developers.google.com/+/"))
-	          .getIntent();
-
-	      startActivityForResult(shareIntent, 0);
-			
-		Intent intent_back = new Intent();
-		setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent_back);
-		Toast.makeText(this, getResources().getString(R.string.endSavingFoodMessage), Toast.LENGTH_LONG)
-		.show();
-		finish();
-			
-		}
-
-		@Override
-		public void onDisconnected() {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onItemSelected(AdapterView<?> aview, View view, int position,
-				long id) {
-			String cat_value=aview.getItemAtPosition(position).toString();
-			ImageView catImageView = (ImageView) findViewById(R.id.imageCategoryFood);
-			SFApplication sfa=(SFApplication) getApplication();
-			catImageView.setImageResource(sfa.getCategoryIcon(cat_value));	
-		}
-
-		@Override
-		public void onNothingSelected(AdapterView<?> arg0) {
-			// TODO Auto-generated method stub
-			
+		else{
+			shareGPlusWithImage(imageFood);
 		}
 		
-		 @Override
-		    public void onConfigurationChanged(Configuration newConfig) {
-		        super.onConfigurationChanged(newConfig);
-		 
-		        // Checks the orientation of the screen for landscape and portrait
-		        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-		            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
-		        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-		            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
-		        }
-		    }
+	}
+
+	private void shareGPlusWithImage(Uri imageFood){
+		ContentResolver cr = this.getContentResolver();
+		String mime = cr.getType(imageFood);
+		Log.d(logTag, "Mime Type "+mime);
+		PlusShare.Builder share = new PlusShare.Builder(this)
+				.setText(
+						"Salva il mio alimento "
+								+ food.getString(Constants.foodNamePO)
+								+ " che scade il "
+								+ Commons.convertToDate(food
+										.getString(Constants.foodDueDatePO)))
+				.setStream(imageFood)
+				.setType(Constants.gp_mime_jpg_type);
+
+		startActivityForResult(share.getIntent(), 0);
+
+		Intent intent_back = new Intent();
+		setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent_back);
+		Toast.makeText(this,
+				getResources().getString(R.string.endSavingFoodMessage),
+				Toast.LENGTH_LONG).show();
+		finish();
+
+	}
+	
+	private void shareGPlusWithoutImage() {
+		Intent shareIntent = new PlusShare.Builder(this)
+				.setType("text/plain")
+				.setText(
+						"Salva il mio alimento "
+								+ food.getString(Constants.foodNamePO)
+								+ " che scade il "
+								+ Commons.convertToDate(food
+										.getString(Constants.foodDueDatePO)))
+				.setContentUrl(Uri.parse("https://developers.google.com/+/"))
+				.getIntent();
+
+		startActivityForResult(shareIntent, 0);
+
+		Intent intent_back = new Intent();
+		setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent_back);
+		Toast.makeText(this,
+				getResources().getString(R.string.endSavingFoodMessage),
+				Toast.LENGTH_LONG).show();
+		finish();
+	}
+
+	@Override
+	public void onDisconnected() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> aview, View view, int position,
+			long id) {
+		String cat_value = aview.getItemAtPosition(position).toString();
+		ImageView catImageView = (ImageView) findViewById(R.id.imageCategoryFood);
+		SFApplication sfa = (SFApplication) getApplication();
+		catImageView.setImageResource(sfa.getCategoryIcon(cat_value));
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+
+		// Checks the orientation of the screen for landscape and portrait
+		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+		} else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+			Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+		}
+	}
 }
