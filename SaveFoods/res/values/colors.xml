@@ -5,4 +5,5 @@
     <color name="black">#000000</color>
     <color name="red_user_comment">#ff0000</color>
     <color name="lime_owner_comment">#00ff00</color>
+    <color name="orangeText">#ff9900</color> 
 </resources>
