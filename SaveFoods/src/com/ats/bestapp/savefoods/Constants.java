@@ -19,6 +19,7 @@ public class Constants {
 	public static final String usernamePO="username";
 	public static final String foodNamePO="name";
 	public static final String foodStatusPO="status";
+	public static final String foodIdPO="foodID";
 	public static final String foodDescritpionPO="description";
 	public static final String foodCategoryPO="type";
 	public static final String foodChannelPO="channel";
@@ -45,9 +46,13 @@ public class Constants {
 	public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 	public static final int FOOD_DETAIL_REQUEST_CODE = 100;
 	public static final int ADD_FOOD_REQUEST_CODE = 101;
+	public static final int UPDATE_FOOD_REQUEST_CODE = 102;
 	public static final int ADD_FOOD_RESPONSE_CODE = 201;
+	public static final int UPDATE_FOOD_RESPONSE_CODE = 202;
 	public static final int standard_image_x_size = 575;
 	public static final int standard_image_y_size = 375;
+	public static final int resized_image_x_size = 256;
+	public static final int resized_image_y_size = 256;
 	public static final int insert_image_x_size = 600;
 	public static final int insert_image_y_size = 400;
 	public static final String gp_mime_jpg_type = "image/jpg";

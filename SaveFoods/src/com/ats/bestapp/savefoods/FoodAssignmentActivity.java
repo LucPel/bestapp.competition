@@ -262,7 +262,9 @@ public class FoodAssignmentActivity extends Activity{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		//getMenuInflater().inflate(R.menu.action_bar, menu);
+		if(food.getOwner().getUsername().equalsIgnoreCase(settings.getString(Constants.userNameSP, null))){
+			getMenuInflater().inflate(R.menu.action_bar_food_details, menu);
+		}
 		return super.onCreateOptionsMenu(menu);
 	}
 	
@@ -275,6 +277,9 @@ public class FoodAssignmentActivity extends Activity{
 	        	Log.d(logTag, "HomeBack: "+food.getStatus());
 	        	onBackPressed();
 	            return true;
+	        case R.id.action_foodUpdate:
+				openFoodUpdate();
+				return true;    
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -418,5 +423,25 @@ public class FoodAssignmentActivity extends Activity{
 		    
 		  }
 
+	}
+	
+	private void openFoodUpdate(){
+		Intent foodUpd=new Intent(this,AddFoodActivity.class);
+		foodUpd.putExtra(Constants.foodDetailSP, food);
+		startActivityForResult(foodUpd, Constants.UPDATE_FOOD_REQUEST_CODE);
+	}
+	
+	
+	@Override
+	protected void onActivityResult(int requestCode, int responseCode,
+			Intent intent) {
+		Log.d(logTag, "requestCode " + requestCode + " responseCode "
+				+ responseCode);
+		if (requestCode == Constants.UPDATE_FOOD_REQUEST_CODE
+				&& (responseCode == Constants.UPDATE_FOOD_RESPONSE_CODE )) {
+			food = (Food) intent
+					.getSerializableExtra(Constants.foodDetailSP);
+			setViewComponents();
+		}
 	}
 }

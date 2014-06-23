@@ -161,7 +161,7 @@ public class FoodDetailsActivity extends Activity{
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
-	    case R.id.action_foodAssignment:
+	    case R.id.action_foodUpdate:
 			openFoodAssignmentActivity();
 			return true;    
 	    case android.R.id.home:

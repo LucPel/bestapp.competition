@@ -56,7 +56,17 @@ public class FoodTrasformer {
 		foodObj.put(Constants.foodChannelPO,UUID.randomUUID().toString().replace("-", ""));
 		foodObj.put(Constants.foodAssigmentCommentPO, assigment);
 		foodObj.put(Constants.foodNamePO, name.getText().toString());
-		foodObj.put(Constants.foodStatusPO, Constants.foodStatusDisponibile);
+		String statusCurr=(String) commonsData.get(Constants.foodStatusPO);
+		if(commonsData.get(Constants.foodStatusPO)==null || statusCurr.trim().isEmpty()){
+			foodObj.put(Constants.foodStatusPO, Constants.foodStatusDisponibile);
+		}
+		else{
+			foodObj.put(Constants.foodStatusPO, commonsData.get(Constants.foodStatusPO));
+		}
+		String foodID=(String) commonsData.get(Constants.foodIdPO);
+		if(foodID!=null && !foodID.trim().isEmpty()){
+			foodObj.setObjectId(foodID);
+		}
 		foodObj.put(Constants.foodCategoryPO, catTextView.getText().toString());
 		foodObj.put(Constants.foodDescritpionPO, description.getText().toString());
 		foodObj.put(Constants.foodDueDatePO, year+month+day);

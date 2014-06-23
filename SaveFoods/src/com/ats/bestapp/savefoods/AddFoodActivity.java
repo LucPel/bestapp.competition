@@ -80,19 +80,30 @@ public class AddFoodActivity extends FragmentActivity implements
 	private ArrayList<Uri> imegesUri;
 	private String logTag = "AddFoodActivity";
 	private boolean shareable = false;
+	private boolean isUpdate=false;
+	private Food foodToUpdate;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_food);
 		init();
-		Calendar cal = Calendar.getInstance();
-		EditText dueDate = (EditText) findViewById(R.id.food_due_date);
-		dueDate.clearComposingText();
-		dueDate.setText(DateFormat.format(
-				"dd-MM-yyyy",
-				new GregorianCalendar(cal.get(Calendar.YEAR), cal
-						.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))));
+		foodToUpdate=(Food) getIntent().getSerializableExtra(Constants.foodDetailSP);
+		if(foodToUpdate==null){
+			Calendar cal = Calendar.getInstance();
+			EditText dueDate = (EditText) findViewById(R.id.food_due_date);
+			dueDate.clearComposingText();
+			dueDate.setText(DateFormat.format(
+					"dd-MM-yyyy",
+					new GregorianCalendar(cal.get(Calendar.YEAR), cal
+							.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))));
+		}
+		else{
+			isUpdate=true;
+			commonsData.put(Constants.foodStatusPO, foodToUpdate.getStatus());
+			commonsData.put(Constants.foodIdPO, foodToUpdate.getFoodId());
+			setUI4Update();
+		}
 		// locListenerWrap=new LocationListenerWrapper(this);
 	}
 
@@ -134,9 +145,14 @@ public class AddFoodActivity extends FragmentActivity implements
 			user = userProxy.getUserParseObject((String) commonsData
 					.get(Constants.userNameSP));
 			ArrayList<byte[]> imagesByte = new ArrayList<byte[]>();
-			for (Uri currentUri : imegesUri) {
-				imagesByte.add(MediaFile.bitmapResized2Bytes(currentUri, 256,
-						256));
+			if(!isUpdate){
+				for (Uri currentUri : imegesUri) {
+					imagesByte.add(MediaFile.bitmapResized2Bytes(currentUri, Constants.resized_image_x_size,
+							Constants.resized_image_y_size));
+				}
+			}
+			else{
+				imagesByte.add(foodToUpdate.getImages().get(0).getImage());
 			}
 			Log.d(logTag, JsonMapper.convertObject2String(imagesByte));
 			food = ftrasformer.trasformInFood(view.getRootView(), commonsData,
@@ -148,8 +164,7 @@ public class AddFoodActivity extends FragmentActivity implements
 			if (shareable) {
 				shareOnGPlus();
 			} else {
-				Intent intent_back = new Intent();
-				setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent_back);
+				closeIntent();
 				Toast.makeText(
 						this,
 						getResources().getString(R.string.endSavingFoodMessage),
@@ -317,9 +332,7 @@ public class AddFoodActivity extends FragmentActivity implements
 				.setType(Constants.gp_mime_jpg_type);
 
 		startActivityForResult(share.getIntent(), 0);
-
-		Intent intent_back = new Intent();
-		setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent_back);
+		closeIntent();
 		Toast.makeText(this,
 				getResources().getString(R.string.endSavingFoodMessage),
 				Toast.LENGTH_LONG).show();
@@ -340,9 +353,7 @@ public class AddFoodActivity extends FragmentActivity implements
 				.getIntent();
 
 		startActivityForResult(shareIntent, 0);
-
-		Intent intent_back = new Intent();
-		setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent_back);
+		closeIntent();
 		Toast.makeText(this,
 				getResources().getString(R.string.endSavingFoodMessage),
 				Toast.LENGTH_LONG).show();
@@ -355,6 +366,17 @@ public class AddFoodActivity extends FragmentActivity implements
 
 	}
 
+	private void closeIntent(){
+		Intent intent_back = new Intent();
+		if(isUpdate){
+			intent_back.putExtra(Constants.foodDetailSP, foodToUpdate);
+			setResult(Constants.UPDATE_FOOD_RESPONSE_CODE, intent_back);
+		}
+		else{
+			setResult(Constants.ADD_FOOD_RESPONSE_CODE, intent_back);
+		}
+	}
+	
 	@Override
 	public void onItemSelected(AdapterView<?> aview, View view, int position,
 			long id) {
@@ -380,5 +402,44 @@ public class AddFoodActivity extends FragmentActivity implements
 		} else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
 			Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
 		}
+	}
+	
+	private void setUI4Update(){
+		EditText name = (EditText) findViewById(R.id.food_name_text);
+		name.setText(foodToUpdate.getName());
+		EditText description = (EditText) findViewById(R.id.food_description_text);
+		description.setText(foodToUpdate.getDescription());
+		EditText quantityET = (EditText) findViewById(R.id.food_quantity_text);
+		quantityET.setText(foodToUpdate.getQuantity());
+		String[] categories=getResources().getStringArray(R.array.foodCategories);
+		Spinner categorySpinner = (Spinner) findViewById(R.id.food_category_spinner);
+		for(int i=0; i<categories.length;i++){
+			if(categories[i].equalsIgnoreCase(foodToUpdate.getType())){
+				categorySpinner.setSelection(i);
+			}
+		}
+		Spinner UMSpinner=(Spinner)findViewById(R.id.food_um_spinner);
+		String[] ums=getResources().getStringArray(R.array.foodMeasurementUnit);
+		for(int j=0;j<ums.length;j++){
+			if(ums[j].equalsIgnoreCase(foodToUpdate.getMeasurementunity())){
+				UMSpinner.setSelection(j);
+			}
+		}
+		
+		
+		ImageView imageView = (ImageView) findViewById(R.id.imageFood);
+			if(foodToUpdate.getImages()!=null && foodToUpdate.getImages().size()!=0){
+				Bitmap image=MediaFile.bitmapFromBytesImage(foodToUpdate.getImages().get(0).getImage());
+				if(image!=null){
+					imageView.setVisibility(View.VISIBLE);
+					imageView.setImageBitmap(Bitmap.createScaledBitmap(image, Constants.standard_image_x_size, Constants.standard_image_y_size, false));
+					
+				}
+			}
+		EditText dueDate = (EditText) findViewById(R.id.food_due_date);
+		dueDate.clearComposingText();
+		dueDate.setText(DateFormat.format(
+				"dd-MM-yyyy",
+				new GregorianCalendar(Integer.parseInt(Commons.getYear(foodToUpdate.getDueDate())), Integer.parseInt(Commons.getMonth(foodToUpdate.getDueDate()))-1, Integer.parseInt(Commons.getDay(foodToUpdate.getDueDate())))));
 	}
 }
