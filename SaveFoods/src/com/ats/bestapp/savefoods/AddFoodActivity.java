@@ -7,6 +7,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.json.JSONException;
 
@@ -22,6 +23,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
@@ -37,8 +39,11 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -71,7 +76,6 @@ public class AddFoodActivity extends FragmentActivity implements
 	private HashMap<String, Object> commonsData;
 	// private LocationListenerWrapper locListenerWrap;
 	private FoodProxy fproxy;
-	private ProgressDialog progressDialog;
 	private FoodTrasformer ftrasformer;
 	private UserProxy userProxy;
 	private ParseObject food;
@@ -82,6 +86,7 @@ public class AddFoodActivity extends FragmentActivity implements
 	private boolean shareable = false;
 	private boolean isUpdate=false;
 	private Food foodToUpdate;
+	private ProgressDialog addFoodProgressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +107,7 @@ public class AddFoodActivity extends FragmentActivity implements
 			isUpdate=true;
 			commonsData.put(Constants.foodStatusPO, foodToUpdate.getStatus());
 			commonsData.put(Constants.foodIdPO, foodToUpdate.getFoodId());
+			commonsData.put(Constants.foodChannelPO, foodToUpdate.getChannel());
 			setUI4Update();
 		}
 		// locListenerWrap=new LocationListenerWrapper(this);
@@ -136,58 +142,21 @@ public class AddFoodActivity extends FragmentActivity implements
 		Toast.makeText(this,
 				getResources().getString(R.string.startSavingFoodMessage),
 				Toast.LENGTH_LONG).show();
+		
 		SFApplication sfapp = (SFApplication) getApplication();
-		try {
+		if(!isUpdate){
 			commonsData.put(Constants.latitudeKey, sfapp.getCurrentLatitude());
 			commonsData
 					.put(Constants.longitudeKey, sfapp.getCurrentLongitude());
-			ParseObject user = null;
-			user = userProxy.getUserParseObject((String) commonsData
-					.get(Constants.userNameSP));
-			ArrayList<byte[]> imagesByte = new ArrayList<byte[]>();
-			if(!isUpdate){
-				for (Uri currentUri : imegesUri) {
-					imagesByte.add(MediaFile.bitmapResized2Bytes(currentUri, Constants.resized_image_x_size,
-							Constants.resized_image_y_size));
-				}
-			}
-			else{
-				imagesByte.add(foodToUpdate.getImages().get(0).getImage());
-			}
-			Log.d(logTag, JsonMapper.convertObject2String(imagesByte));
-			food = ftrasformer.trasformInFood(view.getRootView(), commonsData,
-					imagesByte, user);
-			fproxy.addFood(food);
-			PushService.subscribe(this, Constants.foodSellerChannelPrefix
-					+ food.getString(Constants.foodChannelPO),
-					FoodAssignmentActivity.class);
-			if (shareable) {
-				shareOnGPlus();
-			} else {
-				closeIntent();
-				Toast.makeText(
-						this,
-						getResources().getString(R.string.endSavingFoodMessage),
-						Toast.LENGTH_LONG).show();
-				finish();
-			}
-
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+		else{
+			updateFoodAfterSave(view);
+			commonsData.put(Constants.latitudeKey, foodToUpdate.getLatitude());
+			commonsData
+					.put(Constants.longitudeKey, foodToUpdate.getLongitude());
+		}
+		new SaveFoodTask().execute("test");
+		
 	}
 
 	public void showDatePickerDialog(View view) {
@@ -307,20 +276,23 @@ public class AddFoodActivity extends FragmentActivity implements
 	@Override
 	public void onConnected(Bundle arg0) {
 
-		Uri imageFood = imegesUri.get(0);
-		if (imageFood == null) {
-			shareGPlusWithoutImage();
+		
+		if(imegesUri!=null && imegesUri.size()!=0){
+			Uri imageFood = imegesUri.get(0);
+			if (imageFood == null) {
+				shareGPlusWithoutImage();
+			}
+			else{
+				shareGPlusWithImage(imageFood);
+			}
 		}
 		else{
-			shareGPlusWithImage(imageFood);
+			shareGPlusWithoutImage();
 		}
 		
 	}
 
 	private void shareGPlusWithImage(Uri imageFood){
-		ContentResolver cr = this.getContentResolver();
-		String mime = cr.getType(imageFood);
-		Log.d(logTag, "Mime Type "+mime);
 		PlusShare.Builder share = new PlusShare.Builder(this)
 				.setText(
 						"Salva il mio alimento "
@@ -442,4 +414,104 @@ public class AddFoodActivity extends FragmentActivity implements
 				"dd-MM-yyyy",
 				new GregorianCalendar(Integer.parseInt(Commons.getYear(foodToUpdate.getDueDate())), Integer.parseInt(Commons.getMonth(foodToUpdate.getDueDate()))-1, Integer.parseInt(Commons.getDay(foodToUpdate.getDueDate())))));
 	}
+	
+	private void updateFoodAfterSave(View view){
+		EditText name = (EditText) view.findViewById(R.id.food_name_text);
+		foodToUpdate.setName(name.getText().toString());
+		EditText description = (EditText) view.findViewById(R.id.food_description_text);
+		foodToUpdate.setDescription(description.getText().toString());
+		Spinner categorySpinner = (Spinner) view.findViewById(R.id.food_category_spinner);
+		TextView catTextView = (TextView)categorySpinner.getSelectedView();
+		foodToUpdate.setType(catTextView.getText().toString());
+		EditText date = (EditText) view.findViewById(R.id.food_due_date);
+		EditText quantityET = (EditText) view.findViewById(R.id.food_quantity_text);
+		foodToUpdate.setQuantity(quantityET.getText().toString());
+		Spinner UMSpinner=(Spinner) view.findViewById(R.id.food_um_spinner);
+		TextView umTextView = (TextView)UMSpinner.getSelectedView();
+		foodToUpdate.setMeasurementunity(umTextView.getText().toString());
+		String day=date.getText().subSequence(0, 2).toString();
+		String month=date.getText().subSequence(3, 5).toString();
+		String year=date.getText().subSequence(6, date.getText().length()).toString();
+		foodToUpdate.setDueDate(year+month+day);
+	}
+	
+	// ASYNC TASKS
+	private class SaveFoodTask extends
+				AsyncTask<String, Void, String> {
+
+			@Override
+			protected String doInBackground(String... params) {
+				try {
+					ParseObject user = null;
+					user = userProxy.getUserParseObject((String) commonsData
+							.get(Constants.userNameSP));
+					ArrayList<byte[]> imagesByte = new ArrayList<byte[]>();
+					if(!isUpdate){
+						for (Uri currentUri : imegesUri) {
+							imagesByte.add(MediaFile.bitmapResized2Bytes(currentUri, Constants.resized_image_x_size,
+									Constants.resized_image_y_size));
+						}
+					}
+					else{
+						imagesByte.add(foodToUpdate.getImages().get(0).getImage());
+					}
+					Log.d(logTag, JsonMapper.convertObject2String(imagesByte));
+					food = ftrasformer.trasformInFood(getWindow().getDecorView().getRootView(), commonsData,
+							imagesByte, user);
+					fproxy.addFood(food);
+					
+					
+				}
+				catch (JsonGenerationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ParseException e){
+					e.printStackTrace();
+				}
+				finally{
+					
+				}
+				return "OK";
+			}
+
+			protected void onPostExecute(String foods_out) {
+				PushService.subscribe(AddFoodActivity.this, Constants.foodSellerChannelPrefix
+						+ food.getString(Constants.foodChannelPO),
+						FoodAssignmentActivity.class);
+				addFoodProgressDialog.dismiss();
+				if (shareable) {
+					shareOnGPlus();
+				} else {
+					closeIntent();
+					Toast.makeText(
+							AddFoodActivity.this,
+							getResources().getString(R.string.endSavingFoodMessage),
+							Toast.LENGTH_LONG).show();
+					finish();
+				}
+				
+			}
+
+			protected void onPreExecute() {
+				startDialogLoading();
+			}
+
+		}
+		
+		private void startDialogLoading() {
+			addFoodProgressDialog = new ProgressDialog(this);
+			addFoodProgressDialog.setMessage("Saving Food...");
+			addFoodProgressDialog.setProgressStyle(ProgressDialog.THEME_HOLO_LIGHT);
+			addFoodProgressDialog.setCancelable(false);
+			addFoodProgressDialog.show();
+		}
 }

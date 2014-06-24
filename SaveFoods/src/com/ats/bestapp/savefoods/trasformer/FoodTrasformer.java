@@ -53,7 +53,13 @@ public class FoodTrasformer {
 		Log.d(logTag, "Converted Date: "+year+month+day);
 		ParseObject foodObj = new ParseObject(Constants.foodObject);
 		JSONArray assigment=new JSONArray();
-		foodObj.put(Constants.foodChannelPO,UUID.randomUUID().toString().replace("-", ""));
+		String channel=(String) commonsData.get(Constants.foodChannelPO);
+		if(channel==null || channel.trim().isEmpty()){
+			foodObj.put(Constants.foodChannelPO,UUID.randomUUID().toString().replace("-", ""));
+		}
+		else{
+			foodObj.put(Constants.foodChannelPO,channel);
+		}
 		foodObj.put(Constants.foodAssigmentCommentPO, assigment);
 		foodObj.put(Constants.foodNamePO, name.getText().toString());
 		String statusCurr=(String) commonsData.get(Constants.foodStatusPO);
