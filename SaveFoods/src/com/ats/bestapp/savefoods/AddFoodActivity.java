@@ -233,18 +233,21 @@ public class AddFoodActivity extends FragmentActivity implements
 		if (requestCode == Constants.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
 				// Image captured and saved to fileUri specified in the Intent
-				Toast.makeText(
-						this,
-						"Image saved to:\n"
-								+ imegesUri.get(imegesUri.size() - 1).getPath(),
-						Toast.LENGTH_LONG).show();
-				Bitmap ThumbImage = MediaFile.bitmapResized(
-						imegesUri.get(imegesUri.size() - 1),
-						Constants.insert_image_x_size,
-						Constants.insert_image_y_size);
-				ImageView foodImage = (ImageView) findViewById(R.id.imageFood);
-				foodImage.setVisibility(View.VISIBLE);
-				foodImage.setImageBitmap(ThumbImage);
+				if(imegesUri!=null && imegesUri.size()!=0){
+					Toast.makeText(
+							this,
+							"Image saved to:\n"
+									+ imegesUri.get(imegesUri.size() - 1).getPath(),
+							Toast.LENGTH_LONG).show();
+					Bitmap ThumbImage = MediaFile.bitmapResized(
+							imegesUri.get(imegesUri.size() - 1),
+							Constants.insert_image_x_size,
+							Constants.insert_image_y_size);
+					ImageView foodImage = (ImageView) findViewById(R.id.imageFood);
+					foodImage.setVisibility(View.VISIBLE);
+					foodImage.setImageBitmap(ThumbImage);
+				}
+				
 			} else if (resultCode == RESULT_CANCELED) {
 
 			} else {
@@ -453,7 +456,15 @@ public class AddFoodActivity extends FragmentActivity implements
 						}
 					}
 					else{
-						imagesByte.add(foodToUpdate.getImages().get(0).getImage());
+						if(imegesUri.size()==0 && foodToUpdate.getImages().size()!=0){
+							imagesByte.add(foodToUpdate.getImages().get(0).getImage());
+						}
+						else if(imegesUri.size()!=0){
+							for (Uri currentUri : imegesUri) {
+								imagesByte.add(MediaFile.bitmapResized2Bytes(currentUri, Constants.resized_image_x_size,
+										Constants.resized_image_y_size));
+							}
+						}
 					}
 					Log.d(logTag, JsonMapper.convertObject2String(imagesByte));
 					food = ftrasformer.trasformInFood(getWindow().getDecorView().getRootView(), commonsData,
@@ -484,10 +495,12 @@ public class AddFoodActivity extends FragmentActivity implements
 			}
 
 			protected void onPostExecute(String foods_out) {
-				PushService.subscribe(AddFoodActivity.this, Constants.foodSellerChannelPrefix
-						+ food.getString(Constants.foodChannelPO),
-						FoodAssignmentActivity.class);
 				addFoodProgressDialog.dismiss();
+				if(!isUpdate){
+					PushService.subscribe(AddFoodActivity.this, Constants.foodSellerChannelPrefix
+							+ food.getString(Constants.foodChannelPO),
+							FoodAssignmentActivity.class);
+				}
 				if (shareable) {
 					shareOnGPlus();
 				} else {
